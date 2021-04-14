@@ -1,0 +1,22 @@
+baseURL = "https://gophers-latam.github.io/"
+languageCode = "es-mx"
+title = "Gophers LATAM"
+theme = "basic"
+disqusShortname = "gophers-latam"
+[params]
+    author = "ZeroIdentidad"
+    description = "Gophers LATAM"
+
+gh_url = "https://api.github.com/orgs"
+gh_user = "gophers-latam"
+pygmentsUseClasses = true
+[permalinks]
+posts = "posts/:year/:month/:slug/"
+year = "/posts/:slug/"
+month = "/posts/:slug/"
+[taxonomies]
+year = "year"
+month = "month"
+tag = "tags"
+category = "categories"
+Paginate = 10

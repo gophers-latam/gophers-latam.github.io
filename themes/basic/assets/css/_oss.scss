@@ -1,0 +1,13 @@
+.oss {
+display: flex;
+flex-wrap: wrap;
+justify-content: space-between;
+}
+
+.oss article {
+border: 1px solid #ddd;
+box-shadow: 3px 3px 3px #ddd;
+margin: 0.5%;
+padding: 0.5%;
+width: 30%;
+}

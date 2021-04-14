@@ -1,0 +1,12 @@
+{
+    "accounts": [
+        {
+            "name": "Github org",
+            "url": "https://github.com/gophers-latam"
+        },
+        {
+            "name": "Facebook page",
+            "url": "https://facebook.com/zeroidentidadevs"
+        }        
+    ]
+}

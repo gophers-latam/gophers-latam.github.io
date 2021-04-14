@@ -1,0 +1,17 @@
+{{ define "main" }}
+<h2>{{ .Title }}</h2>
+{{ .Content }}
+{{ $url := printf "%s/%s/members" .Site.Params.gh_url .Site.Params.gh_user }}
+{{ $members := getJSON $url }}
+<section class="colabs">
+    {{ range $members }}
+<article>
+    <center>
+        <h3><a href="{{ .html_url }}">{{ .login }}</a></h3>
+        <img alt="{{ .login }}" src="{{ .avatar_url }}">
+    </center>
+</article>
+{{ end }}
+</section>
+<p><b>*</b>Los miembros que configuran su visiblidad a pública en el Github aparecerán aqui.</p>
+{{ end }}

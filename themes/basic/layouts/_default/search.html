@@ -1,0 +1,17 @@
+{{ define "main" }}
+<h2>{{ .Title }}</h2>
+<input type="search" id="searchField">
+<button id="searchButton">Buscar</button>
+<input id="allwords" type="checkbox">
+<label for="allwords">Requerir todas las palabras</label>
+<div id="output">
+    <p>Esperando entrada de búsqueda</p>
+</div>
+<br>
+{{ $lunr := resources.Get "js/lunr.js" }}
+{{ $axios := resources.Get "js/axios.js" }}
+{{ $search := resources.Get "js/search.js" }}
+{{ $libs := slice $lunr $axios $search }}
+{{ $js := $libs | resources.Concat "js/app.js" | minify | fingerprint }}
+<script src="{{$js.RelPermalink}}"></script>
+{{ end }}

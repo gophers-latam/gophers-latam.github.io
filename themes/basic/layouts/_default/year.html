@@ -1,0 +1,6 @@
+{{ define "main" }}
+    <h2>{{ .Title }}</h2>
+    {{ range .Pages }}
+        {{ partial "post_summary.html" . }}
+    {{ end }}
+{{ end }}

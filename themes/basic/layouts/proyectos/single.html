@@ -1,0 +1,27 @@
+{{ define "main" }}
+<div class="project-container">
+    <section class="project-list">
+        <h2>Proyectos</h2>
+        <ul>
+            {{ range (where .Site.RegularPages "Type" "in" "proyectos") }}
+            <li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>
+            {{ end }}
+        </ul>
+    </section>
+    <section class="project">
+        <h2>{{ .Title }}</h2>
+        {{ .Content }}
+        <img alt="{{ .Params.alt_text }}" src="{{ .Params.image }}">
+        <h3>Tecnología utilizada</h3>
+        <ul>
+            {{ range .Params.tech_used }}
+            <li>{{ . }}</li>
+            {{ end }}
+        </ul>
+        <h3>Repositorio</h3>
+        <p>
+        <a href="{{ .Params.repo }}" target="_blank">{{ .Params.repo }}</a>
+        </p>
+    </section>
+</div>
+{{ end }}

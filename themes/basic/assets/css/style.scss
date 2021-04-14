@@ -1,0 +1,43 @@
+.container {
+margin: 0 auto;
+width: 80%;
+}
+
+nav, footer {
+background-color: #150421;
+color: #fff;
+text-align: center;
+height: 25px;
+}
+
+@import 'navbar';
+
+@media only screen and (min-width: 768px) {
+.project-container { display: flex; }
+.project-container .project-list { width: 20%; }
+.project-container .project { flex: 1; }
+}
+
+a.tag {
+background-color: #ddd;
+color: #333;
+display: inline-block;
+padding: 0.1em;
+font-size: 0.9em;
+text-decoration: none;
+}
+
+#output li{
+list-style:none;
+}
+
+figure img {
+max-width: 100%;
+height: auto;
+}
+
+@import 'oss';
+
+@import 'colabs';
+
+@import 'pagination';
