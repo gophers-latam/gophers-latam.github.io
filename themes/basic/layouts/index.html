@@ -1,20 +1,55 @@
 {{ define "main" }}
-<center>
-<hr>
-<input type="search" id="searchField">
-<button id="searchButton">Buscar</button>
-<input id="allwords" type="checkbox">
-<label for="allwords">Requerir todas las palabras</label>
-<div id="output">
-    <p>Esperando entrada de búsqueda</p>
+
+<div class="home">
+    <div class="home-head">
+        <h1>Gophers LATAM</h1>
+        <label>Comunidad de programadores Golang en Español-Latino.</label>
+    </div>
+
+    <div class="animation-gopher">
+        <!-- https://github.com/bsdavidson/animated-gopher -->
+        <img alt="gopher" data-gopher src="img/gopher.svg">
+        {{ $animation := resources.Get "js/gopher-animation.min.js" }}
+        <script src="{{$animation.RelPermalink}}"></script>
+    </div>
+
+    <div class="content">
+        <a class="box box-section" href="/bibliografia">
+            <!-- <img src=""> -->
+            🗿
+            <br>
+            <br>
+            <b>Bibliografía</b>
+        </a>
+        <a class="box box-section" href="/proyectos">
+            <!-- <img src=""> -->
+            🗃
+            <br>
+            <br>
+            <b>Proyectos</b>
+        </a>
+        <a class="box box-section" href="/posts">
+            <!-- <img src=""> -->
+            📝
+            <br>
+            <br>
+            <b>Posts</b>
+        </a>
+        <a class="box box-section" href="/colaboradores">
+            <!-- <img src=""> -->
+            🧙‍♂
+            <br>
+            <br>
+            <b>Colaboradores</b>
+        </a>
+        <a class="box box-section" href="/contacto">
+            <!-- <img src=""> -->
+            🌎
+            <br>
+            <br>
+            <b>Contactos</b>
+        </a>
+    </div>
 </div>
-<hr>
-{{ .Content }}
-</center>
-{{ $lunr := resources.Get "js/lunr.js" }}
-{{ $axios := resources.Get "js/axios.js" }}
-{{ $search := resources.Get "js/search.js" }}
-{{ $libs := slice $lunr $axios $search }}
-{{ $js := $libs | resources.Concat "js/app.js" | minify | fingerprint }}
-<script src="{{$js.RelPermalink}}"></script>
+
 {{ end }}

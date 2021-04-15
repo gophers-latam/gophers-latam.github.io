@@ -18,4 +18,9 @@ header {
   .button-search {
     text-decoration: none;
   }
+
+  &:hover {
+    border-bottom: 1px solid #ccc;
+    box-shadow: 1px 1px 3px #ccc;
+  }
 }

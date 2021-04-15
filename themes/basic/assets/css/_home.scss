@@ -1,0 +1,56 @@
+@import "vars";
+
+.home {
+  .home-head {
+    text-align: center;
+    margin: 1rem 0;
+    padding: 1rem 0;
+
+    h1 {
+      margin: 1rem 0;
+      font-size: 3.5em;
+    }
+    label {
+      font-size: 0.8em;
+      color: #414141;
+    }
+  }
+
+  .animation-gopher {
+    margin: auto;
+    max-width: 150px;
+    width: 80%;
+  }
+
+  .content {
+    padding: 1rem 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+
+    .box-section {
+      flex-basis: calc(30% - 4rem);
+      margin: 1rem;
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+      text-align: center;
+      padding: 1rem;
+
+      &:hover {
+        background-color: $second-color;
+
+        b { color: white }
+      }
+
+      b { color: #313131 }
+    }
+  }
+}
+
+@media (max-width: #{$display-mid-max}) {
+  .home .content .box-section {
+    flex-basis: calc(100% - 4rem);
+  }
+}

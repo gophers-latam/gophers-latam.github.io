@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu&display=swap');
+
 @media only screen and (min-width: 768px) {
 .project-container { display: flex; }
 .project-container .project-list { width: 20%; }
@@ -22,9 +24,14 @@ max-width: 100%;
 height: auto;
 }
 
+@import "home";
+
 @import "footer";
+
 @import "global";
+
 @import "header";
+
 @import "navbar";
 
 @import 'oss';
