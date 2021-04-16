@@ -141,3 +141,17 @@ your url is: https://grumpy-turtle-68.localtunnel.me
 # Publicación del sitio:
 
 - **[gohugo.io/hosting-and-deployment/hosting-on-github/](https://gohugo.io/hosting-and-deployment/hosting-on-github/)**
+
+Sólo subir cambios al repo, el resto es magia de **Github Page** y **Github Action** tomando la rama principal.
+
+## Rediseño:
+
+Versión de nuevo diseño se esta manejando en la rama [redesign](https://github.com/gophers-latam/gophers-latam.github.io/tree/redesing).
+
+<div><hr></div>
+
+# Aportar al sitio
+
+Las aportaciones son bienvenidas y agradecidas. 
+
+- Ya sea haciendo fork y pull request externo, como tambien acercarse al [Discord](https://discord.com/invite/AEarh2kSvn) y ser invitados a [github.com/gophers-latam](https://github.com/gophers-latam) dejando en el canal [📊-github-contrib](https://discord.com/channels/764989185077542942/808708853352235099) del discord, nickname de la url de su perfil de usuario en github.
