@@ -1,12 +1,12 @@
-<article>
-    <header>
-        <h3>
-            <a href="{{ .RelPermalink }}">{{ .Title }}</a>
-        </h3>
-        <time>
+<a class="box-post-container" href="{{ .RelPermalink }}">
+    <article class="box box-post">
+        <h3 class="title">{{ .Title }}</h3>
+        <time class="date">
             {{ .Date | dateFormat "January" }}
             {{ .Date | dateFormat "2" }}
         </time>
-    </header>
-    {{ .Summary }}
-</article>
+        <div class="summary-container">
+            {{ .Summary }}
+        </div>
+    </article>
+</a>
