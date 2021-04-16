@@ -2,21 +2,16 @@
 <article class="post">
     <header>
         <h2>{{ .Title }}</h2>
-        <p>
-            Por: {{ .Params.Author }}
-        </p>
-        <p>
-            Publicado {{ .Date.Format "January 2, 2006" }}
-            <span class="tags">
-                en
-                {{ range .Params.tags }}
-                <a class="tag" href="/tags/{{ . | urlize }}">{{ . }}</a>
-                {{ end }}
-            </span>
-        </p>
-        <p>
-            Tiempo de lectura: {{ math.Round (div (countwords .Content) 200.0) }} minutos.
-        </p>
+        <span class="tags">
+            {{ range .Params.tags }}
+            <a class="tag" href="/tags/{{ . | urlize }}">{{ . }}</a>
+            {{ end }}
+        </span>
+        <span class="meta">
+            <label>Por: <b>{{ .Params.Author }}</b></label>
+            <label>Publicado <b>{{ .Date.Format "January 2, 2006" }}</b></label>
+            <label>Tiempo de lectura: <b>{{ math.Round (div (countwords .Content) 200.0) }} minutos</b>.</label>
+        </span>
     </header>
     <section class="body">
         {{ .Content }}
@@ -24,10 +19,10 @@
     <section class="related">
         {{ $related := .Site.RegularPages.Related . | first 5 }}
         {{ with $related }}
-        <h3>Páginas relacionadas</h3>
-        <ul>
+        <h3>Relacionados</h3>
+        <ul class="post-list-short">
             {{ range . }}
-            <li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>
+            {{ partial "post_summary.html" . }}
             {{ end }}
         </ul>
         {{ end }}
