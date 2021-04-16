@@ -1,0 +1,284 @@
+<!doctype html><html><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=author content="ZeroIdentidad"><meta name=description content="Gophers LATAM"><title>Golang: Resumen reglas – Gophers LATAM</title><link rel="shortcut icon" type=image/x-icon href=/favicon.ico><link rel=stylesheet href=/css/style.min.254db6eb2b2308f170a3d63cd04c44576625b331b8a1c809aaaf941591beff1d.css><link rel=stylesheet href=/css/syntax.min.f1fef9cbbfe9d2935981821d59853e89db60d137f9117a1279371320195f1d1a.css></head><body><div class=container><header><center><a href=/><img alt="Gophers LATAM" src=/img/gopher.png>
+<b>Gophers LATAM</b></a></center></header><nav><a href=/>Inicio</a>
+<a href=/acerca>Acerca</a>
+<a href=/proyectos>Proyectos</a>
+<a href=/posts>Posts</a>
+<a href=/colaboradores>Colaboradores</a>
+<a href=/contacto>Contacto</a>
+<a href=/search>🔍</a></nav><main><article class=post><header><h2>Golang: Resumen reglas</h2><p>Por: ZeroIdentidad</p><p>Publicado April 10, 2021
+<span class=tags>en
+<a class=tag href=/tags/reglas>reglas</a>
+<a class=tag href=/tags/golang>golang</a></span></p><p>Tiempo de lectura: 20 minutos.</p></header><section class=body><figure class=post-figure><a href=/posts/2021/04/golang-resumen-reglas/images/go-police.png><img src=/posts/2021/04/golang-resumen-reglas/images/go-police_hue7d7c6d1a137cc488db438363aa4cc3d_46281_1024x0_resize_box_2.png width=1024 height=696 alt="Go Police"></a><figcaption>Go Police</figcaption></figure><p>El lenguaje de programación Go fue creado para hacer el trabajo fácilmente.</p><p>Go tiene conceptos similares a los lenguajes imperativos y el tipado estático. También es rápido en la compilación, rápido de ejecutar e implementar. Grande y complejo.</p><p><strong>En este post, se explican conceptos básicos de Go tratando algunos conceptos o reglas importantes.</strong></p><p>Los principales temas tratados son los siguientes:</p><ul><li><strong>Escribir comentarios.</strong></li><li><strong>Librerías e importación.</strong></li><li><strong>Funciones.</strong></li><li><strong>Tipos de datos.</strong></li><li><strong>Valores de retorno con nombre.</strong></li><li><strong>Variables y memoria.</strong></li><li><strong>Control de sentencias.</strong></li><li><strong>Generar funciones.</strong></li><li><strong>Ejecución diferida.</strong></li><li><strong>Interfaces.</strong></li><li><strong>Múltiples entradas.</strong></li><li><strong>Manejo de errores.</strong></li><li><strong>Ejecución simultánea.</strong></li></ul><h1 id=escribir-comentarios>Escribir comentarios:</h1><p>Para escribir un comentario de una línea</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>// comentario de una sola línea
+</code></pre></div><p>Escribir un comentario con más de una línea</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell>/* comentario
+de multi-línea */
+</code></pre></div><h1 id=librerías-e-importación>Librerías e importación:</h1><p>Cada archivo de código fuente comienza con la palabra clave <strong>package</strong>. La palabra clave <strong>main</strong> se utiliza para identificar el archivo como un archivo operativo, no como una librería.</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#f92672>package</span> <span style=color:#a6e22e>main</span>
+</code></pre></div><p>Para importar un paquete de la librería estándar, terceros o personal al archivo, usamos la instrucción <strong>import</strong> de la siguiente manera:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#f92672>import</span> (
+    <span style=color:#e6db74>&#34;fmt&#34;</span> <span style=color:#75715e>// paquete en la librería estándar
+</span><span style=color:#75715e></span>    <span style=color:#e6db74>&#34;io/ioutil&#34;</span> <span style=color:#75715e>// se aplican funciones de E/S
+</span><span style=color:#75715e></span>    <span style=color:#a6e22e>m</span> <span style=color:#e6db74>&#34;math&#34;</span> <span style=color:#75715e>// usando la letra m para acortar o hacer alias del nombre de la librería de funciones matemáticas
+</span><span style=color:#75715e></span>    <span style=color:#e6db74>&#34;net/http&#34;</span> <span style=color:#75715e>// web server
+</span><span style=color:#75715e></span>    <span style=color:#e6db74>&#34;os&#34;</span> <span style=color:#75715e>// funciones a nivel del sistema operativo, como el manejo de archivos
+</span><span style=color:#75715e></span>    <span style=color:#e6db74>&#34;strconv&#34;</span> <span style=color:#75715e>// conversiones de texto
+</span><span style=color:#75715e></span>)
+</code></pre></div><h1 id=funciones>Funciones:</h1><p>Las funciones se definen mediante la palabra <strong>func</strong> seguida del nombre de la función.</p><p>La función main es privada y es la entrada al archivo ejecutable del programa (Go usa llaves ornamentadas <strong>{}</strong> para definir partes / bloques).</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>main</span>() {
+    <span style=color:#75715e>// salida de texto en la unidad main en stdout (salida estandar) con Println de fmt (stdlib pkg)
+</span><span style=color:#75715e></span>    <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span> (<span style=color:#e6db74>&#34;Hello world!&#34;</span>)
+    <span style=color:#75715e>// llamar a una función del paquete actual
+</span><span style=color:#75715e></span>    <span style=color:#a6e22e>beyondHello</span>()
+}
+</code></pre></div><p>Las funciones necesitan paréntesis que reciben parámetros, e incluso en ausencia de parámetros, se requieren paréntesis.</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>beyondHello</span>() {
+    <span style=color:#75715e>// declaración de variable (la variable debe declararse antes de usarse)
+</span><span style=color:#75715e></span>    <span style=color:#66d9ef>var</span> <span style=color:#a6e22e>x</span> <span style=color:#66d9ef>int</span>
+    <span style=color:#75715e>// dar valor a la variable
+</span><span style=color:#75715e></span>    <span style=color:#a6e22e>x</span> = <span style=color:#ae81ff>3</span>
+    <span style=color:#75715e>// definición corta usando := incluye definición de variable, especificando su tipo y dándole valor
+</span><span style=color:#75715e></span>    <span style=color:#a6e22e>y</span> <span style=color:#f92672>:=</span> <span style=color:#ae81ff>4</span>
+    <span style=color:#75715e>// una función que devuelve dos valores separados
+</span><span style=color:#75715e></span>    <span style=color:#a6e22e>sum</span>, <span style=color:#a6e22e>prod</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>learnMultiple</span> (<span style=color:#a6e22e>x</span>, <span style=color:#a6e22e>y</span>)
+    <span style=color:#75715e>// imprimir salida de forma sencilla y directa
+</span><span style=color:#75715e></span>    <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span> (<span style=color:#e6db74>&#34;sum:&#34;</span>, <span style=color:#a6e22e>sum</span>, <span style=color:#e6db74>&#34;prod:&#34;</span>, <span style=color:#a6e22e>prod</span>)
+    <span style=color:#a6e22e>learnTypes</span>()
+}
+</code></pre></div><p>La definición de función puede tener múltiples coeficientes y valores de retorno. Por ejemplo, <strong>learnMultiple</strong> toma los coeficientes <strong>x</strong>, <strong>y</strong> &mldr; y devuelve dos valores de <strong>sum</strong> y <strong>prod</strong> de tipo Int.</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>learnMultiple</span> (<span style=color:#a6e22e>x</span>, <span style=color:#a6e22e>y</span> <span style=color:#66d9ef>int</span>) (<span style=color:#a6e22e>sum</span>, <span style=color:#a6e22e>prod</span> <span style=color:#66d9ef>int</span>) {
+<span style=color:#75715e>// separar los valores devueltos con una coma regular
+</span><span style=color:#75715e></span><span style=color:#66d9ef>return</span> <span style=color:#a6e22e>x</span> <span style=color:#f92672>+</span> <span style=color:#a6e22e>y</span>, <span style=color:#a6e22e>x</span> <span style=color:#f92672>*</span> <span style=color:#a6e22e>y</span>
+}
+</code></pre></div><h1 id=tipos-de-datos>Tipos de datos:</h1><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>learnTypes</span>() {
+    <span style=color:#75715e>// las declaraciones cortas generalmente cumplen el propósito deseado
+</span><span style=color:#75715e></span>    <span style=color:#75715e>// definir una variable de texto usando comillas dobles
+</span><span style=color:#75715e></span>    <span style=color:#a6e22e>str</span> <span style=color:#f92672>:=</span> <span style=color:#e6db74>&#34;Learn Go!&#34;</span>
+    <span style=color:#75715e>// definir una variable de texto con comillas simples
+</span><span style=color:#75715e></span>    <span style=color:#a6e22e>s2</span> <span style=color:#f92672>:=</span> <span style=color:#e6db74>`A &#34;raw&#34; string literal can include line breaks.`</span>
+    <span style=color:#75715e>// definir variable tipo runa que es otro nombre para el tipo int32 que contiene unicode
+</span><span style=color:#75715e></span>    <span style=color:#a6e22e>g</span> <span style=color:#f92672>:=</span> <span style=color:#e6db74>&#39;Σ&#39;</span>
+    <span style=color:#75715e>// float
+</span><span style=color:#75715e></span>    <span style=color:#a6e22e>f</span> <span style=color:#f92672>:=</span> <span style=color:#ae81ff>3.14195</span>
+    <span style=color:#75715e>// definición de número complejo (Complex)
+</span><span style=color:#75715e></span>    <span style=color:#a6e22e>c</span> <span style=color:#f92672>:=</span> <span style=color:#ae81ff>3</span> <span style=color:#f92672>+</span> <span style=color:#ae81ff>4i</span>
+    <span style=color:#75715e>// definir variables usando var
+</span><span style=color:#75715e></span>    <span style=color:#66d9ef>var</span> <span style=color:#a6e22e>u</span> <span style=color:#66d9ef>uint</span> = <span style=color:#ae81ff>7</span> <span style=color:#75715e>// número natural (entero positivo)
+</span><span style=color:#75715e></span>    <span style=color:#66d9ef>var</span> <span style=color:#a6e22e>pi</span> <span style=color:#66d9ef>float32</span> = <span style=color:#ae81ff>22.</span> <span style=color:#f92672>/</span> <span style=color:#ae81ff>7</span> <span style=color:#75715e>// un decimal de 32 bits
+</span><span style=color:#75715e></span>    <span style=color:#75715e>// definición corta byte (es otro nombre para uint8)
+</span><span style=color:#75715e></span>    <span style=color:#a6e22e>n</span> <span style=color:#f92672>:=</span> <span style=color:#66d9ef>byte</span> (<span style=color:#e6db74>&#39;\n&#39;</span>)
+    <span style=color:#75715e>// arrays tienen un tamaño fijo, y son fijos en momento de compilación
+</span><span style=color:#75715e></span>    <span style=color:#75715e>// definir un array int de 4 elementos con un valor inicial de cero
+</span><span style=color:#75715e></span>    <span style=color:#66d9ef>var</span> <span style=color:#a6e22e>a4</span> [<span style=color:#ae81ff>4</span>] <span style=color:#66d9ef>int</span>
+    <span style=color:#75715e>// definir un array de 3 elementos con valores 3, 1 y 5
+</span><span style=color:#75715e></span>    <span style=color:#a6e22e>a3</span> <span style=color:#f92672>:=</span> [<span style=color:#f92672>...</span>] <span style=color:#66d9ef>int</span> {<span style=color:#ae81ff>3</span>, <span style=color:#ae81ff>1</span>, <span style=color:#ae81ff>5</span>}
+</code></pre></div><p>Go ofrece un tipo de datos llamado Slices. Los Slices entendibles como &ldquo;rebanadas&rdquo;, &ldquo;porciones&rdquo;, &ldquo;segmentos&rdquo; tienen un tamaño dinámico. Las matrices (<strong>array</strong>) y los segmentos (<strong>slice</strong>) tienen ventajas, pero los casos de uso de los segmentos son más comunes. La siguiente instrucción define un segmento de tipo int</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go>    <span style=color:#75715e>// observar la diferencia entre el array y la declaración del slice, donde cuando
+</span><span style=color:#75715e></span>    <span style=color:#75715e>// el slice está definido no hay un número que determine su tamaño
+</span><span style=color:#75715e></span>    <span style=color:#a6e22e>s3</span>: = [] <span style=color:#66d9ef>int</span> {<span style=color:#ae81ff>4</span>, <span style=color:#ae81ff>5</span>, <span style=color:#ae81ff>9</span>}
+    <span style=color:#75715e>// definir un tipo int con cuatro elementos con valores cero
+</span><span style=color:#75715e></span>    <span style=color:#a6e22e>s4</span>: = <span style=color:#a6e22e>make</span> ([] <span style=color:#66d9ef>int</span>, <span style=color:#ae81ff>4</span>)
+    <span style=color:#75715e>// solo definir, y no hay selección
+</span><span style=color:#75715e></span>    <span style=color:#66d9ef>var</span> <span style=color:#a6e22e>d2</span> [] [] <span style=color:#66d9ef>float64</span>
+    <span style=color:#75715e>// método para convertir el tipo de texto en slice
+</span><span style=color:#75715e></span>    <span style=color:#a6e22e>bs</span>: = [] <span style=color:#66d9ef>byte</span> (<span style=color:#e6db74>&#34;a slice&#34;</span>)
+</code></pre></div><p>Por la naturaleza de los slice dinámicos, es posible agregar nuevos elementos usando la función <strong>append</strong> incorporada. Primero se pasa el slice al que queremos agregar y luego los elementos que queremos agregar.</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go>    <span style=color:#a6e22e>s</span> <span style=color:#f92672>:=</span> [] <span style=color:#66d9ef>int</span> {<span style=color:#ae81ff>1</span>, <span style=color:#ae81ff>2</span>, <span style=color:#ae81ff>3</span>}
+    <span style=color:#a6e22e>s</span> = <span style=color:#a6e22e>append</span> (<span style=color:#a6e22e>s</span>, <span style=color:#ae81ff>4</span>, <span style=color:#ae81ff>5</span>, <span style=color:#ae81ff>6</span>)
+    <span style=color:#75715e>// se imprimirá un slice con el siguiente contenido [1 2 3 4 5 6]
+</span><span style=color:#75715e></span>    <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span> (<span style=color:#a6e22e>s</span>)
+</code></pre></div><p>Para agregar un slice a otro slice, pasamos los dos slices en la función en lugar de pasar elementos individuales, y siguiendo el segundo slice con tres puntos.</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go>    <span style=color:#a6e22e>s</span> = <span style=color:#a6e22e>append</span> (<span style=color:#a6e22e>s</span>, [] <span style=color:#66d9ef>int</span> {<span style=color:#ae81ff>7</span>, <span style=color:#ae81ff>8</span>, <span style=color:#ae81ff>9</span>} <span style=color:#f92672>...</span>)
+    <span style=color:#75715e>// se imprimirá un slice con el siguiente contenido [1 2 3 4 5 6 7 8 9]
+</span><span style=color:#75715e></span>    <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span> (<span style=color:#a6e22e>s</span>)
+</code></pre></div><p>La siguiente instrucción define las variables <strong>p</strong> y <strong>q</strong> como punteros en dos variables de tipo int que contienen dos valores devueltos por la función learnMemory:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go>    <span style=color:#a6e22e>p</span>, <span style=color:#a6e22e>q</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>learnMemory</span>()
+    <span style=color:#75715e>// tema de reglas por ver
+</span></code></pre></div><p>Cuando un asterisco precede a un cursor, significa el valor de la variable a la que se refiere el cursor, como en el siguiente ejemplo los valores de las dos variables devueltas por la función learnMemory:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go>    <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span> (<span style=color:#f92672>*</span><span style=color:#a6e22e>p</span>, <span style=color:#f92672>*</span><span style=color:#a6e22e>q</span>)
+</code></pre></div><p>Los mapas (<strong>maps</strong>) en Go son arrays dinámicos y modificables que son similares al tipo de diccionario o hash en otros lenguajes.</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go>    <span style=color:#75715e>// aquí un mapa cuya clave es tipo texto y los valores de los elementos numéricos.
+</span><span style=color:#75715e></span>    <span style=color:#a6e22e>m</span>: = <span style=color:#66d9ef>map</span> [<span style=color:#66d9ef>string</span>] <span style=color:#66d9ef>int</span> {<span style=color:#e6db74>&#34;three&#34;</span>: <span style=color:#ae81ff>3</span>, <span style=color:#e6db74>&#34;four&#34;</span>: <span style=color:#ae81ff>4</span>}
+    <span style=color:#a6e22e>m</span> [<span style=color:#e6db74>&#34;one&#34;</span>] = <span style=color:#ae81ff>1</span>
+</code></pre></div><p>Las variables no utilizadas son errores. El subrayado, guion bajo, operador blanco o <strong>Blank Identifier</strong> de la siguiente manera hace usar la variable pero ignora valores al mismo tiempo:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go>    <span style=color:#a6e22e>_</span>, <span style=color:#a6e22e>_</span>, <span style=color:#a6e22e>_</span>, <span style=color:#a6e22e>_</span>, <span style=color:#a6e22e>_</span>, <span style=color:#a6e22e>_</span>, <span style=color:#a6e22e>_</span>, <span style=color:#a6e22e>_</span>, <span style=color:#a6e22e>_</span>, <span style=color:#a6e22e>_</span> = <span style=color:#a6e22e>str</span>, <span style=color:#a6e22e>s2</span>, <span style=color:#a6e22e>g</span>, <span style=color:#a6e22e>f</span>, <span style=color:#a6e22e>u</span>, <span style=color:#a6e22e>pi</span>, <span style=color:#a6e22e>n</span>, <span style=color:#a6e22e>a3</span>, <span style=color:#a6e22e>s4</span>, <span style=color:#a6e22e>bs</span>
+</code></pre></div><h1 id=valores-de-retorno-con-nombre>Valores de retorno con nombre:</h1><p>A diferencia de otros lenguajes, las funciones pueden tener valores de retorno con nombre. Donde el nombre se devuelve al valor de la función en la línea de la definición de la función, esta característica permite regresar fácilmente desde cualquier punto de la función además del uso de la palabra <strong>return</strong> solo sin mencionar nada después:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>learnNamedReturns</span> (<span style=color:#a6e22e>x</span>, <span style=color:#a6e22e>y</span> <span style=color:#66d9ef>int</span>) (<span style=color:#a6e22e>z</span> <span style=color:#66d9ef>int</span>) {
+    <span style=color:#a6e22e>z</span> = <span style=color:#a6e22e>x</span> <span style=color:#f92672>*</span> <span style=color:#a6e22e>y</span>
+    <span style=color:#75715e>// aquí implícitamente significa devolver el valor de la variable z
+</span><span style=color:#75715e></span>    <span style=color:#66d9ef>return</span>
+}
+</code></pre></div><p><strong>Nota:</strong> El lenguaje Go se basa en gran medida en la recolección de basura. Go tiene indicadores pero no cálculos (puede confundir un cursor vacío, pero no puede aumentar el cursor). Tener cuidado con valores de retorno de nil pointer reference.</p><h1 id=variables-y-memoria>Variables y memoria:</h1><p>Las variables <strong>p</strong> y <strong>q</strong> a continuación son indicadores del tipo int y representan valores de retorno en la función. Cuando se define, los cursores están vacíos; sin embargo, el uso de la función incorporada <strong>new</strong> hace que el valor de la variable numérica <strong>p</strong> se refiera a cero, y por lo tanto ocupa espacio en la memoria; es decir, <strong>p</strong> ya no está vacío.</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>learnMemory</span>() (<span style=color:#a6e22e>p</span>, <span style=color:#a6e22e>q</span><span style=color:#f92672>*</span> <span style=color:#66d9ef>int</span>) {
+    <span style=color:#a6e22e>p</span> = new(<span style=color:#66d9ef>int</span>)
+    <span style=color:#75715e>// definir un slice de 20 elementos como una sola unidad en la memoria.
+</span><span style=color:#75715e></span>    <span style=color:#a6e22e>s</span> <span style=color:#f92672>:=</span> make([] <span style=color:#66d9ef>int</span>, <span style=color:#ae81ff>20</span>)
+    <span style=color:#75715e>// dar valor a un elemento
+</span><span style=color:#75715e></span>    <span style=color:#a6e22e>s</span>[<span style=color:#ae81ff>3</span>] = <span style=color:#ae81ff>7</span>
+    <span style=color:#75715e>// definir una nueva variable local a nivel de función
+</span><span style=color:#75715e></span>    <span style=color:#a6e22e>r</span> <span style=color:#f92672>:=</span> <span style=color:#f92672>-</span><span style=color:#ae81ff>2</span>
+    <span style=color:#75715e>// devolver dos valores de la función, que son direcciones de memoria 
+</span><span style=color:#75715e></span>    <span style=color:#75715e>// para las variables s y r, respectivamente.
+</span><span style=color:#75715e></span>    <span style=color:#66d9ef>return</span> <span style=color:#f92672>&amp;</span><span style=color:#a6e22e>s</span>[<span style=color:#ae81ff>3</span>], <span style=color:#f92672>&amp;</span><span style=color:#a6e22e>r</span>
+}
+
+<span style=color:#66d9ef>func</span> <span style=color:#a6e22e>expensiveComputation</span>() <span style=color:#66d9ef>float64</span> {
+    <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>m</span>.<span style=color:#a6e22e>Exp</span> (<span style=color:#ae81ff>10</span>)
+}
+</code></pre></div><h1 id=control-de-sentencias>Control de sentencias</h1><p>Las sentencias condicionales requieren corchetes ornamentados y no requieren paréntesis.</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>learnFlowControl</span>() {
+    <span style=color:#66d9ef>if</span> <span style=color:#66d9ef>true</span> {<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span> (<span style=color:#e6db74>&#34;told ya&#34;</span> )
+}
+
+<span style=color:#66d9ef>if</span> <span style=color:#66d9ef>false</span> {
+    <span style=color:#75715e>// Rusters.
+</span><span style=color:#75715e></span>} <span style=color:#66d9ef>else</span> {
+    <span style=color:#75715e>// Gophers.
+</span><span style=color:#75715e></span>}
+</code></pre></div><p>Usar la instrucción <strong>switch</strong> si se necesita escribir más de una secuencia condicional.</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#a6e22e>x</span> <span style=color:#f92672>:=</span> <span style=color:#ae81ff>42.0</span>
+<span style=color:#66d9ef>switch</span> <span style=color:#a6e22e>x</span> {
+    <span style=color:#66d9ef>case</span> <span style=color:#ae81ff>0</span>:
+    <span style=color:#66d9ef>case</span> <span style=color:#ae81ff>1</span>:
+    <span style=color:#66d9ef>case</span> <span style=color:#ae81ff>42</span>:
+    <span style=color:#66d9ef>case</span> <span style=color:#ae81ff>43</span>:
+    <span style=color:#66d9ef>default</span>:
+}
+</code></pre></div><p>Como sentencia condicional, la cláusula <strong>for</strong> no toma paréntesis. Las variables definidas en la cláusula for son visibles a nivel de la sentencia.</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#66d9ef>for</span> <span style=color:#a6e22e>x</span>: = <span style=color:#ae81ff>0</span>; <span style=color:#a6e22e>x</span> &lt;<span style=color:#ae81ff>3</span>; <span style=color:#a6e22e>x</span> <span style=color:#f92672>++</span> {
+    <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span> (<span style=color:#e6db74>&#34;iteration&#34;</span>, <span style=color:#a6e22e>x</span>)
+}
+</code></pre></div><p>La instrucción for es la única instrucción de iteración en el lenguaje Go y tiene otra formas, de la siguiente manera:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#75715e>// repetición infinita
+</span><span style=color:#75715e></span><span style=color:#66d9ef>for</span> {
+    <span style=color:#75715e>// break para detener la repetición
+</span><span style=color:#75715e></span>    <span style=color:#66d9ef>break</span>
+    <span style=color:#75715e>// continue para ir a la siguiente iteración
+</span><span style=color:#75715e></span>    <span style=color:#66d9ef>continue</span>
+}
+</code></pre></div><p>Se puede utilizar el <strong>range</strong> para pasar elementos de array, slice, text string, map, channel.</p><p>El <strong>range</strong> de canal (<strong>channel</strong>) devuelve un valor, y dos valores cuando se usa en slice, array, text string, o map.</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#75715e>// ejemplo:
+</span><span style=color:#75715e></span><span style=color:#66d9ef>for</span> <span style=color:#a6e22e>key</span>, <span style=color:#a6e22e>value</span> <span style=color:#f92672>:=</span> <span style=color:#66d9ef>range</span> <span style=color:#66d9ef>map</span> [<span style=color:#66d9ef>string</span>] <span style=color:#66d9ef>int</span> {<span style=color:#e6db74>&#34;one&#34;</span>: <span style=color:#ae81ff>1</span>, <span style=color:#e6db74>&#34;two&#34;</span>: <span style=color:#ae81ff>2</span>, <span style=color:#e6db74>&#34;three&#34;</span>: <span style=color:#ae81ff>3</span>} {
+    <span style=color:#75715e>// imprimir el valor de cada elemento del mapa
+</span><span style=color:#75715e></span>    <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Printf</span> (<span style=color:#e6db74>&#34;key =% s, value =% d \n&#34;</span>, <span style=color:#a6e22e>key</span>, <span style=color:#a6e22e>value</span>)
+}
+</code></pre></div><p>Usar el guión bajo (<strong>_</strong>) contra valor de retorno en la clave si solo se desea el valor, de la siguiente manera:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#66d9ef>for</span> <span style=color:#a6e22e>_</span>, <span style=color:#a6e22e>name</span>: = <span style=color:#66d9ef>range</span> [] <span style=color:#66d9ef>string</span> {<span style=color:#e6db74>&#34;Bob&#34;</span>, <span style=color:#e6db74>&#34;Bill&#34;</span>, <span style=color:#e6db74>&#34;Joe&#34;</span>} {
+    <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Printf</span> (<span style=color:#e6db74>&#34;Hello,% s \n&#34;</span>, <span style=color:#a6e22e>name</span>)
+}
+</code></pre></div><p>Se puede usar la declaración corta con la sentencia condicional para que se defina una variable y luego se verifique en la sentencia de condición.</p><p>Por ejemplo se define una variable <strong>y</strong>, se le da un valor y luego se coloca la condición de la sentencia para que estén separadas por un punto y coma.</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#66d9ef>if</span> <span style=color:#a6e22e>y</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>expensiveComputation</span>(); <span style=color:#a6e22e>y</span> &gt; <span style=color:#a6e22e>x</span> {
+    <span style=color:#a6e22e>x</span> = <span style=color:#a6e22e>y</span>
+}
+</code></pre></div><p>Se puede definir funciones anónimas falsas directamente en el código.</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go>    <span style=color:#a6e22e>xBig</span> <span style=color:#f92672>:=</span> <span style=color:#66d9ef>func</span>() <span style=color:#66d9ef>bool</span> {
+        <span style=color:#75715e>// x:= 42 que fue declarada antes donde de menciona la sentencia switch
+</span><span style=color:#75715e></span>        <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>x</span> &gt; <span style=color:#ae81ff>10000</span>
+    }
+    <span style=color:#a6e22e>x</span> = <span style=color:#ae81ff>99999</span>
+    <span style=color:#75715e>// la función xBig ahora devuelve el valor verdadero
+</span><span style=color:#75715e></span>    <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span> (<span style=color:#e6db74>&#34;xBig:&#34;</span>, <span style=color:#a6e22e>xBig</span>())
+    <span style=color:#a6e22e>x</span> = <span style=color:#ae81ff>1.3e3</span>
+    <span style=color:#75715e>// Después de modificar el valor de x a 1.3e3 que es igual a 1300 (es decir, mayor que 1000)
+</span><span style=color:#75715e></span>    <span style=color:#75715e>// la función xBig devuelve falso
+</span><span style=color:#75715e></span>    <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span> (<span style=color:#e6db74>&#34;xBig:&#34;</span>, <span style=color:#a6e22e>xBig</span>())
+</code></pre></div><p>Además de lo anterior, es posible definir función <strong>fantasma</strong> y llamarla en la misma línea y pasarla a otra función siempre que se llame directamente y el tipo de resultado sea consistente con lo esperado en el parámetro de la función.</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go>    <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span> (<span style=color:#e6db74>&#34;Add + double two numbers:&#34;</span>,
+    <span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>a</span>, <span style=color:#a6e22e>b</span> <span style=color:#66d9ef>int</span>) <span style=color:#66d9ef>int</span> {
+        <span style=color:#66d9ef>return</span> (<span style=color:#a6e22e>a</span> <span style=color:#f92672>+</span> <span style=color:#a6e22e>b</span>) <span style=color:#f92672>*</span> <span style=color:#ae81ff>2</span>
+    } (<span style=color:#ae81ff>10</span>, <span style=color:#ae81ff>2</span>))
+    <span style=color:#66d9ef>goto</span> <span style=color:#a6e22e>love</span>
+    <span style=color:#a6e22e>love</span>:
+    <span style=color:#a6e22e>learnFunctionFactory</span>() <span style=color:#75715e>// Una función que devuelve una función
+</span><span style=color:#75715e></span>    <span style=color:#a6e22e>learnDefer</span>() <span style=color:#75715e>// Dormir
+</span><span style=color:#75715e></span>    <span style=color:#a6e22e>learnInterfaces</span>() <span style=color:#75715e>// Trabajar con interfaces
+</span><span style=color:#75715e></span>}
+</code></pre></div><h1 id=generar-funciones>Generar funciones</h1><p>Se puede tratar las funciones como objetos separados. Por ejemplo, crear una función y el valor de retorno es otra.</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>learnFunctionFactory</span>() {
+</code></pre></div><p>Los dos métodos siguientes para imprimir la oración son iguales, pero el segundo método es más claro, más legible y común.</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go>    <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#a6e22e>sentenceFactory</span> (<span style=color:#e6db74>&#34;summer&#34;</span>) (<span style=color:#e6db74>&#34;A beautiful&#34;</span>, <span style=color:#e6db74>&#34;day!&#34;</span>))
+
+    <span style=color:#a6e22e>d</span>: = <span style=color:#a6e22e>sentenceFactory</span> (<span style=color:#e6db74>&#34;summer&#34;</span>)
+    <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#a6e22e>d</span> (<span style=color:#e6db74>&#34;A beautiful&#34;</span>, <span style=color:#e6db74>&#34;day!&#34;</span>))
+    <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#a6e22e>d</span> (<span style=color:#e6db74>&#34;A lazy&#34;</span>, <span style=color:#e6db74>&#34;afternoon!&#34;</span>))
+}
+</code></pre></div><p>Los decoradores se encuentran en algunos lenguajes de programación y en el mismo concepto en Go para que poder pasar datos a funciones.</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>sentenceFactory</span>(<span style=color:#a6e22e>mystring</span> <span style=color:#66d9ef>string</span>) <span style=color:#66d9ef>func</span>(<span style=color:#a6e22e>before</span>, <span style=color:#a6e22e>after</span> <span style=color:#66d9ef>string</span>) <span style=color:#66d9ef>string</span> {
+    <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>func</span>(<span style=color:#a6e22e>before</span>, <span style=color:#a6e22e>after</span> <span style=color:#66d9ef>string</span>) <span style=color:#66d9ef>string</span> {
+        <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Sprintf</span> (<span style=color:#e6db74>&#34;%s %s %s&#34;</span>, <span style=color:#a6e22e>before</span>, <span style=color:#a6e22e>mystring</span>, <span style=color:#a6e22e>after</span>)
+    }
+}
+</code></pre></div><h1 id=ejecución-diferida>Ejecución diferida</h1><p>Se puede usar la función <strong>defer</strong> en funciones para realizar una acción antes de devolver el valor o resolver la funcion, y si se escribe más de una, el orden en ejecución de estas acciones es la contraria, como en learnDefer:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>learnDefer</span>() (<span style=color:#a6e22e>ok</span> <span style=color:#66d9ef>bool</span>) {
+    <span style=color:#75715e>// instrucciones diferidas se ejecutan antes de que la función devuelva el resultado.
+</span><span style=color:#75715e></span>    <span style=color:#66d9ef>defer</span> <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span> (<span style=color:#e6db74>&#34;deferred statements execute in reverse (LIFO) order.&#34;</span>)
+    <span style=color:#66d9ef>defer</span> <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span> (<span style=color:#e6db74>&#34;\nThis line is being printed first because&#34;</span>)
+    <span style=color:#75715e>// defer se utiliza normalmente para cerrar un archivo después de abrirlo.
+</span><span style=color:#75715e></span>    <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>true</span>
+}
+</code></pre></div><h1 id=interfaces>Interfaces</h1><p>Como ejemplo se define una función llamada <strong>Stringer</strong> que contiene una función llamada <strong>String</strong>; luego se define una estructura de dos dígitos de tipo int nombrados <strong>x</strong> y <strong>y</strong>.</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#66d9ef>type</span> <span style=color:#a6e22e>Stringer</span> <span style=color:#66d9ef>interface</span> {
+    <span style=color:#a6e22e>String</span>() <span style=color:#66d9ef>string</span>
+}
+
+<span style=color:#66d9ef>type</span> <span style=color:#a6e22e>pair</span> <span style=color:#66d9ef>struct</span> {
+    <span style=color:#a6e22e>x</span>, <span style=color:#a6e22e>y</span> <span style=color:#66d9ef>int</span>
+}
+</code></pre></div><p>Aquí se define la función <strong>String</strong> como un <strong>pair</strong>, convirtiéndose en un <strong>pair</strong> para la implementación de la interfaz <strong>Stringer</strong>. La variable <strong>p</strong> a continuación se llama receptor (<strong>receiver</strong>). Observar cómo se accede a los campos de estructura de <strong>pair</strong> utilizando el nombre de la estructura seguido de un punto y luego el nombre del campo.</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#66d9ef>func</span>(<span style=color:#a6e22e>p</span> <span style=color:#a6e22e>pair</span>) <span style=color:#a6e22e>String</span>() <span style=color:#66d9ef>string</span> {
+    <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Sprintf</span> (<span style=color:#e6db74>&#34;(%d, %d)&#34;</span>, <span style=color:#a6e22e>p</span>.<span style=color:#a6e22e>x</span>, <span style=color:#a6e22e>p</span>.<span style=color:#a6e22e>y</span>)
+}
+</code></pre></div><p>Los puntos y comas se utilizan para crear un elemento de estructura (<strong>struct</strong>). Se usa la definición corta en el siguiente ejemplo para crear una variable llamada <strong>p</strong> y especificar su tipo en la estructura de <strong>pair</strong>.</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>learnInterfaces</span>() {
+    <span style=color:#a6e22e>p</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>pair</span>{<span style=color:#ae81ff>3</span>, <span style=color:#ae81ff>4</span>}
+    <span style=color:#75715e>// llamar función String de pair
+</span><span style=color:#75715e></span>    <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#a6e22e>p</span>.<span style=color:#a6e22e>String</span>())
+    <span style=color:#75715e>// definir una variable como i del tipo Stringer interface previamente definida 
+</span><span style=color:#75715e></span>    <span style=color:#66d9ef>var</span> <span style=color:#a6e22e>i</span> <span style=color:#a6e22e>Stringer</span>
+    <span style=color:#75715e>// esta igualdad es correcta, porque se aplica pair de Stringer
+</span><span style=color:#75715e></span>    <span style=color:#a6e22e>i</span> = <span style=color:#a6e22e>p</span>
+    <span style=color:#75715e>// se llama función String de la variable i de tipo Stringer y se obtiene
+</span><span style=color:#75715e></span>    <span style=color:#75715e>// el mismo resultado que antes
+</span><span style=color:#75715e></span>    <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#a6e22e>i</span>.<span style=color:#a6e22e>String</span>())
+    <span style=color:#75715e>// al pasar las variables anteriores directamente a las funciones de impresión y salida fmt,
+</span><span style=color:#75715e></span>    <span style=color:#75715e>// estas funciones llaman a la función String para imprimir la representación de la variable. */
+</span><span style=color:#75715e></span>    <span style=color:#75715e>// Las siguientes dos líneas dan el mismo resultado de impresión
+</span><span style=color:#75715e></span>    <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#a6e22e>p</span>)
+    <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#a6e22e>i</span>)
+    <span style=color:#a6e22e>learnVariadicParams</span> (<span style=color:#e6db74>&#34;great&#34;</span>, <span style=color:#e6db74>&#34;learning&#34;</span>, <span style=color:#e6db74>&#34;here!&#34;</span>)
+}
+</code></pre></div><h1 id=múltiples-entradas>Múltiples entradas</h1><p>Es posible pasar variedad de variables a funciones sin un número definido de parámetros.</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>learnVariadicParams</span> (<span style=color:#a6e22e>myStrings</span><span style=color:#f92672>...</span> <span style=color:#66d9ef>interface</span>{}) {
+    <span style=color:#75715e>// la siguiente iteración recorre los elementos de entrada de datos de la función.
+</span><span style=color:#75715e></span>    <span style=color:#66d9ef>for</span> <span style=color:#a6e22e>_</span>, <span style=color:#a6e22e>param</span>: = <span style=color:#66d9ef>range</span> <span style=color:#a6e22e>myStrings</span> {
+        <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#e6db74>&#34;param:&#34;</span>, <span style=color:#a6e22e>param</span>)
+    }
+    <span style=color:#75715e>// se pasa la entrada de la función variadica como parámetro de otra función (para Sprintln)
+</span><span style=color:#75715e></span>    <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span> (<span style=color:#e6db74>&#34;params:&#34;</span>, <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Sprintln</span>(<span style=color:#a6e22e>myStrings</span><span style=color:#f92672>...</span>))
+    <span style=color:#a6e22e>learnErrorHandling</span>()
+}
+</code></pre></div><h1 id=manejo-de-errores>Manejo de errores</h1><p>La palabra clave <strong>&ldquo;ok&rdquo;</strong> se utiliza para determinar si una sentencia es correcta. Si ocurre un error, se puede usar una variable <strong>err</strong> para conocer más detalles sobre el error.</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>learnErrorHandling</span>() {
+    <span style=color:#a6e22e>m</span> <span style=color:#f92672>:=</span> <span style=color:#66d9ef>map</span> [<span style=color:#66d9ef>int</span>] <span style=color:#66d9ef>string</span>{<span style=color:#ae81ff>3</span>: <span style=color:#e6db74>&#34;three&#34;</span>, <span style=color:#ae81ff>4</span>: <span style=color:#e6db74>&#34;four&#34;</span>}
+    <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>x</span>, <span style=color:#a6e22e>ok</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>m</span>[<span style=color:#ae81ff>1</span>]; !<span style=color:#a6e22e>ok</span> {
+        <span style=color:#75715e>// ok aquí será falso porque el número 1 no está en el mapa m
+</span><span style=color:#75715e></span>        <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#e6db74>&#34;no one there&#34;</span>)
+    } <span style=color:#66d9ef>else</span> {
+        <span style=color:#75715e>// x será el valor en el mapa
+</span><span style=color:#75715e></span>        <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Print</span>(<span style=color:#a6e22e>x</span>)
+    }
+    <span style=color:#75715e>// aqui se intenta convertir valor de texto a número que resultará en un error, 
+</span><span style=color:#75715e></span>    <span style=color:#75715e>// se imprimen los detalles del error si err no es nil */
+</span><span style=color:#75715e></span>    <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>_</span>, <span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>strconv</span>.<span style=color:#a6e22e>Atoi</span>(<span style=color:#e6db74>&#34;non-int&#34;</span>); <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
+        <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#a6e22e>err</span>)
+    }
+
+    <span style=color:#a6e22e>learnConcurrency</span>()
+}
+</code></pre></div><h1 id=ejecución-simultánea>Ejecución simultánea</h1><p>Usando una función anterior para hacer una suma numérica a algunos números en conjunto. Se usa <strong>make</strong> para crear una variable sin especificar un valor para ella.</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>learnConcurrency</span>() {
+    <span style=color:#75715e>// se crea una variable de tipo canal llamada c
+</span><span style=color:#75715e></span>    <span style=color:#a6e22e>c</span> <span style=color:#f92672>:=</span> make(<span style=color:#66d9ef>chan</span> <span style=color:#66d9ef>int</span>)
+    <span style=color:#75715e>// creando tres funciones Go concurrentes. Los números se incrementarán simultáneamente 
+</span><span style=color:#75715e></span>    <span style=color:#75715e>// (en paralelo si el dispositivo está configurado para hacerlo).
+</span><span style=color:#75715e></span>    <span style=color:#75715e>// todas las transmisiones irán al mismo canal
+</span><span style=color:#75715e></span>    <span style=color:#75715e>// &#34;go&#34; aquí significa iniciar una nueva función
+</span><span style=color:#75715e></span>    <span style=color:#66d9ef>go</span> <span style=color:#a6e22e>inc</span>(<span style=color:#ae81ff>0</span>, <span style=color:#a6e22e>c</span>)
+    <span style=color:#66d9ef>go</span> <span style=color:#a6e22e>inc</span>(<span style=color:#ae81ff>10</span>, <span style=color:#a6e22e>c</span>)
+    <span style=color:#66d9ef>go</span> <span style=color:#a6e22e>inc</span>(<span style=color:#f92672>-</span><span style=color:#ae81ff>805</span>, <span style=color:#a6e22e>c</span>)
+    <span style=color:#75715e>// luego hacer tres lecturas desde el mismo canal e imprimir los resultados.
+</span><span style=color:#75715e></span>    <span style=color:#75715e>// no hay un orden de acceso de lectura desde el canal, y 
+</span><span style=color:#75715e></span>    <span style=color:#75715e>// también cuando el canal aparece a la derecha de la operación 
+</span><span style=color:#75715e></span>    <span style=color:#75715e>// &lt;- significa que esta leyendo y recibiendo del canal
+</span><span style=color:#75715e></span>    <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#f92672>&lt;-</span><span style=color:#a6e22e>c</span>, <span style=color:#f92672>&lt;-</span><span style=color:#a6e22e>c</span>, <span style=color:#f92672>&lt;-</span><span style=color:#a6e22e>c</span>)
+    <span style=color:#75715e>// nuevo canal con texto
+</span><span style=color:#75715e></span>    <span style=color:#a6e22e>cs</span> <span style=color:#f92672>:=</span> make(<span style=color:#66d9ef>chan</span> <span style=color:#66d9ef>string</span>)
+    <span style=color:#75715e>// canal contiene canales de texto
+</span><span style=color:#75715e></span>    <span style=color:#a6e22e>ccs</span> <span style=color:#f92672>:=</span> make(<span style=color:#66d9ef>chan</span> <span style=color:#66d9ef>chan</span> <span style=color:#66d9ef>string</span>) 
+    <span style=color:#75715e>// enviar valor 84 al canal c
+</span><span style=color:#75715e></span>    <span style=color:#66d9ef>go</span> <span style=color:#66d9ef>func</span>() {<span style=color:#a6e22e>c</span> <span style=color:#f92672>&lt;-</span> <span style=color:#ae81ff>84</span>}()
+    <span style=color:#75715e>// enviar palabra al canal cs
+</span><span style=color:#75715e></span>    <span style=color:#66d9ef>go</span> <span style=color:#66d9ef>func</span>() {<span style=color:#a6e22e>cs</span> <span style=color:#f92672>&lt;-</span> <span style=color:#e6db74>&#34;wordy&#34;</span>}()
+    <span style=color:#75715e>// instrucción select es similar a la instrucción switch, 
+</span><span style=color:#75715e></span>    <span style=color:#75715e>// pero en cada caso contiene un proceso para un canal que 
+</span><span style=color:#75715e></span>    <span style=color:#75715e>// está listo para comunicarse.
+</span><span style=color:#75715e></span>    <span style=color:#66d9ef>select</span> {
+        <span style=color:#75715e>// valor recibido del canal se puede guardar en una variable
+</span><span style=color:#75715e></span>        <span style=color:#66d9ef>case</span> <span style=color:#a6e22e>i</span> <span style=color:#f92672>:=</span> <span style=color:#f92672>&lt;-</span><span style=color:#a6e22e>c</span>:
+        <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Printf</span>(<span style=color:#e6db74>&#34;it&#39;s a %T&#34;</span>, <span style=color:#a6e22e>i</span>)
+        <span style=color:#66d9ef>case</span> <span style=color:#f92672>&lt;-</span><span style=color:#a6e22e>cs</span>:
+        <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#e6db74>&#34;it&#39;s a string&#34;</span>)
+        <span style=color:#75715e>// canal vacío pero listo para comunicarse
+</span><span style=color:#75715e></span>        <span style=color:#66d9ef>case</span> <span style=color:#f92672>&lt;-</span><span style=color:#a6e22e>ccs</span>:
+        <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#e6db74>&#34;didn&#39;t happen.&#34;</span>)
+    }
+
+}
+</code></pre></div></section><section class=related></section><section class=comments><h3>Comentar</h3><div id=disqus_thread></div><script type=application/javascript>var disqus_config=function(){};(function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById('disqus_thread').innerHTML='Disqus comments not available by default when the website is previewed locally.';return;}
+var d=document,s=d.createElement('script');s.async=true;s.src='//'+"gophers-latam"+'.disqus.com/embed.js';s.setAttribute('data-timestamp',+new Date());(d.head||d.body).appendChild(s);})();</script><noscript>Please enable JavaScript to view the <a href=https://disqus.com/?ref_noscript>comments powered by Disqus.</a></noscript><a href=https://disqus.com class=dsq-brlink>comments powered by <span class=logo-disqus>Disqus</span></a></section></article></main><footer><small>© 2021, Gophers LATAM. - Theme by Zero.</small>
+<a href=https://gohugo.io><img src=/img/hugo-logo.svg width=90 height=21></a></footer></div></body></html>
