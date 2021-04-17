@@ -3,7 +3,7 @@ title: "Awesome Latam"
 draft: false
 image: /assets/awesome.png
 alt_text: "Awesome Latam screenshot"
-summary: "Github README"
+summary: "Desde este Github que solo contiene el readme, queremos indexar la mayor cantidad de contenido, idealmente en español, en caso contrario se debe decir en que idioma está. Hay links a documentos, videos, conferencias de gran valor para toda la comunidad de Golang"
 tech_used:
 - Github
 - Markdown
