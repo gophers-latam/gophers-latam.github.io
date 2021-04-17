@@ -1,9 +1,13 @@
-<header>
-    <center>
+<header class="page-header app-width">
+    <div class="header-left">
         <a href="/">
-        <img alt="{{ .Site.Title }}" src="{{"img/gopher.png"|relURL}}">
-        <b>{{ .Site.Title }}</b>
+            <img alt="{{ .Site.Title }}" src="{{"img/gopher.png"|relURL}}">
         </a>
-    </center>
+    </div>
+    <div class="header-center">
+        {{- partial "nav.html" . -}}
+    </div>
+    <div class="header-right">
+        <a class="button-search" href="/search">🔍</a>
+    </div>
 </header>
-{{- partial "nav.html" . -}}

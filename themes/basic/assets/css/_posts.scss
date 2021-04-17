@@ -1,0 +1,112 @@
+@import "vars";
+
+.post-list, .post-list-short {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+
+  .box-post-container {
+    margin: 0.5rem;
+    text-decoration: none;
+    flex-basis: calc(33% - 1rem);
+
+    .box-post {
+      width: calc(100% - 2rem);
+      height: calc(100% - 2rem);
+      padding: 1rem;
+
+      .title { color: $second-color }
+
+      .date {
+        font-size: 0.9em;
+        color: #818181;
+      }
+
+      .summary-container p {
+        color: black;
+      }
+    }
+  }
+}
+
+.post {
+  max-width: $display-mid-max;
+  margin: auto;
+
+  > * {
+    margin: 2rem 0;
+  }
+
+  header {
+    > * {
+      margin: 2rem 0;
+    }
+
+    h2 { font-size: 2.5em }
+
+    .tags {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+
+      .tag {
+        margin: 0.25rem;
+        padding: 0.5rem;
+        border-radius: 5px;
+        font-weight: bold;
+        font-size: 0.9em;
+        background-color: $second-color;
+        color: white;
+      }
+    }
+
+    .meta {
+      display: flex;
+      flex-direction: column;
+      font-size: 0.9em;
+
+      label { padding: 0.5rem 0 }
+    }
+  }
+
+  a.tag {
+    background-color: #ddd;
+    color: #333;
+    display: inline-block;
+    padding: 0.1em;
+    font-size: 0.9em;
+    text-decoration: none;
+  }
+
+  figure {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    img {
+      width: auto;
+      height: auto;
+      max-width: $display-mid-max;
+      max-height: 400px;
+      margin: auto;
+      padding: 1rem;
+    }
+
+    figcaption {
+      font-size: 0.8em;
+      color: #666;
+    }
+  }
+}
+
+@media (max-width: #{$display-mid-max}) {
+  .post-list {
+    flex-direction: column;
+  }
+
+  .post figure img {
+    max-width: 100%;
+  }
+}
