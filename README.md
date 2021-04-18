@@ -1,5 +1,14 @@
 # **Gophers LATAM** [Hugo website builder]
 
+# Índice:
+
+- [Instalar Hugo](#instalar-hugo)
+- [Directorios y uso del contenido](#directorios-y-uso-del-contenido)
+- [Comandos necesarios para el sitio](#comandos-necesarios-para-el-sitio)
+- [Consideraciones](#consideraciones)
+- [Publicación del sitio](#publicación-del-sitio)
+- [Aportar al sitio](#aportar-al-sitio)
+
 # Instalar **Hugo**:
 
 Para poder manejar el generar del sitio statico es necesario instalar el binario hugo en modo extendido. Para opciones de instalación ver la opciones en la [documentación oficial](https://gohugo.io/), por ejemplo en **Linux** sería: [gohugo.io/getting-started/installing/#linux](https://gohugo.io/getting-started/installing/#linux)
@@ -144,13 +153,9 @@ your url is: https://grumpy-turtle-68.localtunnel.me
 
 Sólo subir cambios al repo, el resto es magia de **Github Page** y **Github Action** tomando la rama principal.
 
-## Rediseño:
-
-Versión de nuevo diseño se esta manejando en la rama [redesign](https://github.com/gophers-latam/gophers-latam.github.io/tree/redesing).
-
 <div><hr></div>
 
-# Aportar al sitio
+# Aportar al sitio:
 
 Las aportaciones son bienvenidas y agradecidas. 
 
