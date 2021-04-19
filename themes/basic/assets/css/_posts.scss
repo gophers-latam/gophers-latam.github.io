@@ -126,6 +126,15 @@
       color: #666;
     }
   }
+
+  .highlight {
+
+    pre {
+      padding: 1rem;
+      border-radius: 5px;
+      overflow: auto;
+    }
+  }
 }
 
 @media (max-width: #{$display-mid-max}) {
