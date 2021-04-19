@@ -1,12 +1,10 @@
-<a class="box-post-container" href="{{ .RelPermalink }}">
-    <article class="box box-post">
-        <h3 class="title">{{ .Title }}</h3>
-        <time class="date">
-            {{ .Date | dateFormat "January" }}
-            {{ .Date | dateFormat "2" }}
-        </time>
-        <div class="summary-container">
-            {{ .Summary }}
-        </div>
-    </article>
-</a>
+<article class="box box-post">
+    <a class="title" href="{{ .RelPermalink }}"><h3>{{ .Title }}</h3></a>
+    <time class="date">
+        {{ .Date | dateFormat "January" }}
+        {{ .Date | dateFormat "2" }}
+    </time>
+    <div class="summary-container">
+        {{.Summary}}
+    </div>
+</article>

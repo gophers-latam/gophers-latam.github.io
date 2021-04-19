@@ -1,30 +1,57 @@
 @import "vars";
 
-.post-list, .post-list-short {
+.post-list {
   display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: center;
+  flex-flow: row wrap;
+  justify-content: space-evenly;
 
-  .box-post-container {
+  .box-post {
+    display: flex;
+    flex-direction: column;
+    flex-basis: calc(33% - 3rem);
+    justify-content: flex-end;
     margin: 0.5rem;
-    text-decoration: none;
-    flex-basis: calc(33% - 1rem);
+    padding: 1rem;
+    align-items: stretch;
 
-    .box-post {
-      width: calc(100% - 2rem);
-      height: calc(100% - 2rem);
-      padding: 1rem;
+    .title {
+      text-decoration: none;
+      flex: 1;
 
-      .title { color: $second-color }
+      h3 {
+        color: $second-color;
+        flex-basis: 20%;
+        font-size: 1.25em;
+      }
+    }
 
-      .date {
-        font-size: 0.9em;
-        color: #818181;
+    .date {
+      font-size: 0.9em;
+      color: #818181;
+    }
+
+    .summary-container {
+      max-height: 300px;
+      overflow: hidden;
+
+      figure {
+        max-width: 300px;
+        height: 150px;
+        margin-left: auto;
+        margin-right: auto;
+
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+
+        figcaption { display: none }
       }
 
-      .summary-container p {
-        color: black;
+      p {
+        font-size: 0.85em;
+        color: #616161;
       }
     }
   }
@@ -70,33 +97,44 @@
     }
   }
 
-  a.tag {
-    background-color: #ddd;
-    color: #333;
-    display: inline-block;
-    padding: 0.1em;
-    font-size: 0.9em;
-    text-decoration: none;
-  }
-
-  figure {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-
-    img {
-      width: auto;
-      height: auto;
-      max-width: $display-mid-max;
-      max-height: 400px;
-      margin: auto;
-      padding: 1rem;
+  header, .body {
+    a.tag {
+      background-color: #ddd;
+      color: #333;
+      display: inline-block;
+      padding: 0.1em;
+      font-size: 0.9em;
+      text-decoration: none;
     }
 
-    figcaption {
-      font-size: 0.8em;
-      color: #666;
+    figure {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      img {
+        width: auto;
+        height: auto;
+        max-width: $display-mid-max;
+        max-height: 400px;
+        margin: auto;
+        padding: 1rem;
+      }
+
+      figcaption {
+        font-size: 0.8em;
+        color: #666;
+      }
+    }
+  }
+
+  .highlight {
+
+    pre {
+      padding: 1rem;
+      border-radius: 5px;
+      overflow: auto;
     }
   }
 }
