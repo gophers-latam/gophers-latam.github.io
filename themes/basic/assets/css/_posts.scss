@@ -1,6 +1,6 @@
 @import "vars";
 
-.post-list, .post-list-short {
+.post-list {
   display: flex;
   flex-flow: row wrap;
   justify-content: space-evenly;
@@ -97,33 +97,35 @@
     }
   }
 
-  a.tag {
-    background-color: #ddd;
-    color: #333;
-    display: inline-block;
-    padding: 0.1em;
-    font-size: 0.9em;
-    text-decoration: none;
-  }
-
-  figure {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-
-    img {
-      width: auto;
-      height: auto;
-      max-width: $display-mid-max;
-      max-height: 400px;
-      margin: auto;
-      padding: 1rem;
+  header, .body {
+    a.tag {
+      background-color: #ddd;
+      color: #333;
+      display: inline-block;
+      padding: 0.1em;
+      font-size: 0.9em;
+      text-decoration: none;
     }
 
-    figcaption {
-      font-size: 0.8em;
-      color: #666;
+    figure {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      img {
+        width: auto;
+        height: auto;
+        max-width: $display-mid-max;
+        max-height: 400px;
+        margin: auto;
+        padding: 1rem;
+      }
+
+      figcaption {
+        font-size: 0.8em;
+        color: #666;
+      }
     }
   }
 
