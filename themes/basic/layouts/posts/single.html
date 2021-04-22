@@ -20,11 +20,11 @@
         {{ $related := .Site.RegularPages.Related . | first 5 }}
         {{ with $related }}
         <h3>Relacionados</h3>
-        <ul class="post-list-short">
+        <div class="post-list">
             {{ range . }}
             {{ partial "post_summary.html" . }}
             {{ end }}
-        </ul>
+        </div>
         {{ end }}
     </section>
     <section class="comments">

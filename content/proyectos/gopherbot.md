@@ -3,7 +3,7 @@ title: "Gopher-Bot"
 draft: false
 image: /assets/gopherbot.png
 alt_text: "Gopher-Bot screenshot"
-summary: "Discord Bot"
+summary: "Un pequeño bot de Discord, incluido en el server de gophers-latam."
 tech_used:
 - Golang
 - Discordgo
