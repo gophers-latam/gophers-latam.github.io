@@ -10,7 +10,7 @@ tech_used:
 - HTML
 keywords:
 - html
-repo: https://github.com/gophers-latam/{{ replace .Name | title }}
+repo: https://github.com/gophers-latam/{{ .Name | title }}
 ---
 
 Descripción del proyecto {{ replace .Name "-" " " | title }} ...
