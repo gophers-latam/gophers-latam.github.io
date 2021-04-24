@@ -1,4 +1,5 @@
 baseURL = "https://gophers-latam.github.io/"
+googleAnalytics = "UA-192145152-1"
 languageCode = "es-mx"
 title = "Gophers LATAM"
 theme = "basic"
