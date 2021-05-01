@@ -1,5 +1,5 @@
 ---
-title: "La interfaz vacía"
+title: "Golang: La interfaz vacía"
 date: 2021-04-22T23:06:22-05:00
 draft: false
 author: ZeroIdentidad

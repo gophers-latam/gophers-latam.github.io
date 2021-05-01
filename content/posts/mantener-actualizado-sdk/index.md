@@ -14,6 +14,7 @@ tags:
 keywords:
 - golang
 - sdk
+disableComments: false
 ---
 
 {{<postimage "images/update-go.png" "Update Go">}}
