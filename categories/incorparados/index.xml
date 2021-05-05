@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Incorparados on Gophers LATAM</title><link>https://gophers-latam.github.io/categories/incorparados/</link><description>Recent content in Incorparados on Gophers LATAM</description><generator>Hugo -- gohugo.io</generator><language>es-mx</language><lastBuildDate>Wed, 05 May 2021 13:05:28 -0500</lastBuildDate><atom:link href="https://gophers-latam.github.io/categories/incorparados/index.xml" rel="self" type="application/rss+xml"/><item><title>Golang Init func</title><link>https://gophers-latam.github.io/posts/2021/05/golang-init-func/</link><pubDate>Wed, 05 May 2021 13:05:28 -0500</pubDate><guid>https://gophers-latam.github.io/posts/2021/05/golang-init-func/</guid><description>&lt;figure class="post-figure">
+&lt;a href="https://gophers-latam.github.io/posts/2021/05/golang-init-func/images/init_func_go.png">
+&lt;img src="https://gophers-latam.github.io/posts/2021/05/golang-init-func/images/init_func_go_huce4b74cbd5109a0f59896119f92a02eb_68253_1024x0_resize_box_2.png" width="1024" height="427" alt="init func" />
+&lt;/a>
+&lt;figcaption>init func&lt;/figcaption>
+&lt;/figure>
+&lt;p>Cada programa en Go debe tener un paquete &lt;strong>main&lt;/strong> con una función &lt;strong>main&lt;/strong> para ser ejecutado. Sin embargo, esto impone algunas limitaciones para determinadas soluciones, como las librerías. Imagina que importamos una librería a nuestro código.&lt;/p></description></item></channel></rss>
