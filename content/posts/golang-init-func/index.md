@@ -1,5 +1,5 @@
 ---
-title: "Golang Init func"
+title: "Golang: Init func"
 date: 2021-05-05T13:05:28-05:00
 draft: false
 author: ZeroIdentidad
