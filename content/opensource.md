@@ -5,4 +5,4 @@ draft: false
 layout: opensource
 ---
 
-Software Open Source en GitHub por Gophers LATAM.
+Software Open Source compartido en GitHub por **Gophers LATAM**.

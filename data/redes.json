@@ -5,8 +5,16 @@
             "url": "https://github.com/gophers-latam"
         },
         {
+            "name": "Facebook group",
+            "url": "https://facebook.com/groups/es.golang.mx"
+        },
+        {
+            "name": "Discord server",
+            "url": "https://discord.io/go-latam"
+        },
+        {
             "name": "Facebook page",
             "url": "https://facebook.com/zeroidentidadevs"
-        }        
+        }                
     ]
 }

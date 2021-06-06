@@ -5,4 +5,4 @@ draft: false
 layout: contacto
 ---
 
-Medios de contacto con Gophers LATAM.
+Medios de contacto con **Gophers LATAM**.
