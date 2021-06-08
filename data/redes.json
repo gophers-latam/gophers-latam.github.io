@@ -1,6 +1,10 @@
 {
     "accounts": [
         {
+            "name": "Twitter profile",
+            "url": "https://twitter.com/gophers_latam"
+        },
+        {
             "name": "Github org",
             "url": "https://github.com/gophers-latam"
         },
