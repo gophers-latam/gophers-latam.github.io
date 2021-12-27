@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>software on Gophers LATAM</title><link>https://gophers-latam.github.io/tags/software/</link><description>Recent content in software on Gophers LATAM</description><generator>Hugo -- gohugo.io</generator><language>es-mx</language><lastBuildDate>Mon, 27 Dec 2021 11:22:53 -0600</lastBuildDate><atom:link href="https://gophers-latam.github.io/tags/software/index.xml" rel="self" type="application/rss+xml"/><item><title>Ecosistema lenguage Go</title><link>https://gophers-latam.github.io/posts/2021/12/ecosistema-lenguage-go/</link><pubDate>Mon, 27 Dec 2021 11:22:53 -0600</pubDate><guid>https://gophers-latam.github.io/posts/2021/12/ecosistema-lenguage-go/</guid><description>&lt;figure class="post-figure">
+&lt;a href="https://gophers-latam.github.io/posts/2021/12/ecosistema-lenguage-go/images/golang.png">
+&lt;img src="https://gophers-latam.github.io/posts/2021/12/ecosistema-lenguage-go/images/golang_hu57fed90b28f13fac04b0b2a1fb7dff6d_26167_1024x0_resize_box_2.png" width="1024" height="346" alt="json to go" />
+&lt;/a>
+&lt;figcaption>json to go&lt;/figcaption>
+&lt;/figure>
+&lt;p>Go, también conocido como Golang, es un lenguaje de programación de tipado estático desarrollado por Robert Griesemer, Rob Pike y Ken Thompson en Google.&lt;/p></description></item></channel></rss>
