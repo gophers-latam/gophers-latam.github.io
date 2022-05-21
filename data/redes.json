@@ -1,24 +1,24 @@
 {
     "accounts": [
         {
-            "name": "Twitter profile",
+            "name": "Perfil Twitter",
             "url": "https://twitter.com/gophers_latam"
         },
         {
-            "name": "Github org",
+            "name": "Comunidad Twitter",
+            "url": "https://twitter.com/i/communities/1509206500010569736"
+        },
+        {
+            "name": "Organización Github",
             "url": "https://github.com/gophers-latam"
         },
         {
-            "name": "Facebook group",
-            "url": "https://facebook.com/groups/es.golang.mx"
-        },
-        {
-            "name": "Discord server",
+            "name": "Servidor Discord",
             "url": "https://discord.io/go-latam"
         },
         {
-            "name": "Facebook page",
-            "url": "https://facebook.com/zeroidentidadevs"
-        }                
+            "name": "Grupo Facebook",
+            "url": "https://facebook.com/groups/es.golang.mx"
+        }                      
     ]
 }
