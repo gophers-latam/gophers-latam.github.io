@@ -19,6 +19,10 @@
         {
             "name": "Grupo Facebook",
             "url": "https://facebook.com/groups/es.golang.mx"
+        },
+        {
+            "name": "Blog legado",
+            "url": "https://awebytes.wordpress.com/"
         }                      
     ]
 }

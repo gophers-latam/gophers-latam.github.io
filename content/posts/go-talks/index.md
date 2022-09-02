@@ -2,7 +2,7 @@
 title: "Go Talks"
 date: 2021-08-18T18:11:39-05:00
 draft: false
-author: Gophers
+author: ZeroIdentidad
 year: "2021"
 month: "2021/08"
 categories:
