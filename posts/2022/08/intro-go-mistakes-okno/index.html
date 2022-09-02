@@ -1,0 +1,115 @@
+<!doctype html><html><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=author content="ZeroIdentidad"><meta name=description content="Gophers LATAM"><title>Intro Go Mistakes Okno – Gophers LATAM</title><link rel="shortcut icon" type=image/x-icon href=/favicon.ico><link rel=stylesheet href=/css/style.min.a84a5066e61beb36e290156b73d729ef98cd9fde56d916842cc892df1bdb478f.css><link rel=stylesheet href=/css/syntax.min.f1fef9cbbfe9d2935981821d59853e89db60d137f9117a1279371320195f1d1a.css><script type=application/javascript>var doNotTrack=false;if(!doNotTrack){window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;ga('create','UA-192145152-1','auto');ga('send','pageview');}</script><script async src=https://www.google-analytics.com/analytics.js></script><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7766642915413571" crossorigin=anonymous></script></head><body><div class=container><header class="page-header app-width"><div class=header-left><a href=/><img alt="Gophers LATAM" src=/img/gopher.png></a></div><div class=header-center><nav><a href=/>Inicio</a>
+<a href=/acerca>Acerca</a>
+<a href=/proyectos>Proyectos</a>
+<a href=/posts>Posts</a>
+<a href=/colaboradores>Colaboradores</a>
+<a href=/contacto>Contacto</a></nav></div><div class=header-right><a class=button-search href=/search><img alt=Búsqueda src=/img/search.png></a></div></header><main class=app-width><article class=post><header><h2>Intro Go Mistakes Okno</h2><span class=tags><a class=tag href=/tags/examples>examples</a>
+<a class=tag href=/tags/golang>golang</a></span>
+<span class=meta><label>Por: <b>ZeroIdentidad</b></label>
+<label>Publicado <b>August 1, 2022</b></label>
+<label>Tiempo de lectura: <b>6 minutos</b>.</label></span></header><section class=body><figure class=post-figure><a href=/posts/2022/08/intro-go-mistakes-okno/images/ok-no.png><img src=/posts/2022/08/intro-go-mistakes-okno/images/ok-no_hu67b008a377f65ecd767073b64a23de40_12277_1024x0_resize_box_2.png width=1024 height=443 alt=okno></a><figcaption>okno</figcaption></figure><p>Se comparte el concepto o contexto de algunos errores basicos con su definición acompañado de ejemplo y solución.</p><h3 id=indice>Indice:</h3><hr><ul><li><a href=#c%C3%B3digo-y-organizaci%C3%B3n-del-proyecto>Código y organización del proyecto</a></li></ul><hr><h1 id=código-y-organización-del-proyecto>Código y organización del proyecto</h1><h3 id=--sombreado-de-variable-shadowing-no-deseado>- Sombreado de variable (shadowing) no deseado</h3><p>La parte de una aplicación donde un enlace de nombre es válido. En Go, un nombre de variable declarado en un bloque se puede volver a declarar en un bloque interno. Este principio, llamado sombreado de variable, es propenso a errores.</p><p><strong>Ejemplo:</strong></p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#66d9ef>var</span> <span style=color:#a6e22e>client</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>http</span>.<span style=color:#a6e22e>Client</span>
+<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>tracing</span> {
+    <span style=color:#a6e22e>client</span>, <span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>createClientWithTracing</span>()
+    <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
+        <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>err</span>
+    }
+    <span style=color:#a6e22e>log</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#a6e22e>client</span>)
+} <span style=color:#66d9ef>else</span> {
+    <span style=color:#a6e22e>client</span>, <span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>createDefaultClient</span>()
+    <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
+        <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>err</span>
+    }
+    <span style=color:#a6e22e>log</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#a6e22e>client</span>)
+}
+</code></pre></div><ul><li>1 Declarar una variable client</li><li>2 Crear un cliente HTTP con tracing habilitado, la variable client está sombreada en este bloque</li><li>3 Crear un cliente HTTP predeterminado, la variable client también se sombrea en este bloque</li></ul><p>Como resultado, de este ejemplo, la variable externa siempre será nula.</p><p><strong>Solución:</strong></p><p>La primera opción es usar variables temporales en los bloques internos:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#66d9ef>var</span> <span style=color:#a6e22e>client</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>http</span>.<span style=color:#a6e22e>Client</span>
+<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>tracing</span> {
+    <span style=color:#a6e22e>c</span>, <span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>createClientWithTracing</span>()
+    <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
+        <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>err</span>
+    }
+    <span style=color:#a6e22e>client</span> = <span style=color:#a6e22e>c</span>
+} <span style=color:#66d9ef>else</span> {
+    <span style=color:#75715e>// Same logic
+</span><span style=color:#75715e></span>}          
+</code></pre></div><ul><li>1 Crear una variable temporal c</li><li>2 Asignar esta variable temporal a client</li></ul><p>Otra opción es usar el operador de asignación (=) en los bloques internos para asignar directamente los resultados de la función a la variable. Sin embargo, requiere crear una variable de error ya que el operador de asignación solo funciona si ya se ha declarado un nombre de variable:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#66d9ef>var</span> <span style=color:#a6e22e>client</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>http</span>.<span style=color:#a6e22e>Client</span>
+<span style=color:#66d9ef>var</span> <span style=color:#a6e22e>err</span> <span style=color:#66d9ef>error</span>
+<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>tracing</span> {
+    <span style=color:#a6e22e>client</span>, <span style=color:#a6e22e>err</span> = <span style=color:#a6e22e>createClientWithTracing</span>()
+    <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
+        <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>err</span>
+    }
+} <span style=color:#66d9ef>else</span> {
+    <span style=color:#75715e>// Same logic
+</span><span style=color:#75715e></span>}    
+</code></pre></div><ul><li>1 Declarar una variable de error</li><li>2 Usar operador de asignación para asignar el *http.Client devuelto a la variable client directamente</li></ul><h3 id=--código-anidado-innecesario>- Código anidado innecesario</h3><p>Un aspecto crítico de la legibilidad es el número de niveles anidados. Un código se califica como legible en función de múltiples criterios, como el nombrado, la consistencia, el formato, etc. Un código legible requerirá menos esfuerzo cognitivo para mantener un modelo mental; por lo tanto, será más fácil de leer y mantener.</p><p><strong>Ejemplo:</strong></p><p>Tiempo o dificultad para entender la siguiente función a detalle.</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>join</span>(<span style=color:#a6e22e>s1</span>, <span style=color:#a6e22e>s2</span> <span style=color:#66d9ef>string</span>, <span style=color:#a6e22e>max</span> <span style=color:#66d9ef>int</span>) (<span style=color:#66d9ef>string</span>, <span style=color:#66d9ef>error</span>) {
+    <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>s1</span> <span style=color:#f92672>==</span> <span style=color:#e6db74>&#34;&#34;</span> {
+        <span style=color:#66d9ef>return</span> <span style=color:#e6db74>&#34;&#34;</span>, <span style=color:#a6e22e>errors</span>.<span style=color:#a6e22e>New</span>(<span style=color:#e6db74>&#34;s1 is empty&#34;</span>)
+    } <span style=color:#66d9ef>else</span> {
+        <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>s2</span> <span style=color:#f92672>==</span> <span style=color:#e6db74>&#34;&#34;</span> {
+            <span style=color:#66d9ef>return</span> <span style=color:#e6db74>&#34;&#34;</span>, <span style=color:#a6e22e>errors</span>.<span style=color:#a6e22e>New</span>(<span style=color:#e6db74>&#34;s2 is empty&#34;</span>)
+        } <span style=color:#66d9ef>else</span> {
+            <span style=color:#a6e22e>concat</span>, <span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>concatenate</span>(<span style=color:#a6e22e>s1</span>, <span style=color:#a6e22e>s2</span>)
+            <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
+                <span style=color:#66d9ef>return</span> <span style=color:#e6db74>&#34;&#34;</span>, <span style=color:#a6e22e>err</span>
+            } <span style=color:#66d9ef>else</span> {
+                <span style=color:#66d9ef>if</span> len(<span style=color:#a6e22e>concat</span>) &gt; <span style=color:#a6e22e>max</span> {
+                    <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>concat</span>[:<span style=color:#a6e22e>max</span>], <span style=color:#66d9ef>nil</span>
+                } <span style=color:#66d9ef>else</span> {
+                    <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>concat</span>, <span style=color:#66d9ef>nil</span>
+                }
+            }
+        }
+    }
+}
+
+<span style=color:#66d9ef>func</span> <span style=color:#a6e22e>concatenate</span>(<span style=color:#a6e22e>s1</span> <span style=color:#66d9ef>string</span>, <span style=color:#a6e22e>s2</span> <span style=color:#66d9ef>string</span>) (<span style=color:#66d9ef>string</span>, <span style=color:#66d9ef>error</span>) {
+    <span style=color:#75715e>// ...
+</span><span style=color:#75715e></span>}
+</code></pre></div><p><strong>Solución:</strong></p><p>Hacer la tarea de aplicar legibilidad y consistencia sobre la misma función, implementandola de manera diferente:</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>join</span>(<span style=color:#a6e22e>s1</span>, <span style=color:#a6e22e>s2</span> <span style=color:#66d9ef>string</span>, <span style=color:#a6e22e>max</span> <span style=color:#66d9ef>int</span>) (<span style=color:#66d9ef>string</span>, <span style=color:#66d9ef>error</span>) {
+    <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>s1</span> <span style=color:#f92672>==</span> <span style=color:#e6db74>&#34;&#34;</span> {
+        <span style=color:#66d9ef>return</span> <span style=color:#e6db74>&#34;&#34;</span>, <span style=color:#a6e22e>errors</span>.<span style=color:#a6e22e>New</span>(<span style=color:#e6db74>&#34;s1 is empty&#34;</span>)
+    }
+    <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>s2</span> <span style=color:#f92672>==</span> <span style=color:#e6db74>&#34;&#34;</span> {
+        <span style=color:#66d9ef>return</span> <span style=color:#e6db74>&#34;&#34;</span>, <span style=color:#a6e22e>errors</span>.<span style=color:#a6e22e>New</span>(<span style=color:#e6db74>&#34;s2 is empty&#34;</span>)
+    }
+
+    <span style=color:#a6e22e>concat</span>, <span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>concatenate</span>(<span style=color:#a6e22e>s1</span>, <span style=color:#a6e22e>s2</span>)
+    <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
+        <span style=color:#66d9ef>return</span> <span style=color:#e6db74>&#34;&#34;</span>, <span style=color:#a6e22e>err</span>
+    }
+    
+    <span style=color:#66d9ef>if</span> len(<span style=color:#a6e22e>concat</span>) &gt; <span style=color:#a6e22e>max</span> {
+        <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>concat</span>[:<span style=color:#a6e22e>max</span>], <span style=color:#66d9ef>nil</span>
+    }
+    
+    <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>concat</span>, <span style=color:#66d9ef>nil</span>
+}
+
+<span style=color:#66d9ef>func</span> <span style=color:#a6e22e>concatenate</span>(<span style=color:#a6e22e>s1</span> <span style=color:#66d9ef>string</span>, <span style=color:#a6e22e>s2</span> <span style=color:#66d9ef>string</span>) (<span style=color:#66d9ef>string</span>, <span style=color:#66d9ef>error</span>) {
+    <span style=color:#75715e>// ...
+</span><span style=color:#75715e></span>}
+</code></pre></div><ul><li>El resultado para requerir menos carga cognitiva.</li></ul><h3 id=--mal-uso-de-las-funciones-init>- Mal uso de las funciones init</h3><p>En principio init es una función que no toma argumentos y no devuelve ningún resultado (una función func()). Cuando se inicializa un paquete, se evalúan todas las declaraciones de constantes y variables del paquete. El principal problema reside cuando se ha creado un flujo de uso que se vuelve dificil de entender o seguir y por falta de entendimiento se provocan errores no manejados que se volveran dificiles de mitigar o controlar.</p><p><strong>Ejemplo:</strong></p><p>Olvidar o no haber entendido el sentido o punto de entrada para ejecuion de init.</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=color:#f92672>package</span> <span style=color:#a6e22e>main</span>
+
+<span style=color:#f92672>import</span> <span style=color:#e6db74>&#34;fmt&#34;</span>
+
+<span style=color:#66d9ef>var</span> <span style=color:#a6e22e>a</span> = <span style=color:#66d9ef>func</span>() <span style=color:#66d9ef>int</span> {
+    <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#e6db74>&#34;var&#34;</span>)
+    <span style=color:#66d9ef>return</span> <span style=color:#ae81ff>0</span>
+}()
+
+<span style=color:#66d9ef>func</span> <span style=color:#a6e22e>init</span>() {
+    <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#e6db74>&#34;init&#34;</span>)
+}
+
+<span style=color:#66d9ef>func</span> <span style=color:#a6e22e>main</span>() {
+    <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Println</span>(<span style=color:#e6db74>&#34;main&#34;</span>)
+}
+</code></pre></div><p><em>Salida</em></p><ul><li>1: var</li><li>2: init</li><li>3: main</li></ul><p>Ejemplo de flujo usando Redis en base de codigo personal.</p><p><img src=./images/redis.png alt=redis></p><p><strong>Solución:</strong></p><p>Hay criterios en sentido idiomatico como:</p><ul><li><p>Evitar incluir funciones init en codigo que sera probado con paquete de testing.</p></li><li><p>No hacer que sean de ambito global a menos que sea realmente requerido.</p></li><li><p>Evitar usar para conexiones a base de datos.</p></li><li><p>Investigar situaciones en las que pueden ser útiles, como definir una configuración estática. De lo contrario, y en la mayoría de los casos, manejar las inicializaciones a través de funciones personalizadas.</p></li></ul><h1 id=ebook-recomendado>Ebook recomendado:</h1><ul><li><a href=https://www.manning.com/books/100-go-mistakes-and-how-to-avoid-them>100 Go Mistakes</a></li></ul><p>Que trata a fondo algunos errores sobre: Tipos de datos, Estructuras de control, Strings en detalle, Funciones y métodos, Manejo de errores, Concurrencia: Fundamentos y Práctica, Librería estándar, Pruebas
+y Optimizaciones</p></section><section class=related><h3>Relacionados</h3><div class=post-list><article class="box box-post"><a class=title href=/posts/2021/06/conversi%C3%B3n-json-a-go/><h3>Conversión JSON a Go</h3></a><time class=date>June
+5</time><div class=summary-container><figure class=post-figure><a href=/posts/2021/06/conversi%C3%B3n-json-a-go/images/json_to_go.png><img src=/posts/2021/06/conversi%C3%B3n-json-a-go/images/json_to_go_huea8bfa3ec3570bd3e606c0b62bfa85b8_295039_1024x0_resize_box_2.png width=1024 height=768 alt="json to go"></a><figcaption>json to go</figcaption></figure><p>Uno de los formatos de datos que se encuentra con mucha frecuencia en programación, principalmente web, es JavaScript Object Notation (JSON).</p></div></article><article class="box box-post"><a class=title href=/posts/2021/05/golang-init-func/><h3>Golang: Init func</h3></a><time class=date>May
+5</time><div class=summary-container><figure class=post-figure><a href=/posts/2021/05/golang-init-func/images/init_func_go.png><img src=/posts/2021/05/golang-init-func/images/init_func_go_huce4b74cbd5109a0f59896119f92a02eb_68253_1024x0_resize_box_2.png width=1024 height=427 alt="init func"></a><figcaption>init func</figcaption></figure><p>Cada programa en Go debe tener un paquete <strong>main</strong> con una función <strong>main</strong> para ser ejecutado. Sin embargo, esto impone algunas limitaciones para determinadas soluciones, como las librerías. Imagina que importamos una librería a nuestro código.</p></div></article><article class="box box-post"><a class=title href=/proyectos/gokey/><h3>GoKey</h3></a><time class=date>January
+1</time><div class=summary-container>Primer proyecto OSS en comunidad sobre cache en memoria. - <strong>En desarrollo</strong></div></article><article class="box box-post"><a class=title href=/posts/2021/12/ecosistema-lenguage-go/><h3>Ecosistema lenguage Go</h3></a><time class=date>December
+27</time><div class=summary-container><figure class=post-figure><a href=/posts/2021/12/ecosistema-lenguage-go/images/golang.png><img src=/posts/2021/12/ecosistema-lenguage-go/images/golang_hu57fed90b28f13fac04b0b2a1fb7dff6d_26167_1024x0_resize_box_2.png width=1024 height=346 alt="json to go"></a><figcaption>json to go</figcaption></figure><p>Go, también conocido como Golang, es un lenguaje de programación de tipado estático desarrollado por Robert Griesemer, Rob Pike y Ken Thompson en Google.</p></div></article><article class="box box-post"><a class=title href=/posts/2021/08/go-talks/><h3>Go Talks</h3></a><time class=date>August
+18</time><div class=summary-container><figure class=post-figure><a href=/posts/2021/08/go-talks/images/go-talks.png><img src=/posts/2021/08/go-talks/images/go-talks_hua2212d92c81a395131b43e35903c9f09_241848_1024x0_resize_box_2.png width=1024 height=961 alt=talks></a><figcaption>talks</figcaption></figure><p><a href=https://pkg.go.dev/golang.org/x/talks><img src=https://pkg.go.dev/badge/golang.org/x/talks.svg alt=Reference></a></p><p>Este post contiene charlas de Go que se pueden leer siguiendo los vinculos de cada título listado.</p></div></article></div></section><section class=comments><h3>Comentar</h3><div id=disqus_thread></div><script type=application/javascript>var disqus_config=function(){};(function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById('disqus_thread').innerHTML='Disqus comments not available by default when the website is previewed locally.';return;}
+var d=document,s=d.createElement('script');s.async=true;s.src='//'+"gophers-latam"+'.disqus.com/embed.js';s.setAttribute('data-timestamp',+new Date());(d.head||d.body).appendChild(s);})();</script><noscript>Please enable JavaScript to view the <a href=https://disqus.com/?ref_noscript>comments powered by Disqus.</a></noscript><a href=https://disqus.com class=dsq-brlink>comments powered by <span class=logo-disqus>Disqus</span></a></section></article></main><footer><a href=https://gohugo.io><img src=/img/hugo-logo.svg width=90 height=21></a>
+<small>© 2022, Gophers LATAM. - Theme by <a href=https://github.com/zeroidentidad>Zero</a>.</small></footer></div></body></html>
