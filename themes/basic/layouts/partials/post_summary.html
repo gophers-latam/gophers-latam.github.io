@@ -3,6 +3,7 @@
     <time class="date">
         {{ .Date | dateFormat "January" }}
         {{ .Date | dateFormat "2" }}
+        {{ .Date | dateFormat "2006" }} <!-- Agrego el año de publicación. Es importante que este "2006", ya que es el año el cual hugo toma como referencia -->
     </time>
     <div class="summary-container">
         {{.Summary}}
