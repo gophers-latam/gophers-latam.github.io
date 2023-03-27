@@ -17,7 +17,7 @@ keywords:
 disableComments: false
 ---
 
-{{<postimage "images/go-handlers.jpg" "go handlers">}}
+{{<postimage "images/go-cache.jpg" "go cache">}}
 
 El almacenamiento en caché de datos en una aplicación web a veces es necesario para evitar solicitar datos estáticos de una base de datos o un servicio externo una y otra vez. Go no proporciona ningún paquete integrado en la librería estándar para almacenar en caché las respuestas, pero lo admite a través de paquetes externos creados por la comunidad.
 
