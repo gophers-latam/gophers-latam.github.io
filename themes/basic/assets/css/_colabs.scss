@@ -1,18 +1,34 @@
 .colabs {
-display: flex;
-flex-wrap: wrap;
-justify-content: space-between;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    text-align: center;
 }
 
 .colabs article {
-border: 1px solid #ddd;
-box-shadow: 3px 3px 3px #ddd;
-margin: 0.5%;
-padding: 0.5%;
-width: 20%;
+    border: 1px solid #ddd;
+    margin: 0.5%;
+    padding: 0.5%;
+    width: 20%;
+    border-radius: 10px;
+    box-shadow: 1px 1px 1px #c2c2c2;  
+    background-color: #fcfcfc;
 }
 
-.colabs img{
-width: 45px;
-height: 45px;
+.colabs img {
+    width: 55px;
+    height: 55px;
+    border-radius: 5px;
+    padding-bottom: 8%;
+}
+
+.colabs a {
+    text-decoration: none;
+    color: #333333;
+    font-size: 16px;
+}
+
+.colabs a:hover {
+    text-decoration: underline;
+    mouse: pointer;
 }
