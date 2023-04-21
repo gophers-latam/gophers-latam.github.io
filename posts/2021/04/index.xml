@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>2021/04 on Gophers LATAM</title><link>https://gophers-latam.github.io/posts/2021/04/</link><description>Recent content in 2021/04 on Gophers LATAM</description><generator>Hugo -- gohugo.io</generator><language>es-mx</language><atom:link href="https://gophers-latam.github.io/posts/2021/04/index.xml" rel="self" type="application/rss+xml"/><item><title>Golang: Referencia esencial Go modules</title><link>https://gophers-latam.github.io/posts/2021/04/golang-referencia-esencial-go-modules/</link><pubDate>Fri, 30 Apr 2021 18:02:17 -0500</pubDate><guid>https://gophers-latam.github.io/posts/2021/04/golang-referencia-esencial-go-modules/</guid><description>&lt;figure class="post-figure">
 &lt;a href="https://gophers-latam.github.io/posts/2021/04/golang-referencia-esencial-go-modules/images/go-modules.png">
-&lt;img src="https://gophers-latam.github.io/posts/2021/04/golang-referencia-esencial-go-modules/images/go-modules_hu4efca11e3cf5c24922ed10c2ec6d81f7_540656_1024x0_resize_box_2.png" width="1024" height="642" alt="Go Modules" />
+&lt;img src="https://gophers-latam.github.io/posts/2021/04/golang-referencia-esencial-go-modules/images/go-modules_hu4efca11e3cf5c24922ed10c2ec6d81f7_540656_1024x0_resize_box_3.png" width="1024" height="642" alt="Go Modules" />
 &lt;/a>
 &lt;figcaption>Go Modules&lt;/figcaption>
 &lt;/figure>
 &lt;p>Esta es una hoja de trucos esenciales, no una referencia oficial. Con el fin de que sea conciso, se omitieron aspectos menos frecuentes, dado que este sitio desde su &lt;a href="https://github.com/gophers-latam/gophers-latam.github.io">repositorio&lt;/a> esta abierto a cambios de contribuidores en la comunidad de &lt;strong>Gophers LATAM&lt;/strong> cualquiera puede hacer cambios que mejoren este contenido.&lt;/p></description></item><item><title>Golang: La interfaz vacía</title><link>https://gophers-latam.github.io/posts/2021/04/golang-la-interfaz-vac%C3%ADa/</link><pubDate>Thu, 22 Apr 2021 23:06:22 -0500</pubDate><guid>https://gophers-latam.github.io/posts/2021/04/golang-la-interfaz-vac%C3%ADa/</guid><description>&lt;figure class="post-figure">
 &lt;a href="https://gophers-latam.github.io/posts/2021/04/golang-la-interfaz-vac%C3%ADa/images/interface-type.png">
-&lt;img src="https://gophers-latam.github.io/posts/2021/04/golang-la-interfaz-vac%C3%ADa/images/interface-type_hu3507cf0943d8ccceef7ea63d0a620d0a_94824_1024x0_resize_box_2.png" width="1024" height="639" alt="Interface type" />
+&lt;img src="https://gophers-latam.github.io/posts/2021/04/golang-la-interfaz-vac%C3%ADa/images/interface-type_hu3507cf0943d8ccceef7ea63d0a620d0a_94824_1024x0_resize_box_3.png" width="1024" height="639" alt="Interface type" />
 &lt;/a>
 &lt;figcaption>Interface type&lt;/figcaption>
 &lt;/figure>
 &lt;p>Explicación breve sobre el tipo interfaz vacia y nula.&lt;/p>
 &lt;p>Se define una interfaz vacía como &lt;strong>interface{}&lt;/strong>, y puede contener un valor de cualquier tipo:&lt;/p></description></item><item><title>Golang: Mantener actualizado el SDK</title><link>https://gophers-latam.github.io/posts/2021/04/golang-mantener-actualizado-el-sdk/</link><pubDate>Mon, 12 Apr 2021 00:12:24 -0500</pubDate><guid>https://gophers-latam.github.io/posts/2021/04/golang-mantener-actualizado-el-sdk/</guid><description>&lt;figure class="post-figure">
 &lt;a href="https://gophers-latam.github.io/posts/2021/04/golang-mantener-actualizado-el-sdk/images/update-go.png">
-&lt;img src="https://gophers-latam.github.io/posts/2021/04/golang-mantener-actualizado-el-sdk/images/update-go_hu6b1249bbbab4c5cd87135a176f9a4910_40986_1024x0_resize_box_2.png" width="1024" height="584" alt="Update Go" />
+&lt;img src="https://gophers-latam.github.io/posts/2021/04/golang-mantener-actualizado-el-sdk/images/update-go_hu6b1249bbbab4c5cd87135a176f9a4910_40986_1024x0_resize_box_3.png" width="1024" height="584" alt="Update Go" />
 &lt;/a>
 &lt;figcaption>Update Go&lt;/figcaption>
 &lt;/figure>
 &lt;p>Como ocurre con todos los lenguajes de programación, hay actualizaciones periódicas de las herramientas de desarrollo de Go. El SDK Go son binarios nativos que no dependen de un tiempo de ejecución independiente, por lo que no hay que preocuparse de que la actualización del entorno de desarrollo pueda hacer que los programas actualmente implementados fallen. Puede tenerse programas compilados con diferentes versiones de Go ejecutándose simultáneamente en la misma computadora o máquina virtual.&lt;/p></description></item><item><title>Golang: Resumen reglas</title><link>https://gophers-latam.github.io/posts/2021/04/golang-resumen-reglas/</link><pubDate>Sat, 10 Apr 2021 20:21:07 -0500</pubDate><guid>https://gophers-latam.github.io/posts/2021/04/golang-resumen-reglas/</guid><description>&lt;figure class="post-figure">
 &lt;a href="https://gophers-latam.github.io/posts/2021/04/golang-resumen-reglas/images/go-police.png">
-&lt;img src="https://gophers-latam.github.io/posts/2021/04/golang-resumen-reglas/images/go-police_hue7d7c6d1a137cc488db438363aa4cc3d_46281_1024x0_resize_box_2.png" width="1024" height="696" alt="Go Police" />
+&lt;img src="https://gophers-latam.github.io/posts/2021/04/golang-resumen-reglas/images/go-police_hue7d7c6d1a137cc488db438363aa4cc3d_46281_1024x0_resize_box_3.png" width="1024" height="696" alt="Go Police" />
 &lt;/a>
 &lt;figcaption>Go Police&lt;/figcaption>
 &lt;/figure>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Referencia on Gophers LATAM</title><link>https://gophers-latam.github.io/categories/referencia/</link><description>Recent content in Referencia on Gophers LATAM</description><generator>Hugo -- gohugo.io</generator><language>es-mx</language><lastBuildDate>Fri, 30 Apr 2021 18:02:17 -0500</lastBuildDate><atom:link href="https://gophers-latam.github.io/categories/referencia/index.xml" rel="self" type="application/rss+xml"/><item><title>Golang: Referencia esencial Go modules</title><link>https://gophers-latam.github.io/posts/2021/04/golang-referencia-esencial-go-modules/</link><pubDate>Fri, 30 Apr 2021 18:02:17 -0500</pubDate><guid>https://gophers-latam.github.io/posts/2021/04/golang-referencia-esencial-go-modules/</guid><description>&lt;figure class="post-figure">
 &lt;a href="https://gophers-latam.github.io/posts/2021/04/golang-referencia-esencial-go-modules/images/go-modules.png">
-&lt;img src="https://gophers-latam.github.io/posts/2021/04/golang-referencia-esencial-go-modules/images/go-modules_hu4efca11e3cf5c24922ed10c2ec6d81f7_540656_1024x0_resize_box_2.png" width="1024" height="642" alt="Go Modules" />
+&lt;img src="https://gophers-latam.github.io/posts/2021/04/golang-referencia-esencial-go-modules/images/go-modules_hu4efca11e3cf5c24922ed10c2ec6d81f7_540656_1024x0_resize_box_3.png" width="1024" height="642" alt="Go Modules" />
 &lt;/a>
 &lt;figcaption>Go Modules&lt;/figcaption>
 &lt;/figure>

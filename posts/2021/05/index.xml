@@ -6,7 +6,7 @@
 &lt;/figure>
 &lt;p>El almacenamiento en caché de datos en una aplicación web a veces es necesario para evitar solicitar datos estáticos de una base de datos o un servicio externo una y otra vez. Go no proporciona ningún paquete integrado en la librería estándar para almacenar en caché las respuestas, pero lo admite a través de paquetes externos creados por la comunidad.&lt;/p></description></item><item><title>Golang: Init func</title><link>https://gophers-latam.github.io/posts/2021/05/golang-init-func/</link><pubDate>Wed, 05 May 2021 13:05:28 -0500</pubDate><guid>https://gophers-latam.github.io/posts/2021/05/golang-init-func/</guid><description>&lt;figure class="post-figure">
 &lt;a href="https://gophers-latam.github.io/posts/2021/05/golang-init-func/images/init_func_go.png">
-&lt;img src="https://gophers-latam.github.io/posts/2021/05/golang-init-func/images/init_func_go_huce4b74cbd5109a0f59896119f92a02eb_68253_1024x0_resize_box_2.png" width="1024" height="427" alt="init func" />
+&lt;img src="https://gophers-latam.github.io/posts/2021/05/golang-init-func/images/init_func_go_huce4b74cbd5109a0f59896119f92a02eb_68253_1024x0_resize_box_3.png" width="1024" height="427" alt="init func" />
 &lt;/a>
 &lt;figcaption>init func&lt;/figcaption>
 &lt;/figure>

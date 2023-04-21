@@ -6,7 +6,7 @@
 &lt;/figure>
 &lt;p>En algunas oportunidades, vamos a necesitar un comportamiento &lt;strong>muy&lt;/strong> determinístico en nuestras APIs, ya sea porque el negocio así lo requiere o los clientes. Tal vez, un comportamiento que se mantenga alejado de cualquier sorpresa, puede ser el máximo de duración que le queremos dejar como ventana para que un respuesta sea entregada, en caso de excederlo, ahora si como el título lo dice, devolvemos un &lt;strong>timeout&lt;/strong>&amp;hellip; pero, qué es un timeout?&lt;/p></description></item><item><title>Ecosistema lenguage Go</title><link>https://gophers-latam.github.io/posts/2021/12/ecosistema-lenguage-go/</link><pubDate>Mon, 27 Dec 2021 11:22:53 -0600</pubDate><guid>https://gophers-latam.github.io/posts/2021/12/ecosistema-lenguage-go/</guid><description>&lt;figure class="post-figure">
 &lt;a href="https://gophers-latam.github.io/posts/2021/12/ecosistema-lenguage-go/images/golang.png">
-&lt;img src="https://gophers-latam.github.io/posts/2021/12/ecosistema-lenguage-go/images/golang_hu57fed90b28f13fac04b0b2a1fb7dff6d_26167_1024x0_resize_box_2.png" width="1024" height="346" alt="json to go" />
+&lt;img src="https://gophers-latam.github.io/posts/2021/12/ecosistema-lenguage-go/images/golang_hu57fed90b28f13fac04b0b2a1fb7dff6d_26167_1024x0_resize_box_3.png" width="1024" height="346" alt="json to go" />
 &lt;/a>
 &lt;figcaption>json to go&lt;/figcaption>
 &lt;/figure>

@@ -6,26 +6,26 @@
 &lt;/figure>
 &lt;p>En algunas oportunidades, vamos a necesitar un comportamiento &lt;strong>muy&lt;/strong> determinístico en nuestras APIs, ya sea porque el negocio así lo requiere o los clientes. Tal vez, un comportamiento que se mantenga alejado de cualquier sorpresa, puede ser el máximo de duración que le queremos dejar como ventana para que un respuesta sea entregada, en caso de excederlo, ahora si como el título lo dice, devolvemos un &lt;strong>timeout&lt;/strong>&amp;hellip; pero, qué es un timeout?&lt;/p></description></item><item><title>Intro Go Mistakes Okno</title><link>https://gophers-latam.github.io/posts/2022/08/intro-go-mistakes-okno/</link><pubDate>Mon, 01 Aug 2022 18:54:04 -0500</pubDate><guid>https://gophers-latam.github.io/posts/2022/08/intro-go-mistakes-okno/</guid><description>&lt;figure class="post-figure">
 &lt;a href="https://gophers-latam.github.io/posts/2022/08/intro-go-mistakes-okno/images/ok-no.png">
-&lt;img src="https://gophers-latam.github.io/posts/2022/08/intro-go-mistakes-okno/images/ok-no_hu67b008a377f65ecd767073b64a23de40_12277_1024x0_resize_box_2.png" width="1024" height="443" alt="okno" />
+&lt;img src="https://gophers-latam.github.io/posts/2022/08/intro-go-mistakes-okno/images/ok-no_hu67b008a377f65ecd767073b64a23de40_12277_1024x0_resize_box_3.png" width="1024" height="443" alt="okno" />
 &lt;/a>
 &lt;figcaption>okno&lt;/figcaption>
 &lt;/figure>
 &lt;p>Se comparte el concepto o contexto de algunos errores basicos con su definición acompañado de ejemplo y solución.&lt;/p></description></item><item><title>Ecosistema lenguage Go</title><link>https://gophers-latam.github.io/posts/2021/12/ecosistema-lenguage-go/</link><pubDate>Mon, 27 Dec 2021 11:22:53 -0600</pubDate><guid>https://gophers-latam.github.io/posts/2021/12/ecosistema-lenguage-go/</guid><description>&lt;figure class="post-figure">
 &lt;a href="https://gophers-latam.github.io/posts/2021/12/ecosistema-lenguage-go/images/golang.png">
-&lt;img src="https://gophers-latam.github.io/posts/2021/12/ecosistema-lenguage-go/images/golang_hu57fed90b28f13fac04b0b2a1fb7dff6d_26167_1024x0_resize_box_2.png" width="1024" height="346" alt="json to go" />
+&lt;img src="https://gophers-latam.github.io/posts/2021/12/ecosistema-lenguage-go/images/golang_hu57fed90b28f13fac04b0b2a1fb7dff6d_26167_1024x0_resize_box_3.png" width="1024" height="346" alt="json to go" />
 &lt;/a>
 &lt;figcaption>json to go&lt;/figcaption>
 &lt;/figure>
 &lt;p>Go, también conocido como Golang, es un lenguaje de programación de tipado estático desarrollado por Robert Griesemer, Rob Pike y Ken Thompson en Google.&lt;/p></description></item><item><title>Go Talks</title><link>https://gophers-latam.github.io/posts/2021/08/go-talks/</link><pubDate>Wed, 18 Aug 2021 18:11:39 -0500</pubDate><guid>https://gophers-latam.github.io/posts/2021/08/go-talks/</guid><description>&lt;figure class="post-figure">
 &lt;a href="https://gophers-latam.github.io/posts/2021/08/go-talks/images/go-talks.png">
-&lt;img src="https://gophers-latam.github.io/posts/2021/08/go-talks/images/go-talks_hua2212d92c81a395131b43e35903c9f09_241848_1024x0_resize_box_2.png" width="1024" height="961" alt="talks" />
+&lt;img src="https://gophers-latam.github.io/posts/2021/08/go-talks/images/go-talks_hua2212d92c81a395131b43e35903c9f09_241848_1024x0_resize_box_3.png" width="1024" height="961" alt="talks" />
 &lt;/a>
 &lt;figcaption>talks&lt;/figcaption>
 &lt;/figure>
 &lt;p>&lt;a href="https://pkg.go.dev/golang.org/x/talks">&lt;img src="https://pkg.go.dev/badge/golang.org/x/talks.svg" alt="Reference">&lt;/a>&lt;/p>
 &lt;p>Este post contiene charlas de Go que se pueden leer siguiendo los vinculos de cada título listado.&lt;/p></description></item><item><title>Conversión JSON a Go</title><link>https://gophers-latam.github.io/posts/2021/06/conversi%C3%B3n-json-a-go/</link><pubDate>Sat, 05 Jun 2021 13:01:11 -0500</pubDate><guid>https://gophers-latam.github.io/posts/2021/06/conversi%C3%B3n-json-a-go/</guid><description>&lt;figure class="post-figure">
 &lt;a href="https://gophers-latam.github.io/posts/2021/06/conversi%C3%B3n-json-a-go/images/json_to_go.png">
-&lt;img src="https://gophers-latam.github.io/posts/2021/06/conversi%C3%B3n-json-a-go/images/json_to_go_huea8bfa3ec3570bd3e606c0b62bfa85b8_295039_1024x0_resize_box_2.png" width="1024" height="768" alt="json to go" />
+&lt;img src="https://gophers-latam.github.io/posts/2021/06/conversi%C3%B3n-json-a-go/images/json_to_go_huea8bfa3ec3570bd3e606c0b62bfa85b8_295039_1024x0_resize_box_3.png" width="1024" height="768" alt="json to go" />
 &lt;/a>
 &lt;figcaption>json to go&lt;/figcaption>
 &lt;/figure>
@@ -37,32 +37,32 @@
 &lt;/figure>
 &lt;p>El almacenamiento en caché de datos en una aplicación web a veces es necesario para evitar solicitar datos estáticos de una base de datos o un servicio externo una y otra vez. Go no proporciona ningún paquete integrado en la librería estándar para almacenar en caché las respuestas, pero lo admite a través de paquetes externos creados por la comunidad.&lt;/p></description></item><item><title>Golang: Init func</title><link>https://gophers-latam.github.io/posts/2021/05/golang-init-func/</link><pubDate>Wed, 05 May 2021 13:05:28 -0500</pubDate><guid>https://gophers-latam.github.io/posts/2021/05/golang-init-func/</guid><description>&lt;figure class="post-figure">
 &lt;a href="https://gophers-latam.github.io/posts/2021/05/golang-init-func/images/init_func_go.png">
-&lt;img src="https://gophers-latam.github.io/posts/2021/05/golang-init-func/images/init_func_go_huce4b74cbd5109a0f59896119f92a02eb_68253_1024x0_resize_box_2.png" width="1024" height="427" alt="init func" />
+&lt;img src="https://gophers-latam.github.io/posts/2021/05/golang-init-func/images/init_func_go_huce4b74cbd5109a0f59896119f92a02eb_68253_1024x0_resize_box_3.png" width="1024" height="427" alt="init func" />
 &lt;/a>
 &lt;figcaption>init func&lt;/figcaption>
 &lt;/figure>
 &lt;p>Cada programa en Go debe tener un paquete &lt;strong>main&lt;/strong> con una función &lt;strong>main&lt;/strong> para ser ejecutado. Sin embargo, esto impone algunas limitaciones para determinadas soluciones, como las librerías. Imagina que importamos una librería a nuestro código.&lt;/p></description></item><item><title>Golang: Referencia esencial Go modules</title><link>https://gophers-latam.github.io/posts/2021/04/golang-referencia-esencial-go-modules/</link><pubDate>Fri, 30 Apr 2021 18:02:17 -0500</pubDate><guid>https://gophers-latam.github.io/posts/2021/04/golang-referencia-esencial-go-modules/</guid><description>&lt;figure class="post-figure">
 &lt;a href="https://gophers-latam.github.io/posts/2021/04/golang-referencia-esencial-go-modules/images/go-modules.png">
-&lt;img src="https://gophers-latam.github.io/posts/2021/04/golang-referencia-esencial-go-modules/images/go-modules_hu4efca11e3cf5c24922ed10c2ec6d81f7_540656_1024x0_resize_box_2.png" width="1024" height="642" alt="Go Modules" />
+&lt;img src="https://gophers-latam.github.io/posts/2021/04/golang-referencia-esencial-go-modules/images/go-modules_hu4efca11e3cf5c24922ed10c2ec6d81f7_540656_1024x0_resize_box_3.png" width="1024" height="642" alt="Go Modules" />
 &lt;/a>
 &lt;figcaption>Go Modules&lt;/figcaption>
 &lt;/figure>
 &lt;p>Esta es una hoja de trucos esenciales, no una referencia oficial. Con el fin de que sea conciso, se omitieron aspectos menos frecuentes, dado que este sitio desde su &lt;a href="https://github.com/gophers-latam/gophers-latam.github.io">repositorio&lt;/a> esta abierto a cambios de contribuidores en la comunidad de &lt;strong>Gophers LATAM&lt;/strong> cualquiera puede hacer cambios que mejoren este contenido.&lt;/p></description></item><item><title>Golang: La interfaz vacía</title><link>https://gophers-latam.github.io/posts/2021/04/golang-la-interfaz-vac%C3%ADa/</link><pubDate>Thu, 22 Apr 2021 23:06:22 -0500</pubDate><guid>https://gophers-latam.github.io/posts/2021/04/golang-la-interfaz-vac%C3%ADa/</guid><description>&lt;figure class="post-figure">
 &lt;a href="https://gophers-latam.github.io/posts/2021/04/golang-la-interfaz-vac%C3%ADa/images/interface-type.png">
-&lt;img src="https://gophers-latam.github.io/posts/2021/04/golang-la-interfaz-vac%C3%ADa/images/interface-type_hu3507cf0943d8ccceef7ea63d0a620d0a_94824_1024x0_resize_box_2.png" width="1024" height="639" alt="Interface type" />
+&lt;img src="https://gophers-latam.github.io/posts/2021/04/golang-la-interfaz-vac%C3%ADa/images/interface-type_hu3507cf0943d8ccceef7ea63d0a620d0a_94824_1024x0_resize_box_3.png" width="1024" height="639" alt="Interface type" />
 &lt;/a>
 &lt;figcaption>Interface type&lt;/figcaption>
 &lt;/figure>
 &lt;p>Explicación breve sobre el tipo interfaz vacia y nula.&lt;/p>
 &lt;p>Se define una interfaz vacía como &lt;strong>interface{}&lt;/strong>, y puede contener un valor de cualquier tipo:&lt;/p></description></item><item><title>Búsqueda</title><link>https://gophers-latam.github.io/search/</link><pubDate>Mon, 12 Apr 2021 19:00:35 -0500</pubDate><guid>https://gophers-latam.github.io/search/</guid><description/></item><item><title>Golang: Mantener actualizado el SDK</title><link>https://gophers-latam.github.io/posts/2021/04/golang-mantener-actualizado-el-sdk/</link><pubDate>Mon, 12 Apr 2021 00:12:24 -0500</pubDate><guid>https://gophers-latam.github.io/posts/2021/04/golang-mantener-actualizado-el-sdk/</guid><description>&lt;figure class="post-figure">
 &lt;a href="https://gophers-latam.github.io/posts/2021/04/golang-mantener-actualizado-el-sdk/images/update-go.png">
-&lt;img src="https://gophers-latam.github.io/posts/2021/04/golang-mantener-actualizado-el-sdk/images/update-go_hu6b1249bbbab4c5cd87135a176f9a4910_40986_1024x0_resize_box_2.png" width="1024" height="584" alt="Update Go" />
+&lt;img src="https://gophers-latam.github.io/posts/2021/04/golang-mantener-actualizado-el-sdk/images/update-go_hu6b1249bbbab4c5cd87135a176f9a4910_40986_1024x0_resize_box_3.png" width="1024" height="584" alt="Update Go" />
 &lt;/a>
 &lt;figcaption>Update Go&lt;/figcaption>
 &lt;/figure>
 &lt;p>Como ocurre con todos los lenguajes de programación, hay actualizaciones periódicas de las herramientas de desarrollo de Go. El SDK Go son binarios nativos que no dependen de un tiempo de ejecución independiente, por lo que no hay que preocuparse de que la actualización del entorno de desarrollo pueda hacer que los programas actualmente implementados fallen. Puede tenerse programas compilados con diferentes versiones de Go ejecutándose simultáneamente en la misma computadora o máquina virtual.&lt;/p></description></item><item><title>Golang: Resumen reglas</title><link>https://gophers-latam.github.io/posts/2021/04/golang-resumen-reglas/</link><pubDate>Sat, 10 Apr 2021 20:21:07 -0500</pubDate><guid>https://gophers-latam.github.io/posts/2021/04/golang-resumen-reglas/</guid><description>&lt;figure class="post-figure">
 &lt;a href="https://gophers-latam.github.io/posts/2021/04/golang-resumen-reglas/images/go-police.png">
-&lt;img src="https://gophers-latam.github.io/posts/2021/04/golang-resumen-reglas/images/go-police_hue7d7c6d1a137cc488db438363aa4cc3d_46281_1024x0_resize_box_2.png" width="1024" height="696" alt="Go Police" />
+&lt;img src="https://gophers-latam.github.io/posts/2021/04/golang-resumen-reglas/images/go-police_hue7d7c6d1a137cc488db438363aa4cc3d_46281_1024x0_resize_box_3.png" width="1024" height="696" alt="Go Police" />
 &lt;/a>
 &lt;figcaption>Go Police&lt;/figcaption>
 &lt;/figure>
