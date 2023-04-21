@@ -9,24 +9,20 @@
             "url": "https://twitter.com/i/communities/1509206500010569736"
         },
         {
-            "name": "Organización Github",
-            "url": "https://github.com/gophers-latam"
-        },
-        {
             "name": "Servidor Discord",
-            "url": "https://discord.io/go-latam"
+            "url": "https://discord.io/gophers-latam"
         },
         {
             "name": "Grupo Facebook",
-            "url": "https://facebook.com/groups/es.golang.mx"
-        },
+            "url": "https://facebook.com/groups/gophers.latam"
+        },        
         {    
             "name": " Grupo Linkedin",
             "url": "https://linkedin.com/groups/12007379"
         },
         {
-            "name": "Blog legado",
-            "url": "https://awebytes.wordpress.com/"
-        }
+            "name": "Organización Github",
+            "url": "https://github.com/gophers-latam"
+        }        
     ]
 }
