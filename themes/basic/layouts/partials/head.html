@@ -8,6 +8,7 @@
     {{- else -}}
     {{ .Site.Params.description }}
     {{- end -}}">
+    <meta property="og:image" content="{{ .Site.baseURL}}static/logo.png" />
     <title>
         {{- if .Page.IsHome -}}
         {{ .Site.Title }}

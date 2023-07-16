@@ -1,27 +1,27 @@
 {
     "accounts": [
         {
-            "name": "Perfil Twitter",
+            "name": "👤 Perfil Twitter",
             "url": "https://twitter.com/gophers_latam"
         },
         {
-            "name": "Comunidad Twitter",
-            "url": "https://twitter.com/i/communities/1509206500010569736"
-        },
-        {
-            "name": "Servidor Discord",
+            "name": "💬 Servidor Discord",
             "url": "https://discord.io/gophers-latam"
         },
         {
-            "name": "Grupo Facebook",
-            "url": "https://facebook.com/groups/gophers.latam"
+            "name": "📺 Canal Youtube",
+            "url": "https://youtube.com/@gophers-latam"
         },        
         {    
-            "name": " Grupo Linkedin",
+            "name": "💼 Grupo Linkedin",
             "url": "https://linkedin.com/groups/12007379"
         },
         {
-            "name": "Organización Github",
+          "name": "👥 Comunidad Twitter",
+          "url": "https://twitter.com/i/communities/1509206500010569736"
+        },        
+        {
+            "name": "🗃️ Organización Github",
             "url": "https://github.com/gophers-latam"
         }        
     ]

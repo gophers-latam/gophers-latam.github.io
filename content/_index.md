@@ -8,7 +8,7 @@ En este sitio, encontrará:
 
 📝 Los posts
 
-🧙‍♂️ Los colaboradores
+👥 Los colaboradores
 
 🌎 Los contactos
 
