@@ -18,6 +18,11 @@ html, body, .container {
     width: $content-max-width !important;
     padding-left: calc(50% - calc(#{$content-max-width} / 2)) !important;
     padding-right: calc(50% - calc(#{$content-max-width} / 2)) !important;
+    p > img {
+        height: 350px;
+        display: block;
+        margin: auto;
+    }
   }
 }
 
