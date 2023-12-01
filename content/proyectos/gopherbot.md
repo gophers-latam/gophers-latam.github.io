@@ -11,5 +11,5 @@ tech_used:
 repo: https://github.com/gophers-latam/gopher-bot
 ---
 
-Bot de discord como mascota y utilidad de comandos en server [discord.io/go-latam](https://discord.io/go-latam).
+Bot de discord como mascota y utilidad de comandos en server [discord.me/gophers-latam](https://discord.gg/AEarh2kSvn).
 - El bot se encuentra inactivo debido a que kintohub ya dejo de dar servicio.
