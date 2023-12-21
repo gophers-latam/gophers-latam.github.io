@@ -8,6 +8,7 @@ month: "2023/12"
 categories:
 - golang
 - programación
+- intermedio
 tags:
 - gorutinas
 - aprendizaje
