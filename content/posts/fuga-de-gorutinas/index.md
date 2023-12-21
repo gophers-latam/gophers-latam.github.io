@@ -99,7 +99,7 @@ Si ejecutamos nuestra aplicación en algún tipo de contenedor o máquina virtua
 
 ¿Que podemos hacer?
 
-## Previniendo fugaz de gorutinas
+## Previniendo fugas de gorutinas
 
 Inevitablemente debemos aprender y convertirnos en expertos en el [modelo de memoria de Go](https://go.dev/ref/mem) y en su modelo de concurrencia. Esto es de vital importancia, pues de la misma forma que un carpintero es responsable de usar de forma segura su sierra circular, taladro y otros implementos, nosotros como programadores somos responsables de usar correctamente las herramientas de nuestro oficio.
 
