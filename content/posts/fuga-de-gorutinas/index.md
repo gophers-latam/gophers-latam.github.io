@@ -8,7 +8,6 @@ month: "2023/12"
 categories:
 - golang
 - programación
-- intermedio
 tags:
 - gorutinas
 - aprendizaje
@@ -26,6 +25,10 @@ disableComments: false
 Sabemos que las gorutinas son una de las mas importantes primitivas que Go pone a nuestra disposición para el manejo de concurrencia. Por eso se hace necesaria una forma de prevenir *fugas de gorutinas*.
 
 <!--more-->
+
+---
+Si aun no empieza con concurrencia en Go ¡Le sugerimos ver [este](https://play.golang.com/p/BewmFLdb3m1) video de la comunidad antes de leer este artículo!
+---
 
 Una *fuga* o *leak* de gorutinas es cuando nuestra aplicación crea gorutinas sin tener el cuidado de terminarlas *correctamente*.
 
@@ -81,6 +84,11 @@ número de gorutinas: 16
 
 Imprime `número de gorutinas: 16` ¿Por que razón? Porque el contenido del loop se itera 4 veces y en cada iteración engendra 4 gorutinas en la función `submit`. Ingenuamente podriamos estar esperando que al salir del ámbito de la función submit las gorutinas se hubiesen cerrado ¡Pero no es así! ¡Siguen corriendo al final de su proceso como lo demuestra la impresión!
 
+---
+Una fuga o leak de gorutinas es cuando nuestra aplicación crea gorutinas sin tener el cuidado de terminarlas correctamente.
+---
+
+
 Ahora bien, si nuestra aplicación terminara en este punto, no habría problema alguno, pues al acabar su ejecución ya es responsabilidad del sistema operativo realizar las labores de limpieza. Pero muchas veces usamos Go para construir aplicaciones que se ejecutan continuamente sin parar y que se espera que no se detengan, como servicios, apis, etc. En este tipo de aplicaciones, un escenario como el presentado en el ejemplo es insostenible.
 
 Go reserva una cantidad de memoria específica **inicial** para que las gorutinas usen como su [stack](https://go.dev/doc/faq#stack_or_heap), si bien esta cantidad puede variar de versión en versión, la cantidad actual se puede revisar en el [repositorio de GO](https://github.com/golang/go/blob/master/src/runtime/stack.go#L75)
@@ -95,6 +103,10 @@ Este stack puede ir creciendo según el proceso que se ejecute dentro de la goru
 Entonces, ¿Que pasará si nuestra aplicación sufre de fuga de gorutinas y engendra 100000 de ellas durante un periódo de un año sin terminarlas correctamente?
 
 Pues asumiendo optimistamente que el proceso que se ejecuta dentro de nuestras gorutinas fugadas devuelven correctamente la memoria, y que el stack asignado a cada una de ellas sigue teniendo un tamaño de 2kB, tendriamos para ese momento cerca de **200MB** de memoria usada por la aplicación que no podrán ser recuperados por el recolector de basura ¡Porque las gorutinas todavía están ejecutandose! ¡Porque nunca nos aseguramos de terminarlas correctamente!
+
+---
+Si no cuidamos de terminar correctamente las gorutinas que nuestra aplicacióne engendra, corremos el riesgo de enfrentar Out Of Memory Errors
+---
 
 Si ejecutamos nuestra aplicación en algún tipo de contenedor o máquina virtual con un límite duro de memoría, esto puede llegar a ocasionar [out of memory errors](https://stackoverflow.com/questions/47447225/allocation-error-runtime-out-of-memory)
 
