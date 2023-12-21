@@ -8,10 +8,10 @@
   .box-post {
     display: flex;
     flex-direction: column;
-    flex-basis: calc(33% - 3rem);
+    flex-basis: calc(33% - 2.5rem);
     justify-content: flex-end;
-    margin: 0.5rem;
-    padding: 1rem;
+    margin: 0.4rem;
+    padding: 0.5rem;
     align-items: stretch;
 
     .title {
@@ -31,7 +31,7 @@
     }
 
     .summary-container {
-      max-height: 300px;
+      max-height: 310px;
       overflow: hidden;
 
       figure {

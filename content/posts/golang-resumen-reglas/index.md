@@ -19,9 +19,7 @@ keywords:
 
 El lenguaje de programación Go fue creado para hacer el trabajo fácilmente.
 
-Go tiene conceptos similares a los lenguajes imperativos y el tipado estático. También es rápido en la compilación, rápido de ejecutar e implementar. Grande y complejo.
-
-<!--more-->
+Go tiene conceptos similares a los lenguajes imperativos y el tipado estático. <!--more--> También es rápido en la compilación, rápido de ejecutar e implementar. Grande y complejo.
 
 **En este post, se explican conceptos básicos de Go tratando algunos conceptos o reglas importantes.**
 
