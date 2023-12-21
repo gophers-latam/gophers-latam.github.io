@@ -27,7 +27,7 @@ Sabemos que las gorutinas son una de las mas importantes primitivas que Go pone 
 <!--more-->
 
 ---
-Si aun no empieza con concurrencia en Go ¡Le sugerimos ver [este](https://play.golang.com/p/BewmFLdb3m1) video de la comunidad antes de leer este artículo!
+Si aun no empieza a estudiar concurrencia en Go ¡Le sugerimos ver [este](https://youtu.be/plslYvhPyAU?si=qVl-wJcV9nWzM2Rm) video de la comunidad antes de leer este artículo!
 ---
 
 Una *fuga* o *leak* de gorutinas es cuando nuestra aplicación crea gorutinas sin tener el cuidado de terminarlas *correctamente*.
@@ -94,7 +94,7 @@ Ahora bien, si nuestra aplicación terminara en este punto, no habría problema 
 Go reserva una cantidad de memoria específica **inicial** para que las gorutinas usen como su [stack](https://go.dev/doc/faq#stack_or_heap), si bien esta cantidad puede variar de versión en versión, la cantidad actual se puede revisar en el [repositorio de GO](https://github.com/golang/go/blob/master/src/runtime/stack.go#L75)
 
 
-![tamaño inical de stack](images/stack_go.png)
+![stack](images/stack_go.png)
 
 Este stack puede ir creciendo según el proceso que se ejecute dentro de la gorutina. 
 
