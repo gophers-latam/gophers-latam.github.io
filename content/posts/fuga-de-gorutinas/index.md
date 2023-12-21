@@ -105,7 +105,7 @@ Entonces, ¿Que pasará si nuestra aplicación sufre de fuga de gorutinas y enge
 Pues asumiendo optimistamente que el proceso que se ejecuta dentro de nuestras gorutinas fugadas devuelven correctamente la memoria, y que el stack asignado a cada una de ellas sigue teniendo un tamaño de 2kB, tendriamos para ese momento cerca de **200MB** de memoria usada por la aplicación que no podrán ser recuperados por el recolector de basura ¡Porque las gorutinas todavía están ejecutandose! ¡Porque nunca nos aseguramos de terminarlas correctamente!
 
 ---
-Si no cuidamos de terminar correctamente las gorutinas que nuestra aplicacióne engendra, corremos el riesgo de enfrentar Out Of Memory Errors
+Si no cuidamos de terminar correctamente las gorutinas que nuestra aplicación engendra, corremos el riesgo de enfrentar Out Of Memory Errors
 ---
 
 Si ejecutamos nuestra aplicación en algún tipo de contenedor o máquina virtual con un límite duro de memoría, esto puede llegar a ocasionar [out of memory errors](https://stackoverflow.com/questions/47447225/allocation-error-runtime-out-of-memory)
