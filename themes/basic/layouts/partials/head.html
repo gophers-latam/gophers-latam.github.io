@@ -21,7 +21,7 @@
     {{ $syntax := resources.Get "css/syntax.css" | minify | fingerprint }}
     <link rel="stylesheet" href="{{$style.RelPermalink}}">
     <link rel="stylesheet" href="{{$syntax.RelPermalink}}">
-    <link href='https://fonts.googleapis.com/css?family=JetBrains+Mono' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css2?family=Work+Sans' rel='stylesheet' type='text/css'>
     {{- range .AlternativeOutputFormats -}}
     {{- $link := `
     <link rel="%s" type="%s" href="%s" title="%s">` -}}
