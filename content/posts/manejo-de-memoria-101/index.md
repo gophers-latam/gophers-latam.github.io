@@ -1,5 +1,5 @@
 ---
-title: "Manejo de memoria 101. Memoria virtual, stack y heap"
+title: "Manejo de memoria 101. Memoria virtual, Stack y Heap"
 date: 2023-12-30T15:33:31-03:00
 draft: false
 author: Andrés Reyes, el Programador Pobre
@@ -51,7 +51,7 @@ En realidad, lo que llamamos memoria es una **abstracción** proporcionada por e
 
 * [La caché del procesador](https://es.wikipedia.org/wiki/Cach%C3%A9_de_CPU)
 
-* Ram
+* RAM
 
 * Archivos en disco
 
@@ -70,68 +70,62 @@ Memoria virtual es una abstracción que provee a cada proceso la ilusión de que
 
 La organización en forma de *Celdas de memoria* que nos es tan familiar es propia de la memoria virtual y como se imagina para que pueda funcionar se necesita una sofisticada interacción entre el sistema operativo y el hardware. Esta interacción se basa en un *mapeo*, *direccionamiento* o *traslación* entre las direcciones de la memoria virtual y el medio físico donde realmente se encuentre nuestro dato.
 
-Cuando se ejecuta un programa, este tiene una visión uniforme de la memoria, la que llamamos *Espacio de direcciones virtual*, y dentro de este espacio hay dos áreas bien definidas que nos son de vital importancia.
-
-
-  
-    
-      
-
+Cuando se ejecuta un programa, este tiene una visión uniforme de la memoria, la que llamamos *Espacio de direcciones virtual*, y dentro de este espacio hay dos áreas bien definidas que nos son de vital importancia.   
 
 ## Stack y Heap
 
 ### Stack
 
-El stack es una región de la memoria que es *localizada* para cada hilo de ejecución de nuestros programas. En el contexto de Go, decimos que cada gorutina tiene su propio stack. Su objetivo es contener variables locales, argumentos y valores de retorno de funciones, etc. 
+El Stack es una región de la memoria que es *localizada* para cada hilo de ejecución de nuestros programas. En el contexto de Go, decimos que cada gorutina tiene su propio Stack. Su objetivo es contener variables locales, argumentos y valores de retorno de funciones, etc. 
 
-Cuando se invoca una función, se agrega una nueva capa en el stack y cuando la función termina, esa capa se quita a su vez del stack.
+Cuando se invoca una función, se agrega una nueva capa en el Stack y cuando la función termina, esa capa se quita a su vez del Stack.
 
 ---
 Llamamos *Localización/Allocation* al proceso de reservar memoria para almacenar nuestros datos, y *Deslocalización/Deallocation* al proceso de liberarla una vez que ya no la necesitamos.
 ---
 
-El stack tiene la ventaja de que permite acceder rápidamente a la memoria, ¡Claro! Porque los datos mas recientes están siempre en la capa superior. Además, como cuando una función termina su ejecución, su capa asociada en el stack se quita, ¡La memoria utilizada para los datos en esa capa se ve *automáticamente deslocalizada*!
+El Stack tiene la ventaja de que permite acceder rápidamente a la memoria, ¡claro! porque los datos más recientes están siempre en la capa superior. Además, como cuando una función termina su ejecución, su capa asociada en el Stack se quita, ¡La memoria utilizada para los datos en esa capa se ve *automáticamente deslocalizada*!
 
-El stack empieza con espacio pre localizado de un tamaño fijo, si el runtime detecta que se está quedando sin espacio, localiza mas y como la memoría está localizada de antemano, guardar datos en el stack es barato y automático.
+El Stack empieza con espacio pre-localizado de un tamaño fijo, si el runtime detecta que se está quedando sin espacio, localiza más y como la memoría está localizada de antemano, guardar datos en el Stack es barato y automático.
 
 [![Alt text](images/stack_go.png)](https://github.com/golang/go/blob/master/src/runtime/stack.go#L75)
 
-Para que una variable sea asignada en el stack, deben cumplirse una serie de requisitos:
+Para que una variable sea asignada en el Stack, deben cumplirse una serie de requisitos:
 
 * Tamaño fijo, conocido en tiempo de compilación
 
 * El runtime de Go debe ser capaz de determinar completamente su ciclo de vida
 
-* Su tamaño no debe superar la capacidad máxima del stack (mas las salvaguardas del runtime)
+* Su tamaño no debe superar la capacidad máxima del Stack (mas las salvaguardas del runtime)
 
 ---
 El Stack es rápido, localizar y dealocalizar en el es barato.
 ---
 
-Si estas y otras condiciones no son cumplidas, la variable escapará al heap.
+Si estas y otras condiciones no son cumplidas, la variable escapará al Heap.
 
 ### Heap
 
-El heap es el área del espacio de direcciones virtual que el runtime de Go solicita para almacenar los datos al ejecutar nuestro programa. El heap crece dinámicamente y su objetivo es contener los datos que necesitamos persistan mas allá del tiempo de vida de una función o que son muy grandes para ser alojados en el stack.
+El Heap es el área del espacio de direcciones virtual que el runtime de Go solicita para almacenar los datos al ejecutar nuestro programa. El Heap crece dinámicamente y su objetivo es contener los datos que necesitamos persistan mas allá del tiempo de vida de una función o que son muy grandes para ser alojados en el stack.
 
-El que nuestros datos *escapen* al heap es costoso porque implica una *localización*, lo que significa que:
+El que nuestros datos *escapen* al Heap es costoso porque implica una *localización*, lo que significa que:
 
-1 Se verifica que el heap tenga suficiente capacidad para el valor que almacenaremos en el.
+1 Se verifica que el Heap tenga suficiente capacidad para el valor que almacenaremos en el.
 
-2 Si 1 no se cumple, se debe solicitar mas memoria al sistema operativo para el heap. Se produce una [System Call](https://www.man7.org/linux/man-pages/man2/syscalls.2.html) solicitando el recurso. En el mundo real este paso se realiza independientemente. El runtime monitorea constantemente el heap y algunos algoritmos implementan un una *meta*, un límite de memoria, que una vez alcanzado o sobrepasado produce la solicitud de mas recursos al sistema operatvo.
+2 Si el punto 1 no se cumple, se debe solicitar más memoria al sistema operativo para el Heap. Se produce una [System Call](https://www.man7.org/linux/man-pages/man2/syscalls.2.html) solicitando el recurso. En el mundo real este paso se realiza independientemente. El runtime monitorea constantemente el Heap y algunos algoritmos implementan un una *meta*, un límite de memoria, que una vez alcanzado o sobrepasado produce la solicitud de mas recursos al sistema operatvo.
 
-3 Se localiza la memoria en el heap (Por simplicidad incluyamos en este apartado la escritura de los datos que guardaremos)
+3 Se localiza la memoria en el Heap (por simplicidad incluyamos en este apartado la escritura de los datos que guardaremos).
 
-4 Se almacena en el stack un puntero a la dirección de memoria inicial de la localización en el heap.
+4 Se almacena en el Stack un puntero a la dirección de memoria inicial de la localización en el Heap.
 
 ---
 El Heap es flexible, pero la flexibilidad viene con un costo
 ---
 
-¡Todo esto es bastante trabajo para guardar un monton de datos! ¡Sea parsimonioso! Si, porque localizar en el heap, si bien proporciona muchas ventajas, tiene un costo. Es por eso que en el ecosistema de Go Ud. encontrará librerías que se jactan de tener cero localizaciones, es decir, estan escritas tan cuidadosamente que no guardan datos en el heap, solo usan el stack.
+¡Todo esto es bastante trabajo para guardar un monton de datos! ¡Sea parsimonioso! Si, porque localizar en el Heap, si bien proporciona muchas ventajas, tiene un costo. Es por eso que en el ecosistema de Go usted encontrará librerías que se jactan de tener cero localizaciones, es decir, estan escritas tan cuidadosamente que no guardan datos en el Heap, sólo usan el Stack.
 
 
-## Escapando al heap
+## Escapando al Heap
 
 Revisemos el siguiente código
 
@@ -190,7 +184,7 @@ Benchmark_retString-16          1000000000               0.3356 ns/op          0
 Donde el benchmark nos informa con `0 allocs/op` que han ocurrido 0 localizaciones al heap.
 
 
-Reunamos mas información. Agreguemos al comando el flag `-gcflags "-m -m"` que hara que el compilador realice un *análisis de escape*, el cual nos informara de movimientos de datos al heap.
+Reunamos más información. Agreguemos al comando el flag `-gcflags "-m -m"` que hará que el compilador realice un *análisis de escape*, el cual nos informará de movimientos de datos al heap.
 
 ```bash
 $ go test -gcflags "-m" -bench . -benchmem  
@@ -219,7 +213,7 @@ Continua reportandonos 0 localizaciones, pero ha agregado información interesan
 ./main_test.go:17:8: a escapes to heap
 ```
 
-Nos indica que la variable `a` escapa al heap ¡Y nos dice el lugar exacto donde este escape ocurre!
+Nos indica que la variable `a` escapa al Heap ¡Y nos dice el lugar exacto donde este escape ocurre!
 
 ![Alt text](images/escape1.png)
 
@@ -267,7 +261,7 @@ PASS
 ok  	exmem	1.292s
 ```
 
-¡Una localización que reserva 16 bytes!  Agreguemos un nivel mas al análisis con `-gcflags "-m"`
+¡Una localización que reserva 16 bytes! Agreguemos un nivel más al análisis con `-gcflags "-m"`
 
 ```bash
 ./main.go:3:6: can inline retString
@@ -294,7 +288,6 @@ Benchmark_retPointerToString
 Benchmark_retPointerToString-16         49800909                25.77 ns/op           16 B/op          1 allocs/op
 ```
 
-
 Otra vez podemos ver varias cosas interesantes:
 
 ```bash
@@ -306,12 +299,10 @@ Otra vez podemos ver varias cosas interesantes:
 ...
 ```
 
-En el archivo *main.go*, donde definimos la función `rePointerToString` el análisis de escape nos informa que en la línea 9, donde definimos a la variable `retVal` como un string, el compilador ha movido la variable al heap ¡Cuando aún no hemos devuelto su puntero! ¡Lo hacemos recien en la línea 10! ¡Claro! el compilador ha detectado que devolveremos un puntero al valor string almacenado en la variable local, por lo que ha determinado almacenar a la variable en el heap directamente ¡Aun antes de que se produzca el retorno del puntero!
-
-
+En el archivo *main.go*, donde definimos la función `rePointerToString` el análisis de escape nos informa que en la línea 9, donde definimos a la variable `retVal` como un string, el compilador ha movido la variable al Heap ¡Cuando aún no hemos devuelto su puntero! ¡Lo hacemos recien en la línea 10! ¡Claro! el compilador ha detectado que devolveremos un puntero al valor string almacenado en la variable local, por lo que ha determinado almacenar a la variable en el Heap directamente ¡Aun antes de que se produzca el retorno del puntero!
 
 Hablar sobre memoria y otros temas relacionados con arquitectura de computadores es apasionante, pero es para nunca terminar. 
 
-Recapitulando, hemos dado un recorrido introductorio a vuelo de pajaro sobre la memoria revisando al stack y al heap, con algunos ejemplos en código. Conocimos al flag `-gcflags "-m"` para agregar análisis de escape a nuestros tests y bencharks.
+Recapitulando, hemos dado un recorrido introductorio a vuelo de pajaro sobre la memoria revisando al Stack y al Heap, con algunos ejemplos en código. Conocimos al flag `-gcflags "-m"` para agregar análisis de escape a nuestros tests y benchmarks.
 
 Si le gustó este artículo no olvide compartirlo.
