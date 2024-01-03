@@ -104,8 +104,7 @@ Si bien entraremos en detalle más adelante de cada archivo y configuración, es
 
 Ya con nuestras carpetas generadas, vamos a instalar [Packer](https://github.com/wbthomason/packer.nvim) que será nuestro gestor de plugins para Neovim.
 
-Es cierto que este repositorio no se mantiene desde Agosto de 2023, y que muchos usuarios de Neovim están migrando a [Lazy](https://github.com/folke/lazy.nvim) o [Pckr](https://github.com/lewis6991/pckr.nvim) (el sucesor de packer), pero para este post usaremos Packer, ya que sentara las bases de nuestro conocimiento para Neovim y luego podremos realizar otro post sobre la migración a Lazy (esto debido a que quien escribe, actualmente, no migro su gestor a otro 😅).
-
+Es cierto que este repositorio no se mantiene desde Agosto de 2023, y que muchos usuarios de Neovim están migrando a [Lazy](https://github.com/folke/lazy.nvim) o [Pckr](https://github.com/lewis6991/pckr.nvim) (el sucesor de packer), pero para este post usaremos Packer, ya que sentará las bases de nuestro conocimiento para Neovim y luego podremos realizar otro post sobre la migración a Lazy (esto debido a que quien escribe, actualmente, no migró su gestor a otro 😅).
 
 Para instalar packer, debemos de hacerlo de la siguiente manera:
 
