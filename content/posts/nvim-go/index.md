@@ -90,11 +90,11 @@ nvim/
 
 A continuación se explica para qué sirve cada carpeta.
 
-- after/plugin: Dentro de esta, creamos los .lua con el nombre del plugin que descarguemos para configurar como queramos nuestros plugins. En el arbol de referencia se ve los archivos tokyonight.lua y telescope.lua que nos sirven como ejemplo.
+- after/plugin: Dentro de esta, creamos los .lua con el nombre del plugin que descarguemos para configurar como queramos nuestros plugins. En el arbol de referencia se ve los archivos tokyonight.lua y telescope.lua que nos sirven como ejemplo (no hace falta crear estos .lua, mas adelante se muestran ejemplos para su comprensión).
 
 - lua/tu-nombre: Aquí, cambiaremos {tu-nombre} por tu nombre, en mi caso thiago, y dentro tendremos los archivos que nos servirán para descargar y setear nuestros atajos y configuraciones de Nvim.
 
-- plugin: Esta carpeta debemos de generarla, pero su archivo (packer_compiled.lua) se genera automáticamente, en el ira toda nuestra configuración de Neovim. Es importante saber que no debemos de tocar este archivo. 
+- plugin: Esta carpeta no debemos generarla, contiene un archivo (packer_compiled.lua) que también se genera automáticamente como la carpeta /plugin/. En el archivo, ira toda nuestra configuración de Neovim. Es importante saber que no debemos tocar este archivo. Como información adicional, esta carpeta se generará una vez que ejecutamos el comando `:PackerSync` más adelante.
 
 - init.lua: En este archivo, haremos el llamado de la carpeta "tu-nombre", para que al iniciar se carguen automáticamente nuestras configuraciones.
 
@@ -127,7 +127,7 @@ return require('packer').startup(function(use)
 end)
 ```
 
-Una vez hecho los cambios, haremos el siguiente comando en el modo normal: `:so` y enter. Y luego de esto haremos: `:PackerInstall` para instalar el nuevo paquete que agregamos.
+Una vez hecho los cambios, haremos el siguiente comando en el modo normal: `:so` y enter. Y luego de esto haremos: `:PackerSync` para instalar el nuevo paquete que agregamos (también se generará la carpeta /plugin/ y su respectivo archivo)
 
 Y ya que estamos realizando modificaciones, iremos a  nvim/lua/tu-nombre/ y agregaremos los siguientes cambios en:
 
@@ -208,7 +208,7 @@ end)
 
 Una vez que tengamos los plugins que necesitemos, haremos lo que hicimos en pasos previos 
 
-`:so` y `enter` y luego `:PackerInstall` para poder instarlos.
+`:so` y `enter` y luego `:PackerSync` para poder instarlos.
 
 Una vez instalados, debemos de ir a nvim/after/plugin/ y crear los archivos .lua para cada plugin que descargamos. Por ejemplo.
 
@@ -222,7 +222,7 @@ require('lualine').setup({
 })
 ```
 
-- nvim/after/plugin/nvim-treesitter.nvim
+- nvim/after/plugin/nvim-treesitter.lua
 
 ```lua
 require('nvim-treesitter.configs').setup({
