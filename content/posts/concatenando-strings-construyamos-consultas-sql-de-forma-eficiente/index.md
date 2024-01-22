@@ -1,5 +1,5 @@
 ---
-title: "Concatenando strings. Como construir consultas SQL eficientemente y Porque no hay que creerle  nada nadie."
+title: "Concatenando strings. Construyendo SQL eficientemente"
 date: 2024-01-21T12:33:31-03:00
 draft: false
 author: Andrés Reyes. El Programador Pobre
