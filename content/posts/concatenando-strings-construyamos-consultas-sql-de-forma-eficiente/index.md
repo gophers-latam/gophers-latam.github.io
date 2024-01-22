@@ -26,7 +26,7 @@ Los strings son un tipo de dato peculiar.  A simple vista parecieran no esconder
 
 Un string compuesto de solo un caracter, por ejemplo *"A"*, ocupa un byte completo para almacenarse.  En un byte el número entero sin signo mas pequeño que podemos guardar es 0, siendo 255 el mas grande posible de almacenarse. O sea, **un solo caracter** como *"A"* ocupa la misma cantidad de memoria que un valor del tipo `uint8`.
 
-Entonces ¿Cuanta memoria podemos usar cuando concatenamos una enorme cantidad de caracteres en strings grandes? Investiguemoslo con uno de los usos mas frecuentes de construcción dinámica de strings. La creación de consultas SQL.
+Entonces ¿Cuanta memoria podemos usar al concatenar una enorme cantidad de caracteres en strings de gran tamaño? Investiguémoslo con uno de los usos mas frecuentes de construcción dinámica de strings; la creación de consultas SQL.
 
 Terminaremos además con una bonita técnica para disminuir aun mas los direccionamientos al guardar los parámetros para la consulta SQL en un slice.
 
@@ -55,7 +55,7 @@ Usaremos la siguiente constante como base para la consulta que construiremos:
 const qb = `SELECT id, name, last_name FROM clientes WHERE 1=1 %ATTRS% %ID%  %FIRST_NAME% %LAST_NAME%  %LIMIT% %OFFSET%`
 ```
 
-Y la función que construye la consulta con dicho filtro, la cual se basa en la técnica de colocar patrones en el texto y reemplazarlos al ir construyendo la conmsulta concatenando strings sucesivos:
+Y la función que construye la consulta con dicho filtro, la cual se basa en la técnica de colocar patrones en el texto y reemplazarlos al ir construyendo la consulta concatenando strings sucesivos:
 
 ```go
 func QueryBuilderEvil(f Filter) (string, []any) {
@@ -139,7 +139,7 @@ El benchmark nos dice que se ejecutó la función 18720764 veces, durando  764 n
 ¿Parece rápido? ¿Que puede tener esto de malo?  Observe los bytes direccionados, 784. Esto, mas o menos significa que se guardaron en memoria el equivalente a 784 letras "A".
 
 
-Reunamos mas info. Usemos el flag  `-gcflags="-m"` para descubrir donde se producen los direccionamientos en el heap.
+Reunamos mas información. Usemos el flag  `-gcflags="-m"` para descubrir donde se producen los direccionamientos en el heap.
 
 
 ```bash
@@ -150,7 +150,7 @@ Reunamos mas info. Usemos el flag  `-gcflags="-m"` para descubrir donde se produ
 ./main.go:89:57: "%" + f.Search + "%" escapes to heap
 ```
 
-¡Observe además que cada concatenación con + escapa al heap! Cada una genera un direccionamiento nuevo, Lo que si leyo un [artículo anterior](https://gophers-latam.github.io/posts/2023/12/manejo-de-memoria-101.-memoria-virtual-stack-y-heap/), entenderá que puede ser suceptible de mejorar.
+¡Observe además que cada concatenación con + escapa al heap! Cada una genera un direccionamiento nuevo, Lo que si leyó un [artículo anterior](https://gophers-latam.github.io/posts/2023/12/manejo-de-memoria-101.-memoria-virtual-stack-y-heap/), entenderá que puede ser susceptible de mejorar.
 
 Pero ¿Que alternativas hay?
 
@@ -178,7 +178,7 @@ Y revisemos esta función alternativa para construir la consulta:
 	}
 
 	if strings.TrimSpace(f.Name) != "" {
-		//             Notese el espacio extra antes del sql
+		//             Nótese el espacio extra antes del sql
 		b.WriteString(" AND name = ?")
 		params = append(params, f.Name)
 	}
@@ -238,12 +238,12 @@ Gracias al uso eficiente de strings.Builder podemos evitar concatenaciones costo
 
 Estas mejoras se explican porque este nuevo constructor de la consulta delega el manejo de la construcción del string a [`strings.Builder`](https://pkg.go.dev/strings#Builder), cuya documentación nos explica que es un tipo de dato que permite construir strings minimizando las copias de memoria que como Ud. ya está imaginando es donde se produce la demora en ejecución y el costo. 
 
-Gracias al uso eficiente de `strings.Builder` podemos dejar de usar la técnica de busqueda y reemplazo en el string que estamos construyendo y podemos  evitar concatenaciones costosas.
+Gracias al uso eficiente de `strings.Builder` podemos dejar de usar la técnica de búsqueda y reemplazo en el string que estamos construyendo y podemos  evitar concatenaciones costosas.
 
 
 ## Llevando esto al extremo
 
-¿Hasta que punto deberiamos llegar al pensar en evitar concatenaciones y reemplazarlas por `strings.Builder`?
+¿Hasta que punto deberíamos llegar al pensar en evitar concatenaciones y reemplazarlas por `strings.Builder`?
 
 Depende de lo que estemos tratando de hacer. Por ejemplo, en nuestra función `QueryBuilderOK` Ud. podría decir que en donde se construyen los likes se esta usando `fmt.Sprintf`, y si acaso no sería mejor usar un builder.
 
@@ -263,7 +263,7 @@ func QueryBuilderOKAlter(f Filter) (strings.Builder, []any) {
 	}
 
 	if strings.TrimSpace(f.Name) != "" {
-		//             Notese el espacio extra antes del sql
+		//             Nótese el espacio extra antes del sql
 		b.WriteString(" AND name = ?")
 		params = append(params, f.Name)
 	}
@@ -385,7 +385,7 @@ PASS
 ok      aa      144.342s
 ```
 
-Si tomamos los resultados y los ordenamos desde el más rápido hasta el mas lento, vemos que no hay una gran diferencia a favor de las funciones OK, y que incluso `QueryBuilderOK`  es un poco mas veloz que `QueryBuilderOKAlter`. 
+Si tomamos los resultados y los ordenamos desde el más rápido hasta el mas lento, vemos que no hay una gran diferencia entre las funciones OK, y que incluso `QueryBuilderOK`  es un poco mas veloz que `QueryBuilderOKAlter`. 
 
 En el apartado de memoria ambas gastaron la misma cantidad y realizaron el mismo número de direccionamientos.
 
