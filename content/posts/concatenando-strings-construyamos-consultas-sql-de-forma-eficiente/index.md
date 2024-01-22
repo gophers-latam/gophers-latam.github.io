@@ -1,5 +1,5 @@
 ---
-title: "Concatenando strings. Construyendo SQL eficientemente"
+title: "Concatenando strings. Construyendo SQL"
 date: 2024-01-21T12:33:31-03:00
 draft: false
 author: Andrés Reyes. El Programador Pobre
@@ -19,10 +19,13 @@ keywords:
 disableComments: false
 ---
 
-{{<postimage "images/builders.jpg" "string builder">}}
+{{<postimage "images/builders.png" "json to go">}}
 
 
 Los strings son un tipo de dato peculiar.  A simple vista parecieran no esconder nada raro, pero si los comparamos con tipos de dato numéricos encontramos diferencias interesantes.
+
+<!--more-->
+
 
 Un string compuesto de solo un caracter, por ejemplo *"A"*, ocupa un byte completo para almacenarse.  En un byte el número entero sin signo mas pequeño que podemos guardar es 0, siendo 255 el mas grande posible de almacenarse. O sea, **un solo caracter** como *"A"* ocupa la misma cantidad de memoria que un valor del tipo `uint8`.
 
