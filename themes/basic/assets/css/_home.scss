@@ -40,7 +40,7 @@
             color: #7c1ad2;
 
             &:hover {
-                background-color: #8cc5e7;
+                background-color: #8cc5e7; // same color as the golang logo.
 
                 b { color: white }
             }
@@ -71,5 +71,5 @@ p img {
     max-width: 100%;
     height: auto;
     display: block;
-    margin: 0 auto; /* Esto centra la imagen dentro de su contenedor */
+    margin: 0 auto;
 }
