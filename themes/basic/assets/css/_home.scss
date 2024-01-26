@@ -65,3 +65,11 @@ p img {
     margin-left: auto;
     margin-right: auto;
 }
+
+// Project Images Responsives
+.image-project {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto; /* Esto centra la imagen dentro de su contenedor */
+}
