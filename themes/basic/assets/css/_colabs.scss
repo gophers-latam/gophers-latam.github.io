@@ -32,3 +32,27 @@
     text-decoration: underline;
     cursor: pointer;
 }
+
+@media only screen and (max-width: 768px) {
+    .colabs article {
+        width: 45%;
+        margin: 1.5%;
+    }
+    
+    .colabs img {
+        width: 90px;
+        height: 90px;
+    }
+}
+
+@media only screen and (max-width: 480px) {
+    .colabs article {
+        width: 100%;
+        margin: 1.5%;
+    }
+
+.colabs img {
+        width: 90px;
+        height: 90px;
+    }
+}

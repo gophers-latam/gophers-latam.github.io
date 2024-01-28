@@ -1,150 +1,150 @@
 @import "vars";
 
 .post-list {
-  display: flex;
-  flex-flow: row wrap;
-  justify-content: space-evenly;
-
-  .box-post {
     display: flex;
-    flex-direction: column;
-    flex-basis: calc(33% - 2.5rem);
-    justify-content: flex-end;
-    margin: 0.4rem;
-    padding: 0.5rem;
-    align-items: stretch;
+    flex-flow: row wrap;
+    justify-content: space-evenly;
 
-    .title {
-      text-decoration: none;
-      flex: 1;
+    .box-post {
+        display: initial; // NOTE: fix the white space between the title and the date.
+        // flex-direction: column;
+        flex-basis: calc(33% - 2.5rem);
+        // justify-content: flex-end;
+        margin: 0.4rem;
+        padding: 0.5rem;
+        // align-items: stretch;
 
-      h3 {
-        color: $second-color;
-        flex-basis: 20%;
-        font-size: 1.25em;
-      }
-    }
+        .title {
+            text-decoration: none;
+            flex: 1;
 
-    .date {
-      font-size: 0.9em;
-      color: #818181;
-    }
-
-    .summary-container {
-      max-height: 310px;
-      overflow: hidden;
-
-      figure {
-        max-width: 300px;
-        height: 150px;
-        margin-left: auto;
-        margin-right: auto;
-
-        img {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
+            h3 {
+                color: $second-color;
+                flex-basis: 20%;
+                font-size: 1.25em;
+            }
         }
 
-        figcaption { display: none }
-      }
+        .date {
+            font-size: 0.9em;
+            color: #818181;
+        }
 
-      p {
-        font-size: 0.85em;
-        color: #616161;
-      }
+        .summary-container {
+            max-height: 310px;
+            overflow: hidden;
+
+            figure {
+                max-width: 300px;
+                height: 150px;
+                margin-left: auto;
+                margin-right: auto;
+
+                img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                }
+
+                figcaption { display: none }
+            }
+
+            p {
+                font-size: 0.85em;
+                color: #616161;
+            }
+        }
     }
-  }
 }
 
 .post {
-  max-width: $display-mid-max;
-  margin: auto;
+    max-width: $display-mid-max;
+    margin: auto;
 
-  > * {
-    margin: 2rem 0;
-  }
-
-  header {
     > * {
-      margin: 2rem 0;
+        margin: 2rem 0;
     }
 
-    h2 { font-size: 2.5em }
+    header {
+        > * {
+            margin: 2rem 0;
+        }
 
-    .tags {
-      display: flex;
-      flex-direction: row;
-      flex-wrap: wrap;
+        h2 { font-size: 2.5em }
 
-      .tag {
-        margin: 0.25rem;
-        padding: 0.5rem;
-        border-radius: 5px;
-        font-weight: bold;
-        font-size: 0.9em;
-        background-color: $second-color;
-        color: white;
-      }
+        .tags {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+
+            .tag {
+                margin: 0.25rem;
+                padding: 0.5rem;
+                border-radius: 5px;
+                font-weight: bold;
+                font-size: 0.9em;
+                background-color: $second-color;
+                color: white;
+            }
+        }
+
+        .meta {
+            display: flex;
+            flex-direction: column;
+            font-size: 0.9em;
+
+            label { padding: 0.5rem 0 }
+        }
     }
 
-    .meta {
-      display: flex;
-      flex-direction: column;
-      font-size: 0.9em;
+    header, .body {
+        a.tag {
+            background-color: #ddd;
+            color: #333;
+            display: inline-block;
+            padding: 0.1em;
+            font-size: 0.9em;
+            text-decoration: none;
+        }
 
-      label { padding: 0.5rem 0 }
+        figure {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+
+            img {
+                width: auto;
+                height: auto;
+                max-width: $display-mid-max;
+                max-height: 400px;
+                margin: auto;
+                padding: 1rem;
+            }
+
+            figcaption {
+                font-size: 0.8em;
+                color: #666;
+            }
+        }
     }
-  }
 
-  header, .body {
-    a.tag {
-      background-color: #ddd;
-      color: #333;
-      display: inline-block;
-      padding: 0.1em;
-      font-size: 0.9em;
-      text-decoration: none;
+    .highlight {
+
+        pre {
+            padding: 1rem;
+            border-radius: 5px;
+            overflow: auto;
+        }
     }
-
-    figure {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-
-      img {
-        width: auto;
-        height: auto;
-        max-width: $display-mid-max;
-        max-height: 400px;
-        margin: auto;
-        padding: 1rem;
-      }
-
-      figcaption {
-        font-size: 0.8em;
-        color: #666;
-      }
-    }
-  }
-
-  .highlight {
-
-    pre {
-      padding: 1rem;
-      border-radius: 5px;
-      overflow: auto;
-    }
-  }
 }
 
 @media (max-width: #{$display-mid-max}) {
-  .post-list {
-    flex-direction: column;
-  }
+    .post-list {
+        flex-direction: column;
+    }
 
-  .post figure img {
-    max-width: 100%;
-  }
+    .post figure img {
+        max-width: 100%;
+    }
 }
