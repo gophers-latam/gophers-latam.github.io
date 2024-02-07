@@ -500,12 +500,12 @@ func (t *taskTest) Run() {
 
 	if os.Getenv("DEBUG") == "TRUE" {
 		fmt.Printf("     starting task %d\n", t.id)
-		time.Sleep(200 * time.Millisecond)
+		time.Sleep(10 * time.Millisecond)
 	}
 }
 ```
 
-Simulamos un trabajo en nuestra implementación mock de tarea esperando durante 200 milisegundos.
+Simulamos un trabajo en nuestra implementación mock de tarea esperando durante 10 milisegundos.
 Además, agregamos unas comprobaciones a la variable de entorno `DEBUG` para poder ver logs del inicio y fin de la ejecución de las tareas mock.
 
 
@@ -564,9 +564,12 @@ $ DEBUG=TRUE go test -timeout 256s -run ^Test_deadpool_Flow$ github.com/profe-aj
 
 Donde vemos que el tiempo sumado de la ejecución de todas las tareas fue *1.298687182s*, pero el tiempo total de proceso solo fue de *223.349239ms*, mientras que cada tarea demoro en promedio *10.145993ms* que es una fracción mayor a los 10ms que le indicamos que debía esperar la tarea mock.
 
+Como alternativa al worker pool, según sea nuestro caso podriamos haber implementado un [pipeline](https://medium.com/@chess.coach.ar/concurrencia-en-go-implementando-pipelines-d23a58fa2405), que consiste en una cadena de gorutinas cada una de las cuales realiza una acción sobre un elemento hasta completarlo, y cuya analogía es una línea de producción.
 
-Hemos implementado un worker pool funcional, pero aun no hemos respondido a la pregunta con que iniciamos este artículo ¿Hay algún límite para la concurrencia? Preferimos dejar la pregunta abierta y esperamos sus respuestas en los omentarios.
+Sea cual sea el patrón concurrente que elijamos, debemos ser cuidadosos de no provocar condiciones de carrera ni [fugas de gorutinas](https://gophers-latam.github.io/posts/2023/12/fuga-de-gorutinas/)
+
+Hemos implementado un worker pool funcional, pero aun no hemos respondido a la pregunta con que iniciamos este artículo ¿Hay algún límite para la concurrencia? Preferimos dejar la pregunta abierta y esperamos sus respuestas en los comentarios.
 
 Puede hackear el código que hemos construido en este [playground](https://go.dev/play/p/x7R2nwq5um7), y como de costumbre, le proveemos con el [repositorio](https://github.com/profe-ajedrez/deadpool) donde se aloja.
 
-Y bien, con eso llegamos al final de este codelab. Esperamos que haya sido de su agrado y como siempre le recordamos que si le gusto este artículo no dude en compartirlo o en comentarnos si considera que hay algo en lo que podamos mejorar. 
+Y bien, con eso llegamos al final de este codelab. Esperamos que haya sido de su agrado y como siempre le recordamos que si le gustó este artículo no dude en compartirlo o en comentarnos si considera que hay algo en lo que podamos mejorar. 
