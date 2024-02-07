@@ -27,21 +27,21 @@ Pero ¿Podemos hacer uso de la concurrencia sin ponernos un límite?
 
 <!--more-->
 
-Concurrencia es un aspecto integral del desarrollo moderno de software que permite que nuestras aplicaciones ejecuten multiples tareas simultaneamente y nos permite usar efectivamente los recursos del sistema, especialmente en situaciones donde debemos llevar a cabo mucho computo u operaciones de entrada/salida.
+Concurrencia es un aspecto integral del desarrollo moderno de software que permite que nuestras aplicaciones ejecuten múltiples tareas simultáneamente y nos permite usar efectivamente los recursos del sistema, especialmente en situaciones donde debemos llevar a cabo mucho computo u operaciones de entrada/salida.
 
-Pero ¿Hay un Limite?
+Pero ¿Hay un Límite?
 
-Imaginemos el periódo de matriculas de un colegio en donde se debe registrar el ingreso y asignar curso a cientos de alumnos. Podriamos poner un funcionario encargado para el registro de cada alumno, pero solo podriamos hacerlo hasta completar el máximo número de funcionarios disponibles
+Imaginemos el periódo de matriculas de un colegio en donde se debe registrar el ingreso y asignar curso a cientos de alumnos. Podríamos poner un funcionario encargado para el registro de cada alumno, pero solo podríamos hacerlo hasta completar el máximo número de funcionarios disponibles
 
 ¡Además de que todas las demás tareas de esos funcionarios quedarían en pausa hasta terminar el proceso de registro!
 
 ---
-*Worker pool* es un patrón concurrente cuya idea base es tener un número de gorutinas esperando a que se le asignen trabajos, ejecutandolos a medida que se le van asignando
+*Worker pool* es un patrón concurrente cuya idea base es tener un número de gorutinas esperando a que se le asignen trabajos, ejecutándolos a medida que se le van asignando
 ---
 
 Como eso es poco verosímil, que tal si dejamos solo a 4 funcionarios realizando el proceso de matricula mientras que los demás se reparten las tareas habituales. De esta forma los 4 funcionarios registran alumnos *concurrentemente*.  Junto con ello, esto nos permite que si vemos que se produce un cuello de botella, por ejemplo muchos apoderados llegan a registrar a sus pupilos al mismo tiempo, podemos reforzar con algunos funcionarios extra, y devolverlos a sus tareas habituales cuando se haya procesado el cuello de botella.
 
-Pues bien, con esta analogia hemos descrito el funcionamiento de un *worker pool*, el cual es un patrón para lograr concurrencia, cuya idea base es tener un número de gorutinas, que reciben el nombre de *worker*, esperando a que se le asignen trabajos. Cuando un trabajo se le asigna a un worker, se ejecuta concurrentemente mientras la gorutina principal sigue ejecutando otro código.
+Pues bien, con esta analogía hemos descrito el funcionamiento de un *worker pool*, el cual es un patrón para lograr concurrencia, cuya idea base es tener un número de gorutinas, que reciben el nombre de *worker*, esperando a que se le asignen trabajos. Cuando un trabajo se le asigna a un worker, se ejecuta concurrentemente mientras la gorutina principal sigue ejecutando otro código.
 
 ---
 La idea base de nuestra implementación es gatillar bajo demanda un número fijo de gorutinas que harán las veces de workers e iran recibiendo tareas a ejecutar a través de un canal por el cual las enviaremos
@@ -92,7 +92,7 @@ La interface `Executor`  tendrá la responsabilidad de ejecutar cada tarea
 type Spawner interface {
 
     // Spawn engendra un nuevo worker para el worker pool
-    // recibe como arguemnto:
+    // recibe como argumento:
     // El canal por donde se recibirán las tareas
     // Una función capaz de ejecutar una tarea
     // Una función que se ejecutará al momento de desplegar el worker
@@ -207,7 +207,7 @@ func (s *DefaultSpawner) Spawn(
 
 ## Implementado Pool. Deadpool
 
-Implementaremos ahora a nuestor Pool concreto, le llamaremos Deadpool por razones obvias.
+Implementaremos ahora a nuestro Pool concreto, le llamaremos Deadpool por razones obvias.
 
 Cuando definamos al constructor usaremos [funciones argumentales variadicas](https://medium.com/@chess.coach.ar/argumentos-opcionales-en-go-argumento-variadico-funcional-en-constructores-85458a5f07f) pues nos proveen de una gran flexibilidad.
 
@@ -225,7 +225,7 @@ var (
 
 
 type deadpool struct {
-    // maxWorkers indica la cantidad máxima de workers a leventar
+    // maxWorkers indica la cantidad máxima de workers a levantar
 	maxWorkers        int32
 
     // cap es la capacidad de tareas para el worker pool. Se usa como 
@@ -351,7 +351,7 @@ func (d *deadpool) SpawnWorker() {
         // de [Spawner]
 		d.spawner.Spawn(
 			d.tasksStream,                // canal de tareas
-			d.Execute,                    // función ejecutadora que al final delega al [Executer]
+			d.Execute,                    // función ejecutora que al final delega al [Executer]
 			func(workerID int32) func() { // función a invocar al iniciar el worker
 				return func() {             // en esta implementación lo usamos para
 					d.wg.Add(1)             // aumentar en 1 el contador de workers a esperar
