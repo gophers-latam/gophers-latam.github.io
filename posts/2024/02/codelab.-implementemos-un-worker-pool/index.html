@@ -1,0 +1,428 @@
+<!doctype html><html><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=author content="ZeroIdentidad"><meta name=description content="Gophers LATAM"><meta property="og:image" content="https://gophers-latam.github.io//logo.png"><title>CodeLab. Implementemos un Worker Pool – Gophers LATAM</title><link rel="shortcut icon" type=image/x-icon href=/favicon.ico><link rel=stylesheet href=/css/style.min.5c43d42176932b665337e50d7340aece08d086e5c40b6f4eecff0e6abb091d0a.css><link rel=stylesheet href=/css/syntax.min.f1fef9cbbfe9d2935981821d59853e89db60d137f9117a1279371320195f1d1a.css><link href='https://fonts.googleapis.com/css2?family=Work+Sans' rel=stylesheet type=text/css><script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga("create","UA-192145152-1","auto"),ga("send","pageview"))</script><script async src=https://www.google-analytics.com/analytics.js></script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7766642915413571" crossorigin=anonymous></script></head><body><div class=container><header class="page-header app-width"><div class=header-left><a href=/><img alt="Gophers LATAM" src=/img/gopher.png style=height:90px></a></div><div class=header-center><nav><a href=/>Inicio</a>
+<a href=/biografia>Biografía</a>
+<a href=/proyectos>Proyectos</a>
+<a href=/posts>Posts</a>
+<a href=/colaboradores>Colaboradores</a>
+<a href=/contacto>Contacto</a></nav></div><div class=header-right><a class=button-search href=/search><img alt=Búsqueda src=/img/search.png></a></div></header><main class=app-width><article class=post><header><h2>CodeLab. Implementemos un Worker Pool</h2><span class=tags><a class=tag href=/tags/golang>golang</a>
+<a class=tag href=/tags/concurrencia>concurrencia</a>
+<a class=tag href=/tags/software>software</a></span>
+<span class=meta><label>Por: <b>Andres Reyes El Programador Pobre</b></label>
+<label>Publicado <b>February 6, 2024</b></label>
+<label>Tiempo de lectura: <b>13 minutos</b>.</label></span></header><section class=body><figure class=post-figure><a href=/posts/2024/02/codelab.-implementemos-un-worker-pool/images/pools.png><img src=/posts/2024/02/codelab.-implementemos-un-worker-pool/images/pools_hu25c2df14317a6a74ebc7cc77c76ece4a_666661_1024x0_resize_box_3.png width=1024 height=794 alt=" Mengniu Dairy production line. Gentileza de  Peter Tittenberger y flickr. https://www.flickr.com/photos/ext504/3639675762/in/photostream/"></a><figcaption>Mengniu Dairy production line. Gentileza de Peter Tittenberger y flickr. https://www.flickr.com/photos/ext504/3639675762/in/photostream/</figcaption></figure><p>La concurrencia es una herramienta que nos ayuda a ejecutar tareas pesadas o que bloquean el avance de un proceso, mientras otras tareas se ejecutan, mejorando el rendimiento general.</p><p>Pero ¿Podemos hacer uso de la concurrencia sin ponernos un límite?</p><p>Concurrencia es un aspecto integral del desarrollo moderno de software que permite que nuestras aplicaciones ejecuten múltiples tareas simultáneamente y nos permite usar efectivamente los recursos del sistema, especialmente en situaciones donde debemos llevar a cabo mucho computo u operaciones de entrada/salida.</p><p>Pero ¿Hay un Límite?</p><p>Imaginemos el periódo de matriculas de un colegio en donde se debe registrar el ingreso y asignar curso a cientos de alumnos. Podríamos poner un funcionario encargado para el registro de cada alumno, pero solo podríamos hacerlo hasta completar el máximo número de funcionarios disponibles</p><p>¡Además de que todas las demás tareas de esos funcionarios quedarían en pausa hasta terminar el proceso de registro!</p><hr><h2 id=worker-pool-es-un-patrón-concurrente-cuya-idea-base-es-tener-un-número-de-gorutinas-esperando-a-que-se-le-asignen-trabajos-ejecutándolos-a-medida-que-se-le-van-asignando><em>Worker pool</em> es un patrón concurrente cuya idea base es tener un número de gorutinas esperando a que se le asignen trabajos, ejecutándolos a medida que se le van asignando</h2><p>Como eso es poco verosímil, que tal si dejamos solo a 4 funcionarios realizando el proceso de matricula mientras que los demás se reparten las tareas habituales. De esta forma los 4 funcionarios registran alumnos <em>concurrentemente</em>. Junto con ello, esto nos permite que si vemos que se produce un cuello de botella, por ejemplo muchos apoderados llegan a registrar a sus pupilos al mismo tiempo, podemos reforzar con algunos funcionarios extra, y devolverlos a sus tareas habituales cuando se haya procesado el cuello de botella.</p><p>Pues bien, con esta analogía hemos descrito el funcionamiento de un <em>worker pool</em>, el cual es un patrón para lograr concurrencia, cuya idea base es tener un número de gorutinas, que reciben el nombre de <em>worker</em>, esperando a que se le asignen trabajos. Cuando un trabajo se le asigna a un worker, se ejecuta concurrentemente mientras la gorutina principal sigue ejecutando otro código.</p><hr><h2 id=la-idea-base-de-nuestra-implementación-es-gatillar-bajo-demanda-un-número-fijo-de-gorutinas-que-harán-las-veces-de-workers-e-iran-recibiendo-tareas-a-ejecutar-a-través-de-un-canal-por-el-cual-las-enviaremos>La idea base de nuestra implementación es gatillar bajo demanda un número fijo de gorutinas que harán las veces de workers e iran recibiendo tareas a ejecutar a través de un canal por el cual las enviaremos</h2><p>Worker pool nos permite <em>administrar</em> el nivel de concurrencia de nuestras aplicaciones controlando el uso de recursos de procesamiento.</p><p>¡Pero basta de teoría y ensuciemonos las manos que a eso hemos venido!</p><p>Implementaremos un worker pool definiendo cada parte que lo constituye, junto con algunas utilidades para obtener métricas.</p><p>La idea base de nuestra implementación es gatillar bajo demanda un número fijo de gorutinas que harán las veces de workers e iran recibiendo tareas a ejecutar a través de un canal por el cual las enviaremos.</p><p>Decimos que gatillaremos bajo demanda a los workers porque los iremos levantando a medida que vayan llegando tareas y no hayan workers para ejecutarlas, hasta llegar al límite definido de workers. En pocas palabras, implementaremos una lazy inicialization de los workers de nuestro pool.</p><p>Dentro de las consideraciones de diseño, haremos un fuerte uso de interfaces pues nos permiten que los elementos que componen el worker pool sean plugables y posibles de reemplazar por otros componentes que implementen la interface.</p><p>La belleza de esto radica en que si a Ud. se le ocurre una mejor implementación, o necesita funcionalidades extra que no están contempladas en las implementaciones por defecto, puede construir su propia implementación de acuerdo a sus gustos o necesidades, y mientras implemente la interface definida su código personalizado trabajará perfectamente con el resto del worker pool.</p><h2 id=tareas>Tareas</h2><p>Dentro del contexto de programación concurrente es usual llamar aquello que se procesa como <em>tarea</em>, que son trabajos que pueden ser ejecutados asíncrona y concurrentemente con otras tareas. Así que empecemos por definir la estructura de datos que nuestro worker pool será capaz de procesar.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#66d9ef>type</span> <span style=color:#a6e22e>Task</span> <span style=color:#66d9ef>interface</span> {
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>Run</span>()
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>Una interface llamada <code>Task</code>, exponiendo un método <code>Run</code> que será implementada por las tareas concretas que necesitemos procesar.</p><h2 id=executor-y-spawner>Executor y Spawner</h2><p>Comentamos que los workers deben levantarse a medida que las tareas vayan llegando, y que deben ir ejecutandolas. Podemos abstraer esas dos funcionalides en respectivas interfaces.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#66d9ef>type</span> <span style=color:#a6e22e>Executor</span> <span style=color:#66d9ef>interface</span> {
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// Execute ejecuta una tarea Task para un worker pool Pool
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>	<span style=color:#a6e22e>Execute</span>(<span style=color:#a6e22e>Task</span>, <span style=color:#a6e22e>Pool</span>)
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>La interface <code>Executor</code> tendrá la responsabilidad de ejecutar cada tarea</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#66d9ef>type</span> <span style=color:#a6e22e>Spawner</span> <span style=color:#66d9ef>interface</span> {
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// Spawn engendra un nuevo worker para el worker pool
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#75715e>// recibe como argumento:
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#75715e>// El canal por donde se recibirán las tareas
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#75715e>// Una función capaz de ejecutar una tarea
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#75715e>// Una función que se ejecutará al momento de desplegar el worker
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#75715e>// Una función que se ejecutará al momento de terminar al worker
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>	<span style=color:#a6e22e>Spawn</span>(<span style=color:#66d9ef>chan</span> <span style=color:#a6e22e>Task</span>, <span style=color:#66d9ef>func</span>(<span style=color:#a6e22e>Task</span>), <span style=color:#66d9ef>func</span>(), <span style=color:#66d9ef>func</span>())
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p><code>Spawner</code> cuya finalidad será levantar un nuevo worker cuando sea necesario.</p><h2 id=pool>Pool</h2><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#66d9ef>type</span> <span style=color:#a6e22e>Pool</span> <span style=color:#66d9ef>interface</span> {
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// Submit Envia una nueva tarea al worker pool
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>	<span style=color:#a6e22e>Submit</span>(<span style=color:#a6e22e>Task</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// WaitAll Espera a que todos los workers terminen de procesar sus tareas asignadas
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>	<span style=color:#a6e22e>WaitAll</span>()
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// Execute Ejecuta las tareas enviadas al worker delegando en la interface [Executor]
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>	<span style=color:#a6e22e>Execute</span>(<span style=color:#a6e22e>Task</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// SpawnWorker Levanta un nuevo worker delegando en la interface [Spawner]
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>	<span style=color:#a6e22e>SpawnWorker</span>()
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// WorkerSpawned Retorna el número de workers levantados hasta el momento
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>	<span style=color:#a6e22e>WorkerSpawned</span>() <span style=color:#66d9ef>int32</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// SubmittedTasks Retorna el número de tareas enviadas a los workers
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>	<span style=color:#a6e22e>SubmittedTasks</span>() <span style=color:#66d9ef>int32</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// AddReadyTask agrega el deltas indicado como parámetro a la cantidad 
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#75715e>// de tareas ejecutadas. Se usa en DefaultExecutor por ejemplo
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#a6e22e>AddReadyTask</span>(<span style=color:#66d9ef>int32</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// OnExecuteTask Lo usaremos como un hook para inyectar código que se ejecutará cuando el [Executor] ejecute cada tarea
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>	<span style=color:#a6e22e>OnExecuteTask</span>(<span style=color:#a6e22e>time</span>.<span style=color:#a6e22e>Time</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// CummulatedWorkTime() time.Duration` Devuelve el tiempo de trabajo hasta el momento de su invocación
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>	<span style=color:#a6e22e>CummlatedWorkTime</span>() <span style=color:#a6e22e>time</span>.<span style=color:#a6e22e>Duration</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// AVGTime Devuelve el tiempo promedio de ejecución de tareas
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>	<span style=color:#a6e22e>AVGTime</span>() <span style=color:#a6e22e>time</span>.<span style=color:#a6e22e>Duration</span>
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>Definimos la última de nuestras interfaces, la interface <code>Pool</code> que representa al worker pool.</p><p>Con la api de nuestro worker pool ya definida, procedemos ahora a construir una implementación concreta.</p><h2 id=implementando-a-executor-defaultexecutor>Implementando a Executor. DefaultExecutor</h2><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#66d9ef>type</span> <span style=color:#a6e22e>DefaultExecutor</span> <span style=color:#66d9ef>struct</span>{}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>e</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>DefaultExecutor</span>) <span style=color:#a6e22e>Execute</span>(<span style=color:#a6e22e>task</span> <span style=color:#a6e22e>Task</span>, <span style=color:#a6e22e>p</span> <span style=color:#a6e22e>Pool</span>) {
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>start</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>time</span>.<span style=color:#a6e22e>Now</span>().<span style=color:#a6e22e>UTC</span>()
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>defer</span> <span style=color:#a6e22e>p</span>.<span style=color:#a6e22e>OnExecuteTask</span>(<span style=color:#a6e22e>start</span>)
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>defer</span> <span style=color:#a6e22e>p</span>.<span style=color:#a6e22e>AddReadyTask</span>(<span style=color:#ae81ff>1</span>)
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>task</span>.<span style=color:#a6e22e>Run</span>()
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>Tal como se indicó en la definición de nuestra api, el executor es responsable de gatillar la tarea recibida por el worker.</p><p>En esta implementación registraremos el tiempo que las tareas demoran en ejecutarse, y para invocar al método <code>OnExecuteTask</code> del worker pool.</p><h2 id=implementando-a-spawner-defaultspawner>Implementando a Spawner. DefaultSpawner.</h2><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#66d9ef>type</span> <span style=color:#a6e22e>DefaultSpawner</span> <span style=color:#66d9ef>struct</span>{}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>s</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>DefaultSpawner</span>) <span style=color:#a6e22e>Spawn</span>(
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>tasks</span> <span style=color:#66d9ef>chan</span> <span style=color:#a6e22e>Task</span>, 
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>executor</span> <span style=color:#66d9ef>func</span>(<span style=color:#a6e22e>Task</span>), 
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>onStart</span> <span style=color:#66d9ef>func</span>(), 
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>onEnd</span> <span style=color:#66d9ef>func</span>()
+</span></span><span style=display:flex><span>) {
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// Antes de levantar propiamente al worker, ejecutamos la función onStart
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#75715e>// recibida como argumento. Esto nos da la oportunidad
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#75715e>// de inyectar un hook al momento de levantar los workers
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>	<span style=color:#a6e22e>onStart</span>()
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// Levantamos al worker en su propia gorutina
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>	<span style=color:#66d9ef>go</span> <span style=color:#66d9ef>func</span>() {
+</span></span><span style=display:flex><span>        <span style=color:#75715e>// registramos la función onEnd recibidas como argumento
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>        <span style=color:#75715e>// para que se ejecute al terminar la gorutina
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>		<span style=color:#66d9ef>defer</span> <span style=color:#a6e22e>onEnd</span>()
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>		<span style=color:#66d9ef>for</span> <span style=color:#a6e22e>task</span> <span style=color:#f92672>:=</span> <span style=color:#66d9ef>range</span> <span style=color:#a6e22e>tasks</span> {
+</span></span><span style=display:flex><span>            <span style=color:#75715e>// Dejamos un medio para terminar al worker 
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>            <span style=color:#75715e>// recibiendo una tarea con valor nil 
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>			<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>task</span> <span style=color:#f92672>==</span> <span style=color:#66d9ef>nil</span> {
+</span></span><span style=display:flex><span>				<span style=color:#66d9ef>return</span>
+</span></span><span style=display:flex><span>			}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>            <span style=color:#75715e>// para cada tarea recibida, invocamos a la 
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>            <span style=color:#75715e>// función executor recibida como argumento
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>            <span style=color:#75715e>// para que la gatille.
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>			<span style=color:#a6e22e>executor</span>(<span style=color:#a6e22e>task</span>)
+</span></span><span style=display:flex><span>		}
+</span></span><span style=display:flex><span>	}()
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h2 id=implementado-pool-deadpool>Implementado Pool. Deadpool</h2><p>Implementaremos ahora a nuestro Pool concreto, le llamaremos Deadpool por razones obvias.</p><p>Cuando definamos al constructor usaremos <a href=https://medium.com/@chess.coach.ar/argumentos-opcionales-en-go-argumento-variadico-funcional-en-constructores-85458a5f07f>funciones argumentales variadicas</a> pues nos proveen de una gran flexibilidad.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// Definimos los posibles errores que puede gatillar la creación de un nuevo deadpool
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span><span style=color:#66d9ef>var</span> (
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>ErrInvalidMaxWorkers</span> = <span style=color:#a6e22e>errors</span>.<span style=color:#a6e22e>New</span>(<span style=color:#e6db74>&#34;invalid max number of workers&#34;</span>)
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>ErrInvalidCap</span>        = <span style=color:#a6e22e>errors</span>.<span style=color:#a6e22e>New</span>(<span style=color:#e6db74>&#34;invalid capacity for tasks stream&#34;</span>)
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>ErrInvalidExecutor</span>   = <span style=color:#a6e22e>errors</span>.<span style=color:#a6e22e>New</span>(<span style=color:#e6db74>&#34;expected a valid Executor. Nil received&#34;</span>)
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>ErrInvalidSpawner</span>    = <span style=color:#a6e22e>errors</span>.<span style=color:#a6e22e>New</span>(<span style=color:#e6db74>&#34;expected a valid Spawner. Nil received&#34;</span>)
+</span></span><span style=display:flex><span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>type</span> <span style=color:#a6e22e>deadpool</span> <span style=color:#66d9ef>struct</span> {
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// maxWorkers indica la cantidad máxima de workers a levantar
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>	<span style=color:#a6e22e>maxWorkers</span>        <span style=color:#66d9ef>int32</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// cap es la capacidad de tareas para el worker pool. Se usa como 
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#75715e>// el segundo parámetro de `make` al construir el canal de tareas
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>	<span style=color:#a6e22e>cap</span>               <span style=color:#66d9ef>int8</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// currentWorkersQTY registra la cantidad actual de workers levantados
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>	<span style=color:#a6e22e>currentWorkersQTY</span> <span style=color:#66d9ef>int32</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// readyTasksQTY registra la cantidad de tareas ejecutadas
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>	<span style=color:#a6e22e>readyTasksQTY</span>     <span style=color:#66d9ef>int32</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// submittedTasksQTY registra la cantidad de tareas enviadas a los workers
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>	<span style=color:#a6e22e>submittedTasksQTY</span> <span style=color:#66d9ef>int32</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// registra el tiempo acumulado de proceso para las tareas ejecutadas
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>	<span style=color:#a6e22e>cummulatedTime</span> <span style=color:#a6e22e>time</span>.<span style=color:#a6e22e>Duration</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// registra el tiempo promedio de ejecución de las tareas
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>	<span style=color:#a6e22e>avgTaskTime</span>    <span style=color:#a6e22e>time</span>.<span style=color:#a6e22e>Duration</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// executor de tipo [Executor] es un punto de montaje para un 
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#75715e>// Executor personalizado, en caso de no proveerse uno, se usará
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#75715e>//[DefaultExecutor]
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>	<span style=color:#a6e22e>executor</span> <span style=color:#a6e22e>Executor</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// spawner de tipo [Spawner] es un punto de montaje para un 
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#75715e>// Spawner personalizado, en caso de no proveerse uno, se usará
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#75715e>//[DefaultSpawner]
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>	<span style=color:#a6e22e>spawner</span>  <span style=color:#a6e22e>Spawner</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// tasksStream es el canal por donde se enviaran las tareas a los workers
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>	<span style=color:#a6e22e>tasksStream</span> <span style=color:#66d9ef>chan</span> <span style=color:#a6e22e>Task</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>wg</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>sync</span>.<span style=color:#a6e22e>WaitGroup</span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>mu</span> <span style=color:#a6e22e>sync</span>.<span style=color:#a6e22e>Mutex</span>
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// New devuelve un puntero a un deadpool inicializado y listo para usar.
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>New</span>(<span style=color:#a6e22e>opts</span> <span style=color:#f92672>...</span><span style=color:#66d9ef>func</span>(<span style=color:#f92672>*</span><span style=color:#a6e22e>deadpool</span>)) (<span style=color:#f92672>*</span><span style=color:#a6e22e>deadpool</span>, <span style=color:#66d9ef>error</span>) {
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// Instancia de deadpool con defauklts executor y spawner
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>	<span style=color:#a6e22e>d</span> <span style=color:#f92672>:=</span> <span style=color:#f92672>&amp;</span><span style=color:#a6e22e>deadpool</span>{
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>executor</span>: <span style=color:#f92672>&amp;</span><span style=color:#a6e22e>DefaultExecutor</span>{},
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>spawner</span>:  <span style=color:#f92672>&amp;</span><span style=color:#a6e22e>DefaultSpawner</span>{},
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>wg</span>:       <span style=color:#f92672>&amp;</span><span style=color:#a6e22e>sync</span>.<span style=color:#a6e22e>WaitGroup</span>{},
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>mu</span>:       <span style=color:#a6e22e>sync</span>.<span style=color:#a6e22e>Mutex</span>{},
+</span></span><span style=display:flex><span>	}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// procesamos las funciones argumentales variadicas
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>	<span style=color:#66d9ef>for</span> <span style=color:#a6e22e>_</span>, <span style=color:#a6e22e>f</span> <span style=color:#f92672>:=</span> <span style=color:#66d9ef>range</span> <span style=color:#a6e22e>opts</span> {
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>f</span>(<span style=color:#a6e22e>d</span>)
+</span></span><span style=display:flex><span>	}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>d</span>.<span style=color:#a6e22e>maxWorkers</span> <span style=color:#f92672>&lt;=</span> <span style=color:#ae81ff>0</span> {
+</span></span><span style=display:flex><span>		<span style=color:#66d9ef>return</span> <span style=color:#a6e22e>d</span>, <span style=color:#a6e22e>ErrInvalidMaxWorkers</span>
+</span></span><span style=display:flex><span>	}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>d</span>.<span style=color:#a6e22e>cap</span> &lt; <span style=color:#ae81ff>0</span> {
+</span></span><span style=display:flex><span>		<span style=color:#66d9ef>return</span> <span style=color:#a6e22e>d</span>, <span style=color:#a6e22e>ErrInvalidCap</span>
+</span></span><span style=display:flex><span>	}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// Si por cualquier causa se pasó un executor nil, terminamos con el 
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#75715e>// error correspondiente
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>	<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>d</span>.<span style=color:#a6e22e>executor</span> <span style=color:#f92672>==</span> <span style=color:#66d9ef>nil</span> {
+</span></span><span style=display:flex><span>		<span style=color:#66d9ef>return</span> <span style=color:#a6e22e>d</span>, <span style=color:#a6e22e>ErrInvalidExecutor</span>
+</span></span><span style=display:flex><span>	}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>d</span>.<span style=color:#a6e22e>spawner</span> <span style=color:#f92672>==</span> <span style=color:#66d9ef>nil</span> {
+</span></span><span style=display:flex><span>		<span style=color:#66d9ef>return</span> <span style=color:#a6e22e>d</span>, <span style=color:#a6e22e>ErrInvalidSpawner</span>
+</span></span><span style=display:flex><span>	}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#75715e>// construimos el canal donde dejaremos caer las tareas
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#a6e22e>d</span>.<span style=color:#a6e22e>tasksStream</span> = make(<span style=color:#66d9ef>chan</span> <span style=color:#a6e22e>Task</span>, <span style=color:#a6e22e>d</span>.<span style=color:#a6e22e>cap</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>return</span> <span style=color:#a6e22e>d</span>, <span style=color:#66d9ef>nil</span>
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>d</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>deadpool</span>) <span style=color:#a6e22e>AddReadyTask</span>(<span style=color:#a6e22e>qty</span> <span style=color:#66d9ef>int32</span>) {
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>atomic</span>.<span style=color:#a6e22e>AddInt32</span>(<span style=color:#f92672>&amp;</span><span style=color:#a6e22e>d</span>.<span style=color:#a6e22e>readyTasksQTY</span>, <span style=color:#a6e22e>qty</span>)
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// Submit envía una nueva tarea parea ser procesada por algún worker
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>d</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>deadpool</span>) <span style=color:#a6e22e>Submit</span>(<span style=color:#a6e22e>task</span> <span style=color:#a6e22e>Task</span>) {
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// engendramos un nuevo worker solo si es necesario
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>	<span style=color:#a6e22e>d</span>.<span style=color:#a6e22e>SpawnWorker</span>()
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// enviamos la tarea por el canal
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>	<span style=color:#a6e22e>d</span>.<span style=color:#a6e22e>tasksStream</span> <span style=color:#f92672>&lt;-</span> <span style=color:#a6e22e>task</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// aumentamos en 1 la cantidad de tareas enviadas usando una operación atómica
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>	<span style=color:#a6e22e>atomic</span>.<span style=color:#a6e22e>AddInt32</span>(<span style=color:#f92672>&amp;</span><span style=color:#a6e22e>d</span>.<span style=color:#a6e22e>submittedTasksQTY</span>, <span style=color:#ae81ff>1</span>)
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// WaitAll espera porque todos los workers levantados terminen sus tareas asignadas
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>d</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>deadpool</span>) <span style=color:#a6e22e>WaitAll</span>() {
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>d</span>.<span style=color:#a6e22e>tasksStream</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
+</span></span><span style=display:flex><span>		close(<span style=color:#a6e22e>d</span>.<span style=color:#a6e22e>tasksStream</span>)
+</span></span><span style=display:flex><span>	}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>d</span>.<span style=color:#a6e22e>wg</span>.<span style=color:#a6e22e>Wait</span>()
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// Execute ejecuta la tarea delegando a la implementación de
+</span></span></span><span style=display:flex><span><span style=color:#75715e>// [Executor] definida
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>d</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>deadpool</span>) <span style=color:#a6e22e>Execute</span>(<span style=color:#a6e22e>task</span> <span style=color:#a6e22e>Task</span>) {
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>d</span>.<span style=color:#a6e22e>executor</span>.<span style=color:#a6e22e>Execute</span>(<span style=color:#a6e22e>task</span>, <span style=color:#a6e22e>d</span>)
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// SpawnWorker levanta un nuevo worker
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>d</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>deadpool</span>) <span style=color:#a6e22e>SpawnWorker</span>() {
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// Obtiene de una operación atómica la cantidad actual de workers levantados
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>	<span style=color:#a6e22e>currentWorkersQTY</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>atomic</span>.<span style=color:#a6e22e>LoadInt32</span>(<span style=color:#f92672>&amp;</span><span style=color:#a6e22e>d</span>.<span style=color:#a6e22e>currentWorkersQTY</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// si es menor a la cantidad máxima de workers indicada, procedemos a levantar un nuevo worker
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>	<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>currentWorkersQTY</span> &lt; <span style=color:#a6e22e>atomic</span>.<span style=color:#a6e22e>LoadInt32</span>(<span style=color:#f92672>&amp;</span><span style=color:#a6e22e>d</span>.<span style=color:#a6e22e>maxWorkers</span>) {
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>        <span style=color:#75715e>// Para levantar un nuevo worker delegamos a la implementación definida
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>        <span style=color:#75715e>// de [Spawner]
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>		<span style=color:#a6e22e>d</span>.<span style=color:#a6e22e>spawner</span>.<span style=color:#a6e22e>Spawn</span>(
+</span></span><span style=display:flex><span>			<span style=color:#a6e22e>d</span>.<span style=color:#a6e22e>tasksStream</span>,                <span style=color:#75715e>// canal de tareas
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>			<span style=color:#a6e22e>d</span>.<span style=color:#a6e22e>Execute</span>,                    <span style=color:#75715e>// función ejecutora que al final delega al [Executer]
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>			<span style=color:#66d9ef>func</span>(<span style=color:#a6e22e>workerID</span> <span style=color:#66d9ef>int32</span>) <span style=color:#66d9ef>func</span>() { <span style=color:#75715e>// función a invocar al iniciar el worker
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>				<span style=color:#66d9ef>return</span> <span style=color:#66d9ef>func</span>() {             <span style=color:#75715e>// en esta implementación lo usamos para
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>					<span style=color:#a6e22e>d</span>.<span style=color:#a6e22e>wg</span>.<span style=color:#a6e22e>Add</span>(<span style=color:#ae81ff>1</span>)             <span style=color:#75715e>// aumentar en 1 el contador de workers a esperar
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>				}
+</span></span><span style=display:flex><span>			}(<span style=color:#a6e22e>currentWorkersQTY</span>),
+</span></span><span style=display:flex><span>			<span style=color:#66d9ef>func</span>(<span style=color:#a6e22e>workerID</span> <span style=color:#66d9ef>int32</span>) <span style=color:#66d9ef>func</span>() { <span style=color:#75715e>// función a invocar al terminar el worker
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>				<span style=color:#66d9ef>return</span> <span style=color:#66d9ef>func</span>() {             <span style=color:#75715e>// en esta implementación lo usamos para
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>					<span style=color:#a6e22e>d</span>.<span style=color:#a6e22e>wg</span>.<span style=color:#a6e22e>Done</span>()             <span style=color:#75715e>// disminuir en 1 el contador de workers a esperar
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>				}
+</span></span><span style=display:flex><span>			}(<span style=color:#a6e22e>currentWorkersQTY</span>),
+</span></span><span style=display:flex><span>		)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>atomic</span>.<span style=color:#a6e22e>AddInt32</span>(<span style=color:#f92672>&amp;</span><span style=color:#a6e22e>d</span>.<span style=color:#a6e22e>currentWorkersQTY</span>, <span style=color:#ae81ff>1</span>)  <span style=color:#75715e>// Aumentamos en 1 la cantidad de workers levantados
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>                                                  <span style=color:#75715e>// con una operación atómica
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>	}
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// OnExecuteTask es un hook que se provee para inyectar código antes de ejecutar una tarea.
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>d</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>deadpool</span>) <span style=color:#a6e22e>OnExecuteTask</span>(<span style=color:#a6e22e>start</span> <span style=color:#a6e22e>time</span>.<span style=color:#a6e22e>Time</span>) {
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>d</span>.<span style=color:#a6e22e>mu</span>.<span style=color:#a6e22e>Lock</span>()
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>defer</span> <span style=color:#a6e22e>d</span>.<span style=color:#a6e22e>mu</span>.<span style=color:#a6e22e>Unlock</span>()
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#75715e>// En esta implementación lo usamos para  guardar el tiempo
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#75715e>// de ejecución de las tareas
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#75715e>// para calcular el cummulated execution time y el avg execution time
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#a6e22e>ellapsed</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>time</span>.<span style=color:#a6e22e>Since</span>(<span style=color:#a6e22e>start</span>)
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>d</span>.<span style=color:#a6e22e>cummulatedTime</span> <span style=color:#f92672>+=</span> <span style=color:#a6e22e>ellapsed</span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>readies</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>time</span>.<span style=color:#a6e22e>Duration</span>(<span style=color:#a6e22e>atomic</span>.<span style=color:#a6e22e>LoadInt32</span>(<span style=color:#f92672>&amp;</span><span style=color:#a6e22e>d</span>.<span style=color:#a6e22e>readyTasksQTY</span>))
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>d</span>.<span style=color:#a6e22e>avgTaskTime</span> = <span style=color:#a6e22e>d</span>.<span style=color:#a6e22e>cummulatedTime</span> <span style=color:#f92672>/</span> <span style=color:#a6e22e>readies</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// Pero ud. podría usarlo para lo que quiera!
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>d</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>deadpool</span>) <span style=color:#a6e22e>WorkerSpawned</span>() <span style=color:#66d9ef>int32</span> {
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>return</span> <span style=color:#a6e22e>d</span>.<span style=color:#a6e22e>currentWorkersQTY</span>
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>d</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>deadpool</span>) <span style=color:#a6e22e>SubmittedTasks</span>() <span style=color:#66d9ef>int32</span> {
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>return</span> <span style=color:#a6e22e>d</span>.<span style=color:#a6e22e>submittedTasksQTY</span>
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>d</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>deadpool</span>) <span style=color:#a6e22e>AVGTime</span>() <span style=color:#a6e22e>time</span>.<span style=color:#a6e22e>Duration</span> {
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>return</span> <span style=color:#a6e22e>d</span>.<span style=color:#a6e22e>avgTaskTime</span>
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>d</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>deadpool</span>) <span style=color:#a6e22e>CummlatedWorkTime</span>() <span style=color:#a6e22e>time</span>.<span style=color:#a6e22e>Duration</span> {
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>return</span> <span style=color:#a6e22e>d</span>.<span style=color:#a6e22e>cummulatedTime</span>
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>/// Funciones argumentales variadicas
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// WithMax indica el máximo número de workers
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>WithMax</span>(<span style=color:#a6e22e>max</span> <span style=color:#66d9ef>int32</span>) <span style=color:#66d9ef>func</span>(<span style=color:#f92672>*</span><span style=color:#a6e22e>deadpool</span>) {
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>return</span> <span style=color:#66d9ef>func</span>(<span style=color:#a6e22e>d</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>deadpool</span>) {
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>d</span>.<span style=color:#a6e22e>maxWorkers</span> = <span style=color:#a6e22e>max</span>
+</span></span><span style=display:flex><span>	}
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// WithCap indica la capacidad del canal. Si se omite el canal de tareas no estará buffereado
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>WithCap</span>(<span style=color:#a6e22e>cap</span> <span style=color:#66d9ef>int8</span>) <span style=color:#66d9ef>func</span>(<span style=color:#f92672>*</span><span style=color:#a6e22e>deadpool</span>) {
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>return</span> <span style=color:#66d9ef>func</span>(<span style=color:#a6e22e>d</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>deadpool</span>) {
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>d</span>.<span style=color:#a6e22e>cap</span> = <span style=color:#a6e22e>cap</span>
+</span></span><span style=display:flex><span>	}
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// WithExecutor permite explicitar el Executor a usar. Si se omite, se usa [DefaultExecutor]
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>WithExecutor</span>(<span style=color:#a6e22e>exe</span> <span style=color:#a6e22e>Executor</span>) <span style=color:#66d9ef>func</span>(<span style=color:#f92672>*</span><span style=color:#a6e22e>deadpool</span>) {
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>return</span> <span style=color:#66d9ef>func</span>(<span style=color:#a6e22e>d</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>deadpool</span>) {
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>d</span>.<span style=color:#a6e22e>executor</span> = <span style=color:#a6e22e>exe</span>
+</span></span><span style=display:flex><span>	}
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// WithSpawner permite explicitar el [Spawner] a usar. Si se omite, se usa [DefaultSpawner]
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>WithSpawner</span>(<span style=color:#a6e22e>spn</span> <span style=color:#a6e22e>WorkerSpawner</span>) <span style=color:#66d9ef>func</span>(<span style=color:#f92672>*</span><span style=color:#a6e22e>deadpool</span>) {
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>return</span> <span style=color:#66d9ef>func</span>(<span style=color:#a6e22e>d</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>deadpool</span>) {
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>d</span>.<span style=color:#a6e22e>spawner</span> = <span style=color:#a6e22e>spn</span>
+</span></span><span style=display:flex><span>	}
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>En nuestra implementación hemos decidido usar el paquete atomic que provee primitivas de memoria de bajo nivel. La documentación de Go recomienda preferir la paquete sync o canales para sincronizar memoria, pero como lo que necesitabamos hacer era aumentar en 1 algunas variables nos decantamos por atomic.</p><p>Como ninguna implementaciónm está terminada si sus pruebas, construyamos pruebas para nuestro invento.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>Test_deadpool_ErrsOnCreate</span>(<span style=color:#a6e22e>t</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>testing</span>.<span style=color:#a6e22e>T</span>) {
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>_</span>, <span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>New</span>(<span style=color:#a6e22e>WithMax</span>(<span style=color:#f92672>-</span><span style=color:#ae81ff>1</span>))
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>==</span> <span style=color:#66d9ef>nil</span> {
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>t</span>.<span style=color:#a6e22e>Log</span>(<span style=color:#e6db74>&#34;ErrInvalidMaxWorkers expected&#34;</span>)
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>t</span>.<span style=color:#a6e22e>FailNow</span>()
+</span></span><span style=display:flex><span>	}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>_</span>, <span style=color:#a6e22e>err</span> = <span style=color:#a6e22e>New</span>(<span style=color:#a6e22e>WithCap</span>(<span style=color:#f92672>-</span><span style=color:#ae81ff>1</span>))
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>==</span> <span style=color:#66d9ef>nil</span> {
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>t</span>.<span style=color:#a6e22e>Log</span>(<span style=color:#e6db74>&#34;ErrInvalidCap expected&#34;</span>)
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>t</span>.<span style=color:#a6e22e>FailNow</span>()
+</span></span><span style=display:flex><span>	}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>_</span>, <span style=color:#a6e22e>err</span> = <span style=color:#a6e22e>New</span>(<span style=color:#a6e22e>WithExecutor</span>(<span style=color:#66d9ef>nil</span>))
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>==</span> <span style=color:#66d9ef>nil</span> {
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>t</span>.<span style=color:#a6e22e>Log</span>(<span style=color:#e6db74>&#34;ErrInvalidExecutor expected&#34;</span>)
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>t</span>.<span style=color:#a6e22e>FailNow</span>()
+</span></span><span style=display:flex><span>	}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>_</span>, <span style=color:#a6e22e>err</span> = <span style=color:#a6e22e>New</span>(<span style=color:#a6e22e>WithSpawner</span>(<span style=color:#66d9ef>nil</span>))
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>==</span> <span style=color:#66d9ef>nil</span> {
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>t</span>.<span style=color:#a6e22e>Log</span>(<span style=color:#e6db74>&#34;ErrInvalidSpawner expected&#34;</span>)
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>t</span>.<span style=color:#a6e22e>FailNow</span>()
+</span></span><span style=display:flex><span>	}
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>El test anterior comprueba que los posibles errores al instanciar a nuestro pool se gatillen correctamente.</p><p>Ahora implementemos un mock de una tarea para poder probar la infraestructura completa.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#66d9ef>type</span> <span style=color:#a6e22e>taskTest</span> <span style=color:#66d9ef>struct</span> {
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>id</span> <span style=color:#66d9ef>int</span>
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>newTaskTest</span>(<span style=color:#a6e22e>id</span> <span style=color:#66d9ef>int</span>) <span style=color:#f92672>*</span><span style=color:#a6e22e>taskTest</span> {
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>return</span> <span style=color:#f92672>&amp;</span><span style=color:#a6e22e>taskTest</span>{
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>id</span>: <span style=color:#a6e22e>id</span>,
+</span></span><span style=display:flex><span>	}
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>t</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>taskTest</span>) <span style=color:#a6e22e>Run</span>() {
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>defer</span> <span style=color:#66d9ef>func</span>() {
+</span></span><span style=display:flex><span>		<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>os</span>.<span style=color:#a6e22e>Getenv</span>(<span style=color:#e6db74>&#34;DEBUG&#34;</span>) <span style=color:#f92672>==</span> <span style=color:#e6db74>&#34;TRUE&#34;</span> {
+</span></span><span style=display:flex><span>			<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Printf</span>(<span style=color:#e6db74>&#34;     stoping task %d\n&#34;</span>, <span style=color:#a6e22e>t</span>.<span style=color:#a6e22e>id</span>)
+</span></span><span style=display:flex><span>		}
+</span></span><span style=display:flex><span>	}()
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>os</span>.<span style=color:#a6e22e>Getenv</span>(<span style=color:#e6db74>&#34;DEBUG&#34;</span>) <span style=color:#f92672>==</span> <span style=color:#e6db74>&#34;TRUE&#34;</span> {
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Printf</span>(<span style=color:#e6db74>&#34;     starting task %d\n&#34;</span>, <span style=color:#a6e22e>t</span>.<span style=color:#a6e22e>id</span>)
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>time</span>.<span style=color:#a6e22e>Sleep</span>(<span style=color:#ae81ff>10</span> <span style=color:#f92672>*</span> <span style=color:#a6e22e>time</span>.<span style=color:#a6e22e>Millisecond</span>)
+</span></span><span style=display:flex><span>	}
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>Simulamos un trabajo en nuestra implementación mock de tarea esperando durante 10 milisegundos.
+Además, agregamos unas comprobaciones a la variable de entorno <code>DEBUG</code> para poder ver logs del inicio y fin de la ejecución de las tareas mock.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>Test_deadpool_Flow</span>(<span style=color:#a6e22e>t</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>testing</span>.<span style=color:#a6e22e>T</span>) {
+</span></span><span style=display:flex><span>    
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// Instanciamos un nuevo deadpool con un máximo de 6 workers
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>	<span style=color:#a6e22e>d</span>, <span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>New</span>(<span style=color:#a6e22e>WithMax</span>(<span style=color:#ae81ff>6</span>))
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>t</span>.<span style=color:#a6e22e>Log</span>(<span style=color:#a6e22e>err</span>)
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>t</span>.<span style=color:#a6e22e>FailNow</span>()
+</span></span><span style=display:flex><span>	}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>start</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>time</span>.<span style=color:#a6e22e>Now</span>().<span style=color:#a6e22e>UTC</span>()
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// Enviaremos al worker pool 128 de nuestras tareas mock
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>	<span style=color:#66d9ef>for</span> <span style=color:#a6e22e>i</span> <span style=color:#f92672>:=</span> <span style=color:#ae81ff>1</span>; <span style=color:#a6e22e>i</span> <span style=color:#f92672>&lt;=</span> <span style=color:#ae81ff>128</span>; <span style=color:#a6e22e>i</span><span style=color:#f92672>++</span> {
+</span></span><span style=display:flex><span>		<span style=color:#66d9ef>func</span>(<span style=color:#a6e22e>i</span> <span style=color:#66d9ef>int</span>) {
+</span></span><span style=display:flex><span>			<span style=color:#a6e22e>d</span>.<span style=color:#a6e22e>Submit</span>(<span style=color:#a6e22e>newTaskTest</span>(<span style=color:#a6e22e>i</span>))
+</span></span><span style=display:flex><span>		}(<span style=color:#a6e22e>i</span>)
+</span></span><span style=display:flex><span>	}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>d</span>.<span style=color:#a6e22e>WaitAll</span>()
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// estadisticas
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>	<span style=color:#a6e22e>t</span>.<span style=color:#a6e22e>Logf</span>(<span style=color:#e6db74>&#34;tiempo acumulado de proceso: %v\n&#34;</span>, <span style=color:#a6e22e>d</span>.<span style=color:#a6e22e>CummlatedWorkTime</span>())
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>t</span>.<span style=color:#a6e22e>Logf</span>(<span style=color:#e6db74>&#34;tiempo promedio por tarea: %v \n&#34;</span>, <span style=color:#a6e22e>d</span>.<span style=color:#a6e22e>AVGTime</span>())
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>t</span>.<span style=color:#a6e22e>Logf</span>(<span style=color:#e6db74>&#34;tiempo total de proceso: %v&#34;</span>, <span style=color:#a6e22e>time</span>.<span style=color:#a6e22e>Since</span>(<span style=color:#a6e22e>start</span>))
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>Y al ejecutar nuestro test con la variable de entrono <code>DEBUG</code> con valor <code>TRUE</code> podemos ver el resultado.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>$ DEBUG<span style=color:#f92672>=</span>TRUE go test -timeout 256s -run ^Test_deadpool_Flow$ github.com/profe-ajedrez/deadpool -v
+</span></span><span style=display:flex><span><span style=color:#f92672>===</span> RUN   Test_deadpool_Flow
+</span></span><span style=display:flex><span>     starting task <span style=color:#ae81ff>1</span>
+</span></span><span style=display:flex><span>     starting task <span style=color:#ae81ff>2</span>
+</span></span><span style=display:flex><span>     starting task <span style=color:#ae81ff>3</span>
+</span></span><span style=display:flex><span>     starting task <span style=color:#ae81ff>4</span>
+</span></span><span style=display:flex><span>     ...
+</span></span><span style=display:flex><span>     stoping task <span style=color:#ae81ff>122</span>
+</span></span><span style=display:flex><span>     stoping task <span style=color:#ae81ff>125</span>
+</span></span><span style=display:flex><span>     stoping task <span style=color:#ae81ff>128</span>
+</span></span><span style=display:flex><span>     stoping task <span style=color:#ae81ff>127</span>
+</span></span><span style=display:flex><span>    deadpool_test.go:60: tiempo acumulado de proceso: 1.298687182s
+</span></span><span style=display:flex><span>    deadpool_test.go:61: tiempo promedio por tarea: 10.145993ms 
+</span></span><span style=display:flex><span>    deadpool_test.go:62: tiempo total de proceso: 223.349239ms
+</span></span><span style=display:flex><span>--- PASS: Test_deadpool_Flow <span style=color:#f92672>(</span>0.22s<span style=color:#f92672>)</span>
+</span></span></code></pre></div><p>Donde vemos que el tiempo sumado de la ejecución de todas las tareas fue <em>1.298687182s</em>, pero el tiempo total de proceso solo fue de <em>223.349239ms</em>, mientras que cada tarea demoro en promedio <em>10.145993ms</em> que es una fracción mayor a los 10ms que le indicamos que debía esperar la tarea mock.</p><p>Como alternativa al worker pool, según sea nuestro caso podriamos haber implementado un <a href=https://medium.com/@chess.coach.ar/concurrencia-en-go-implementando-pipelines-d23a58fa2405>pipeline</a>, que consiste en una cadena de gorutinas cada una de las cuales realiza una acción sobre un elemento hasta completarlo, y cuya analogía es una línea de producción.</p><p>Sea cual sea el patrón concurrente que elijamos, debemos ser cuidadosos de no provocar condiciones de carrera ni <a href=https://gophers-latam.github.io/posts/2023/12/fuga-de-gorutinas/>fugas de gorutinas</a></p><p>Hemos implementado un worker pool funcional, pero aun no hemos respondido a la pregunta con que iniciamos este artículo ¿Hay algún límite para la concurrencia? Preferimos dejar la pregunta abierta y esperamos sus respuestas en los comentarios.</p><p>Puede hackear el código que hemos construido en este <a href=https://go.dev/play/p/x7R2nwq5um7>playground</a>, y como de costumbre, le proveemos con el <a href=https://github.com/profe-ajedrez/deadpool>repositorio</a> donde se aloja.</p><p>Y bien, con eso llegamos al final de este codelab. Esperamos que haya sido de su agrado y como siempre le recordamos que si le gustó este artículo no dude en compartirlo o en comentarnos si considera que hay algo en lo que podamos mejorar.</p></section><section class=related><h3>Relacionados</h3><div class=post-list><article class="box box-post"><a class=title href=/posts/2021/12/ecosistema-lenguage-go/><h3>Ecosistema lenguage Go</h3></a><time class=date>December
+27
+2021</time><div class=summary-container><figure class=post-figure><a href=/posts/2021/12/ecosistema-lenguage-go/images/golang.png><img src=/posts/2021/12/ecosistema-lenguage-go/images/golang_hu57fed90b28f13fac04b0b2a1fb7dff6d_26167_1024x0_resize_box_3.png width=1024 height=346 alt="json to go"></a><figcaption>json to go</figcaption></figure><p>Go, también conocido como Golang, es un lenguaje de programación de tipado estático desarrollado por Robert Griesemer, Rob Pike y Ken Thompson en Google.</p></div></article><article class="box box-post"><a class=title href=/posts/2021/05/golang-implementaci%C3%B3n-del-almacenamiento-en-cach%C3%A9/><h3>Golang: Implementación del almacenamiento en caché</h3></a><time class=date>May
+6
+2021</time><div class=summary-container><figure class=post-figure><a href=/posts/2021/05/golang-implementaci%C3%B3n-del-almacenamiento-en-cach%C3%A9/images/go-cache.jpg><img src=/posts/2021/05/golang-implementaci%C3%B3n-del-almacenamiento-en-cach%C3%A9/images/go-cache_huddfdaf20a9de86793c7e04ee08a1b995_15138_1024x0_resize_q75_box.jpg width=1024 height=465 alt="go cache"></a><figcaption>go cache</figcaption></figure><p>El almacenamiento en caché de datos en una aplicación web a veces es necesario para evitar solicitar datos estáticos de una base de datos o un servicio externo una y otra vez. Go no proporciona ningún paquete integrado en la librería estándar para almacenar en caché las respuestas, pero lo admite a través de paquetes externos creados por la comunidad.</p></div></article><article class="box box-post"><a class=title href=/posts/2021/04/golang-referencia-esencial-go-modules/><h3>Golang: Referencia esencial Go modules</h3></a><time class=date>April
+30
+2021</time><div class=summary-container><figure class=post-figure><a href=/posts/2021/04/golang-referencia-esencial-go-modules/images/go-modules.png><img src=/posts/2021/04/golang-referencia-esencial-go-modules/images/go-modules_hu4efca11e3cf5c24922ed10c2ec6d81f7_540656_1024x0_resize_box_3.png width=1024 height=642 alt="Go Modules"></a><figcaption>Go Modules</figcaption></figure><p>Esta es una hoja de trucos esenciales, no una referencia oficial. Con el fin de que sea conciso, se omitieron aspectos menos frecuentes, dado que este sitio desde su <a href=https://github.com/gophers-latam/gophers-latam.github.io>repositorio</a> esta abierto a cambios de contribuidores en la comunidad de <strong>Gophers LATAM</strong> cualquiera puede hacer cambios que mejoren este contenido.</p></div></article><article class="box box-post"><a class=title href=/posts/2021/04/golang-mantener-actualizado-el-sdk/><h3>Golang: Mantener actualizado el SDK</h3></a><time class=date>April
+12
+2021</time><div class=summary-container><figure class=post-figure><a href=/posts/2021/04/golang-mantener-actualizado-el-sdk/images/update-go.png><img src=/posts/2021/04/golang-mantener-actualizado-el-sdk/images/update-go_hu6b1249bbbab4c5cd87135a176f9a4910_40986_1024x0_resize_box_3.png width=1024 height=584 alt="Update Go"></a><figcaption>Update Go</figcaption></figure><p>Como ocurre con todos los lenguajes de programación, hay actualizaciones periódicas de las herramientas de desarrollo de Go. El SDK Go son binarios nativos que no dependen de un tiempo de ejecución independiente, por lo que no hay que preocuparse de que la actualización del entorno de desarrollo pueda hacer que los programas actualmente implementados fallen. Puede tenerse programas compilados con diferentes versiones de Go ejecutándose simultáneamente en la misma computadora o máquina virtual.</p></div></article><article class="box box-post"><a class=title href=/posts/2021/04/golang-resumen-reglas/><h3>Golang: Resumen reglas</h3></a><time class=date>April
+10
+2021</time><div class=summary-container><figure class=post-figure><a href=/posts/2021/04/golang-resumen-reglas/images/go-police.png><img src=/posts/2021/04/golang-resumen-reglas/images/go-police_hue7d7c6d1a137cc488db438363aa4cc3d_46281_1024x0_resize_box_3.png width=1024 height=696 alt="Go Police"></a><figcaption>Go Police</figcaption></figure><p>El lenguaje de programación Go fue creado para hacer el trabajo fácilmente.</p><p>Go tiene conceptos similares a los lenguajes imperativos y el tipado estático.</p></div></article></div></section><section class=comments><h3>Comentar</h3><div id=disqus_thread></div><script type=application/javascript>window.disqus_config=function(){},function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById("disqus_thread").innerHTML="Disqus comments not available by default when the website is previewed locally.";return}var t=document,e=t.createElement("script");e.async=!0,e.src="//gophers-latam.disqus.com/embed.js",e.setAttribute("data-timestamp",+new Date),(t.head||t.body).appendChild(e)}()</script><noscript>Please enable JavaScript to view the <a href=https://disqus.com/?ref_noscript>comments powered by Disqus.</a></noscript><a href=https://disqus.com class=dsq-brlink>comments powered by <span class=logo-disqus>Disqus</span></a></section></article></main><footer><a href=https://gohugo.io><img src=/img/hugo-logo.svg width=90 height=21></a>
+<small>© 2024, Gophers LATAM. - Theme by <a href=https://github.com/zeroidentidad>zeroidentidad</a>.</small></footer></div></body></html>
