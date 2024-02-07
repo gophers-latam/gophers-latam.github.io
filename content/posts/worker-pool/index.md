@@ -59,11 +59,11 @@ Decimos que gatillaremos bajo demanda a los workers porque los iremos levantando
 
 Dentro de las consideraciones de diseño, haremos un fuerte uso de interfaces pues nos permiten que los elementos que componen el worker pool sean plugables y posibles de reemplazar por otros componentes que implementen la interface.
 
-La belleza de esto radica en que si a Ud. se le ocurre una mejor implementación, o necesita funcionalidades extra que no están contempladas en las implementaciones por defecto, puede construir su propia implementación de acuerdo a sus gustos o necesidades, y mientras implemente la interface definida su código personalizado trabajará perfectamente con el resto del worker pool.
+La belleza de esto radica en que si a Ud. se le ocurre una mejor implementación, o necesita funcionalidades extra que no están contempladas, puede construir su propia implementación de acuerdo a sus gustos o necesidades, y mientras exponga los métodos de la interface definida, su código personalizado trabajará perfectamente con el resto del worker pool.
 
 ## Tareas
 
-Dentro del contexto de programación concurrente es usual llamar aquello que se procesa como *tarea*, que son trabajos que pueden ser ejecutados asíncrona y concurrentemente con otras tareas. Así que empecemos por definir la estructura de datos que nuestro worker pool será capaz de procesar.
+Dentro del contexto de programación concurrente es usual llamar aquello que se procesa como *tarea*, que son trabajos que pueden ser ejecutados asíncrona y concurrentemente. Así que empecemos por definir la estructura de datos que nuestro worker pool será capaz de procesar.
 
 ```go
 type Task interface {
@@ -437,9 +437,9 @@ func WithSpawner(spn WorkerSpawner) func(*deadpool) {
 
 ```
 
-En nuestra implementación hemos decidido usar el paquete atomic que provee primitivas de memoria de bajo nivel. La documentación de Go recomienda preferir la paquete sync o canales para sincronizar memoria, pero como lo que necesitabamos hacer era aumentar en 1 algunas variables nos decantamos por atomic.
+En nuestra implementación hemos decidido usar el paquete `atomic` que provee primitivas de memoria de bajo nivel. La documentación de Go recomienda preferir el paquete sync o canales para sincronizar memoria, pero como lo que necesitabamos hacer era aumentar en 1 algunas variables nos decantamos por atomic.
 
-Como ninguna implementaciónm está terminada si sus pruebas, construyamos pruebas para nuestro invento.
+Como ninguna implementaciónm está terminada sin sus pruebas, construyamoslas  para probar nuestro invento.
 
 
 ```go
@@ -566,7 +566,7 @@ Donde vemos que el tiempo sumado de la ejecución de todas las tareas fue *1.298
 
 Como alternativa al worker pool, según sea nuestro caso podriamos haber implementado un [pipeline](https://medium.com/@chess.coach.ar/concurrencia-en-go-implementando-pipelines-d23a58fa2405), que consiste en una cadena de gorutinas cada una de las cuales realiza una acción sobre un elemento hasta completarlo, y cuya analogía es una línea de producción.
 
-Sea cual sea el patrón concurrente que elijamos, debemos ser cuidadosos de no provocar condiciones de carrera ni [fugas de gorutinas](https://gophers-latam.github.io/posts/2023/12/fuga-de-gorutinas/)
+Sea cual sea el patrón concurrente que elijamos, debemos ser cuidadosos de no provocar condiciones de carrera ni [fugas de gorutinas](https://gophers-latam.github.io/posts/2023/12/fuga-de-gorutinas/), por lo que debemos hacer uso exhaustivo del flag `-race` al ejecutar nuestras pruebas.
 
 Hemos implementado un worker pool funcional, pero aun no hemos respondido a la pregunta con que iniciamos este artículo ¿Hay algún límite para la concurrencia? Preferimos dejar la pregunta abierta y esperamos sus respuestas en los comentarios.
 
