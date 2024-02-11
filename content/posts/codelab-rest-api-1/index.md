@@ -585,6 +585,12 @@ func main() {
 // boot es responsable de cargar las variables de entorno y de parsear los flags que se le agregan a nuestra aplicación.
 // Verifica que el ambiente indicado en los flags sea uno válido
 func boot() {
+
+	// Cargaremos con godotenv como las variables de entorno la información
+	// registrada en el archivo .env 
+	// En este ejercicio descartamos el error 
+	// pero ¡Recuerde que en producción todo 
+	// error debe ser validado!
 	_ = godotenv.Load()
 
 	config.LoadCliConfig()
