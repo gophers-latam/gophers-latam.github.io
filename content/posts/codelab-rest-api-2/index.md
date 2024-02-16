@@ -33,7 +33,7 @@ Esta serie se compone de los siguientes artículos que se irán publicando progr
 
 * [Codelab 1](/posts/2024/02/codelab.-implementemos-una-api-rest-con-go/). Configuración de la aplicación, router, repositorio para acceder a datos y primer endpoint.
 * Codelab 2. Testeando enpoints. Simulando una petición http.
-* Codelab 3. Implementando endpoint con filtrado y paginación.
+* Codelab 3. Implementando endpoint con filtrado.
 * Codelab 4. Implementando endpoint para actualizar una entidad.
 * Codelab 5. Refactorizando. Reemplazando nuestro router por una librería.
 
