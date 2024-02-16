@@ -41,7 +41,7 @@ En el primer codelab hemos construido una base para api REST consistente, compon
 
 Para poder hacer uso de nuestra api, nuestros usuarios deberán usar algún tipo de *cliente* que permita conectarse a su servicio. En efecto, aplicaciones cómo curl, postman, o incluso un navegador web pueden hacer las veces de cliente. Con ellos pueden hacer **peticiones** que apuntan a los endpoints registrados en nuestra api. Por lo tanto, si queremos testear nuestro handler, es conveniente hacerlo *simulando* las peticiones que puede manejar, y es exactamente eso lo que implementaremos a continuación.
 
-Hablamos de *simular peticiones* porque nuestra aplicación no necesitará estar ejecutándose cuando gatillemos los tests, recordemos que estos deben ser [aislados, independientes y auto validantes](https://github.com/tekguard/Principles-of-Unit-Testing), y no depender de elementos ambientales. 
+Hablamos de *simular peticiones* porque nuestra aplicación no necesitará estar ejecutándose cuando ejecutemos los tests, recordemos que estos deben ser [aislados, independientes y auto validantes](https://github.com/tekguard/Principles-of-Unit-Testing), y no depender de elementos ambientales. 
 
 Entonces, tal cómo los usuarios de nuestra api necesitan un cliente para acceder a sus servicios, empezaremos por simular un cliente HTTP y configuraremos nuestros tests para usar ese cliente simulado. De esta forma cada test puede *declarar* la respuesta simulada correcta para cada uno de ellos y usarla para comprobar el funcionamiento del handler que estamos probando.
 
@@ -63,7 +63,7 @@ type HTTPClient interface {
 }
 ```
 
-Definimos una interface que expone el método `Do`, el cual recibe cómo argumento un request y devuelve una respuesta y el posible error gatillado durante el procesamiento de la petición.
+Definimos una interface que expone el método `Do`, el cual recibe cómo argumento un request y devuelve una respuesta y el posible error ocurrido durante el procesamiento de la petición.
 
 
 ```go
@@ -76,7 +76,7 @@ func (m *MockClient) Do(req *http.Request) (*http.Response, error) {
 }
 ```
 
-Construimos un struct que *implementa* dicha interface. En este struct definimos una variable de tipo función que será invocada cuando se llame al método expuesto en el struct. así podemos cargar la funcionalidad que necesitemos en cada test, pues cada uno  probará un handler diferente.
+Construimos un struct que *implementa* dicha interface. En este struct definimos una variable de tipo función que será invocada cuando se llame al método expuesto en el struct. Así podemos cargar la funcionalidad que necesitemos en cada test, pues cada uno  probará un handler diferente.
 
 
 ## Iniciando los tests en modo simulación
@@ -292,7 +292,7 @@ PASS
 ok  	restexample/api/v1/handler	1.242s
 ```
 
-cómo habíamos construido también un benchmark para `MockActorCrud` Podemos ejecutarlo también y tener una idea del costo verdadero de nuestro flujo.
+Cómo habíamos construido también un benchmark para `MockActorCrud` podemos ejecutarlo y tener una idea del costo verdadero de nuestro flujo.
 
 ```bash
 go test -benchmem -run=^$ -bench ^BenchmarkActorGetMock$ restexample/db/model
@@ -312,4 +312,4 @@ Por lo tanto, podemos decir que de los *1873 ns/op* que tarda en ejecutarse el f
 
 Y con esto llegamos al final del segundo codelab. Le agradecemos por haber llegado hasta aquí. Como siempre le proveemos el código escrito en [este](https://github.com/profe-ajedrez/codelab_api_rest/tree/codelab_2) repositorio.
 
-Si le gustó este artículo no olvide compartirlo, y si después de seguirlo le quedan dudas o preguntas le esperamos en los ocmentarios.
+Si le gustó este artículo no olvide compartirlo, y si después de seguirlo le quedan dudas o preguntas le esperamos en los comentarios.
