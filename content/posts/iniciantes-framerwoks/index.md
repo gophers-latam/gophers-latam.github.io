@@ -37,7 +37,7 @@ Las ventajas de utilizar la biblioteca estándar en lugar de un framework son la
 
 * ___Simplicidad y Minimalismo___: El paquete “net/http” está desarrollado siguiendo los principios de simplicidad y minimalismo, lo que significa que no hay una sobrecarga de funcionalidades o dependencias innecesarias, lo que puede resultar en código más limpio y fácil de entender.
 
-* ___Rendimiento___: La biblioteca estándar de Go está optimizada para un rendimiento óptimo. Al evitar capas adicionales proporcionadas por los frameworks, se puede lograr un rendimiento más rápido y eficiente en las aplicaciones.
+* ___Rendimiento___: La biblioteca estándar de Go está optimizada para un rendimiento óptimo. 
 
 * ___Flexibilidad___: El paquete “net/http” proporciona una gran flexibilidad para construir servidores web y manejar solicitudes HTTP de manera personalizada. Esto permite adaptar la aplicación a requisitos específicos sin estar limitado por las decisiones de diseño del framework.
 
