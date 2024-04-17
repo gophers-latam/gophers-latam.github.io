@@ -6,7 +6,7 @@
     justify-content: space-evenly;
 
     .box-post {
-        display: initial; // NOTE: fix the white space between the title and the date.
+        display: initial; 
         // flex-direction: column;
         flex-basis: calc(33% - 2.5rem);
         // justify-content: flex-end;
@@ -116,10 +116,10 @@
             img {
                 width: auto;
                 height: auto;
-                max-width: $display-mid-max;
+                // max-width: $display-mid-max;
                 max-height: 400px;
                 margin: auto;
-                padding: 1rem;
+                // padding: 1rem;
             }
 
             figcaption {
@@ -145,6 +145,6 @@
     }
 
     .post figure img {
-        max-width: 100%;
+        max-width: 100vw;
     }
 }
