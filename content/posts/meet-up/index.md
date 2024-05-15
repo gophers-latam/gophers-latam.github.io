@@ -55,7 +55,7 @@ De las demás comunidades, se presentarán:
 
 {{<postimage "images/flyer_meetup_vergara_web.png" "Daniel Vergara">}}
 
-🗓️ **Fecha:** Sábado, 22 de mayo de 2024
+🗓️ **Fecha:** 22 de mayo de 2024
 
 🕐 **Hora:** 7 p.m. México | 8 p.m. Colombia | 9 p.m. Chile
 
