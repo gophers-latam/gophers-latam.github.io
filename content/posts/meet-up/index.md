@@ -32,7 +32,7 @@ En esta Meetup única, cada comunidad tendrá la oportunidad de presentar un ora
 
 {{<postimage "images/flyer.png" "Oradores de la primera meetup">}}
 
-Pero eso no es todo... ¡también tendremos sorteos especiales para todos los asistentes! Estaremos regalando tres licencias de JetBrains. ¡Una oportunidad imperdible para ampliar tus herramientas de desarrollo y llevar tus proyectos en Go al siguiente nivel!
+Pero eso no es todo... ¡también tendremos **SORTEOS ESPECIALES** para todos los asistentes! Estaremos regalando **2 licencias de JetBrains** para **Goland** y **1 cupón de ArdanLabs** para un curso de **High Performance Bundle**. ¡Una oportunidad imperdible para ampliar tus herramientas de desarrollo y llevar tus proyectos en Go al siguiente nivel!
 
 ¡No te pierdas esta oportunidad de conectarte con otros apasionados de Go, aprender de expertos de la industria y, por supuesto, divertirte! Marca tu calendario, invita a tus amigos y únete a nosotros el 22 de mayo para una jornada llena de inspiración y aprendizaje.
 
