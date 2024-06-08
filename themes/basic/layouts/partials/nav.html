@@ -1,4 +1,10 @@
-<nav>
+<div class="menu-button">
+    <span >
+        <img  alt="mobile menu" src="{{"img/menu.svg"|relURL}}" alt=""/>
+    </span>
+</div>
+
+<nav class="nav-links hide-on-mobile">
     <a href="/">Inicio</a>
     <a href="/biografia">Biografía</a>
     <a href="/proyectos">Proyectos</a>
@@ -6,3 +12,7 @@
     <a href="/colaboradores">Colaboradores</a>
     <a href="/contacto">Contacto</a>
 </nav>
+
+
+{{ $mobileHeader := resources.Get "js/header-mobile.js" }}
+<script src="{{ $mobileHeader.Permalink }}" defer></script>
