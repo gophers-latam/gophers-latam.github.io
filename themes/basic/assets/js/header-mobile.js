@@ -8,8 +8,8 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   menuButton.addEventListener("click", function () {
-    var displayStyle = getComputedStyle(menu).display;
-    if (displayStyle !== "none") {
+    let menuClass = menu.classList;
+    if (menuClass.contains("show-on-mobile")) {
       hideMenu();
     } else {
       menu.classList.add("show-on-mobile");
