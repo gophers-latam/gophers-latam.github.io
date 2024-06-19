@@ -1,7 +1,7 @@
 {{ define "main" }}
 <h2>{{ .Title }}</h2>
 {{ .Content }}
-<h3>🌐 Enlaces redes:</h3>
+<h3>🌐 Medios:</h3>
 <ul>
     {{ range .Site.Data.redes.accounts }}
     <li><b><a href="{{ .url }}" target="_blank">{{ .name }}</a></b></li>
