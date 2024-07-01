@@ -5,12 +5,16 @@ html, body, .container {
   height: 100%;
   margin: 0;
   font-family: 'Work Sans', san-serif;
+
+  display:flex;
+  flex-direction:column; 
 }
 
 .app-width {
   width: calc(100% - calc(#{$content-margin} * 2)) !important;
   padding-left: $content-margin !important;
   padding-right: $content-margin !important;
+  flex-grow: 1;
 }
 
 @media (min-width: $content-max-width + ($content-margin * 2)) {
