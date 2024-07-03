@@ -14,6 +14,9 @@ html, body, .container {
   width: calc(100% - calc(#{$content-margin} * 2)) !important;
   padding-left: $content-margin !important;
   padding-right: $content-margin !important;
+}
+
+main.app-width {
   flex-grow: 1;
 }
 
