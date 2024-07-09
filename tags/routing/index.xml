@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>routing on Gophers LATAM</title><link>https://gophers-latam.github.io/tags/routing/</link><description>Recent content in routing on Gophers LATAM</description><generator>Hugo -- gohugo.io</generator><language>es-mx</language><lastBuildDate>Tue, 09 Jul 2024 11:48:56 -0600</lastBuildDate><atom:link href="https://gophers-latam.github.io/tags/routing/index.xml" rel="self" type="application/rss+xml"/><item><title>Guía de enrutamiento http estándar Go 1.22+</title><link>https://gophers-latam.github.io/posts/2024/07/gu%C3%ADa-de-enrutamiento-http-est%C3%A1ndar-go-1.22-/</link><pubDate>Tue, 09 Jul 2024 11:48:56 -0600</pubDate><guid>https://gophers-latam.github.io/posts/2024/07/gu%C3%ADa-de-enrutamiento-http-est%C3%A1ndar-go-1.22-/</guid><description>&lt;figure class="post-figure">
+&lt;a href="https://gophers-latam.github.io/posts/2024/07/gu%C3%ADa-de-enrutamiento-http-est%C3%A1ndar-go-1.22/images/servmux.png">
+&lt;img src="https://gophers-latam.github.io/posts/2024/07/gu%C3%ADa-de-enrutamiento-http-est%C3%A1ndar-go-1.22/images/servmux_hu68e2ecd27d4b99632388b57e18a14a28_31674_1024x0_resize_box_3.png" width="1024" height="601" alt="new servmux" />
+&lt;/a>
+&lt;figcaption>new servmux&lt;/figcaption>
+&lt;/figure>
+&lt;p>Considerando la promesa de retrocompatibilidad esta guía o tutorial se estima sirva de referencia para la era de versiones de Go 1.22+&lt;/p></description></item></channel></rss>
