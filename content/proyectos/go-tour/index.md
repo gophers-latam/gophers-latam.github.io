@@ -7,6 +7,7 @@ summary: "El Tour de Go, **ahora en español**"
 tech_used:
 - Go
 - Markdown 
+- Google Cloud
 keywords:
 - Go
 - Tour
@@ -18,4 +19,6 @@ Para aquellos que aún no lo conocen, el 'Tour de Go' representa una introducci�
 
 Como comunidad, hemos realizado la traducción del sitio, permitiendo que cualquier persona de habla hispana tenga acceso a esta valiosa herramienta de aprendizaje.
 
-**Estatus:** Pendiente de aprobación por el sitio oficial de Go (https://go-review.googlesource.com/c/website/+/545855).
+**Status:** Pendiente de aprobación por el sitio oficial de Go (https://go-review.googlesource.com/c/website/+/545855).
+
+**Status 2:** [Pull Request aprobada por el Go Team](https://github.com/golang/website/pull/264), ya disponible en el repositorio oficial de Go o haz click [aqui](https://go-tour-lat.appspot.com) para entrar al tour.
