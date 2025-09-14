@@ -11,7 +11,7 @@
 
 # Instalar **Hugo**:
 
-Para poder manejar el generar del sitio statico es necesario instalar el binario hugo en modo extendido. Para opciones de instalación ver la opciones en la [documentación oficial](https://gohugo.io/), por ejemplo en **Linux** sería: [gohugo.io/getting-started/installing/#linux](https://gohugo.io/getting-started/installing/#linux)
+Para poder manejar el generar del sitio statico es necesario instalar el binario hugo (v0.107.0) en modo extendido. Para opciones de instalación ver la opciones en la [documentación oficial](https://gohugo.io/), por ejemplo en **Linux** sería: [gohugo.io/getting-started/installing/#linux](https://gohugo.io/getting-started/installing/#linux)
 
 # Directorios y uso del contenido:
 
