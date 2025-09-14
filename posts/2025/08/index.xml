@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>2025/08 on Gophers LATAM</title><link>https://gophers-latam.github.io/posts/2025/08/</link><description>Recent content in 2025/08 on Gophers LATAM</description><generator>Hugo -- gohugo.io</generator><language>es-mx</language><atom:link href="https://gophers-latam.github.io/posts/2025/08/index.xml" rel="self" type="application/rss+xml"/><item><title>CGO OK en Windows</title><link>https://gophers-latam.github.io/posts/2025/08/cgo-ok-en-windows/</link><pubDate>Tue, 26 Aug 2025 15:56:37 -0600</pubDate><guid>https://gophers-latam.github.io/posts/2025/08/cgo-ok-en-windows/</guid><description>&lt;figure class="post-figure">
+&lt;a href="https://gophers-latam.github.io/posts/2025/08/cgo-ok-en-windows/images/cgo_ok_win.png">
+&lt;img src="https://gophers-latam.github.io/posts/2025/08/cgo-ok-en-windows/images/cgo_ok_win_hub945665aa5a8af9b571058cc630015db_62226_1024x0_resize_box_3.png" width="1024" height="598" alt="cgo ok" />
+&lt;/a>
+&lt;figcaption>cgo ok&lt;/figcaption>
+&lt;/figure>
+&lt;p>Para CGO (env CGO_ENABLED=1) en Windows el SDK de Go espera encontrar un compilador estilo GCC (p. ej. MinGW-w64 o MSYS2).&lt;/p></description></item></channel></rss>
