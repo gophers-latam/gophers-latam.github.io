@@ -8,7 +8,22 @@
     {{- else -}}
     {{ .Site.Params.description }}
     {{- end -}}">
-    <meta property="og:image" content="{{ .Site.BaseURL }}/logo.png" />
+    <!-- Open Graph -->
+    <meta property="og:title" content="Gophers LATAM" />
+    <meta property="og:description" content="fmt.Println('Comunidad de programadores Golang en Español.')" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://gophers-latam.github.io" />
+    <meta property="og:image" content="https://gophers-latam.github.io/assets/awesome.png" />
+    <meta property="og:image:width" content="720" />
+    <meta property="og:image:height" content="720" />
+    <!-- Twitter Card (opcional) -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Gophers LATAM" />
+    <meta name="twitter:description" content="fmt.Println('Comunidad de programadores Golang en Español.')" />
+    <meta name="twitter:image" content="https://gophers-latam.github.io/assets/awesome.png" />
+    
+    <!-- otros meta (opcionales) -->
+    <link rel="canonical" href="https://gophers-latam.github.io" />
     <title>
         {{- if .Page.IsHome -}}
         {{ .Site.Title }}
